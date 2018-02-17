@@ -3,16 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace Core
 {
-    public class Tools
+    public class Tools : Database
     {
         public Tools()
         {
 
         }
 
+        public void AddStaff()
+        {
+            List<string> staff = new List<string>();
+
+            using (SqlDataReader getStaff = GetDataReader("select distinct(责任领导) from [重点工作2018]"))
+            {
+                string s;
+                while (getStaff.Read())
+                {
+                    s = getStaff[0].ToString();
+                    if (s.Contains("\n"))
+                    {
+                        string[] duoren = s.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (string ds in duoren)
+                            if (!staff.Contains(ds))
+                                staff.Add(ds);
+                    }
+                    else
+                        staff.Add(s);
+                }
+            }
+
+            foreach (string ins in staff)
+                ExecuteSql(@"insert 工作人员(姓名,所属部门,人员类型) values (@姓名,1,1)",new SqlParameter[] { new SqlParameter("@姓名",ins)});
+            //List<string> distinctStaff = staff.Distinct<string>().ToList<string>();
+            //int i = 3;
+        }
+        /*
         /// <summary>
         /// 将注册资本从文本格式传唤成长整型格式
         /// </summary>
@@ -86,5 +115,7 @@ namespace Core
                 return (capital / 1000).ToString() + "千";
             return capitalStr;
         }
+
+    */
     }
 }
