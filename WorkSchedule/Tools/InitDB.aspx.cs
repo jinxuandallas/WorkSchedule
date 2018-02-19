@@ -13,7 +13,8 @@ namespace WorkSchedule.Tools
         protected void Page_Load(object sender, EventArgs e)
         {
             Core.Tools t = new Core.Tools();
-            t.AddStaff();
+            //t.AddStaff();
+            //t.ImportWorks();
         }
     }
 }

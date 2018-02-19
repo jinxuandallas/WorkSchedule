@@ -14,6 +14,9 @@ namespace Core
 
         }
 
+        /// <summary>
+        /// 生成工作人员表
+        /// </summary>
         public void AddStaff()
         {
             List<string> staff = new List<string>();
@@ -40,6 +43,18 @@ namespace Core
                 ExecuteSql(@"insert 工作人员(姓名,所属部门,人员类型) values (@姓名,1,1)",new SqlParameter[] { new SqlParameter("@姓名",ins)});
             //List<string> distinctStaff = staff.Distinct<string>().ToList<string>();
             //int i = 3;
+        }
+
+
+        public void ImportWorks()
+        {
+            ExecuteSql("insert 工作 (序号,目标名称,目标内容,年份,备注) select 序号,目标名称,目标内容,year(getdate()),备注 from 重点工作2018");
+        }
+
+
+        public void BuildWorksRelevantTable()
+        {
+
         }
         /*
         /// <summary>
