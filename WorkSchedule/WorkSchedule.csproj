@@ -54,7 +54,9 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
+    <Reference Include="System.Core">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
@@ -83,6 +85,7 @@
     <Content Include="Global.asax" />
     <Content Include="Schedule.aspx" />
     <Content Include="ScheduleTest.aspx" />
+    <Content Include="Test.aspx" />
     <Content Include="Tools\AddMonthSchedule.aspx" />
     <Content Include="Tools\InitDB.aspx" />
     <Content Include="Web.config" />
@@ -112,6 +115,13 @@
     </Compile>
     <Compile Include="ScheduleTest.aspx.designer.cs">
       <DependentUpon>ScheduleTest.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Test.aspx.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Test.aspx.designer.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
     </Compile>
     <Compile Include="Tools\AddMonthSchedule.aspx.cs">
       <DependentUpon>AddMonthSchedule.aspx</DependentUpon>

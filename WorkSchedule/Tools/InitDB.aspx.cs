@@ -12,9 +12,11 @@ namespace WorkSchedule.Tools
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            string tableName = "重点工作2018";
             Core.Tools t = new Core.Tools();
-            //t.AddStaff();
-            //t.ImportWorks();
+            //t.AddStaff(tableName);
+            //t.ImportWorks(tableName);
+            //t.BuildWorkLeader(tableName);
         }
     }
 }

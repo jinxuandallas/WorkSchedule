@@ -17,11 +17,12 @@ namespace Core
         /// <summary>
         /// 生成工作人员表
         /// </summary>
-        public void AddStaff()
+        /// <param name="workTable"></param>
+        public void AddStaff(string workTable)
         {
             List<string> staff = new List<string>();
 
-            using (SqlDataReader getStaff = GetDataReader("select distinct(责任领导) from [重点工作2018]"))
+            using (SqlDataReader getStaff = GetDataReader("select distinct(责任领导) from " + workTable))
             {
                 string s;
                 while (getStaff.Read())
@@ -40,22 +41,101 @@ namespace Core
             }
 
             foreach (string ins in staff)
-                ExecuteSql(@"insert 工作人员(姓名,所属部门,人员类型) values (@姓名,1,1)",new SqlParameter[] { new SqlParameter("@姓名",ins)});
+                ExecuteSql(@"insert 工作人员(姓名,所属部门,人员类型) values (@姓名,1,1)", new SqlParameter[] { new SqlParameter("@姓名", ins) });
             //List<string> distinctStaff = staff.Distinct<string>().ToList<string>();
             //int i = 3;
         }
 
 
-        public void ImportWorks()
+        public void ImportTasts(string workTable)
         {
-            ExecuteSql("insert 工作 (序号,目标名称,目标内容,年份,备注) select 序号,目标名称,目标内容,year(getdate()),备注 from 重点工作2018");
+            ExecuteSql("insert 工作 (序号,目标名称,目标内容,年份,备注) select 序号,目标名称,目标内容,year(getdate()),备注 from " + workTable);
         }
 
-
+        /*
         public void BuildWorksRelevantTable()
         {
 
         }
+        */
+
+        public void BuildWorkLeader(string workTable)
+        {
+            Guid taskID;
+            int staffID;
+            List<WorkLeader> l = new List<WorkLeader>();
+
+            ///此处会产生SqlDataReader嵌套，需用两个connection
+            ///或者用泛型列表，用完一个再用下一个
+            using (SqlDataReader getLeader = GetDataReader("select 序号,责任领导 from " + workTable))
+            {
+                string leaderName;
+                int SN;
+                while (getLeader.Read())
+                {
+
+                    leaderName = getLeader[1].ToString();
+                    SN = int.Parse(getLeader[0].ToString());
+
+                    if (leaderName.Contains("\n"))
+                    {
+                        string[] duoren = leaderName.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (string ds in duoren)
+                            l.Add(new WorkLeader(SN, ds));
+                    }
+                    else
+                        l.Add(new WorkLeader(SN, leaderName));
+                }
+
+            }
+            
+            foreach (WorkLeader wl in l)
+            {
+                taskID = GetTaskIDBySN(wl.SN);
+                if (taskID == Guid.Empty)
+                    break;
+                staffID = GetStaffIDByName(wl.LeaderName);
+                if (staffID == 0)
+                    break;
+
+                AddWorkLeader(taskID, staffID);
+
+            }
+
+        }
+
+
+        public Guid GetTaskIDBySN(int sn)
+        {
+            using (SqlDataReader sdr = GetDataReader("select ID from 工作 where 序号=@SN", new SqlParameter[] { new SqlParameter("@SN", sn) }))
+            {
+                if (sdr.Read())
+                    return Guid.Parse(sdr[0].ToString());
+            }
+                
+            return Guid.Empty;
+        }
+
+        public int GetStaffIDByName(string name)
+        {
+            using (SqlDataReader sdr = GetDataReader("select ID from 工作人员 where 姓名=@Name", new SqlParameter[] { new SqlParameter("@Name", name) }))
+            {
+                if (sdr.Read())
+                    return int.Parse(sdr[0].ToString());
+            }
+                
+            return 0;
+        }
+
+        public void AddWorkLeader(Guid taskID, int staffID)
+        {
+            //return;
+            ExecuteSql("insert 工作责任领导(工作ID,工作人员ID) values(@工作ID,@工作人员ID)", new SqlParameter[] {
+                new SqlParameter("@工作ID", taskID),
+                new SqlParameter("@工作人员ID", staffID)
+            });
+        }
+
         /*
         /// <summary>
         /// 将注册资本从文本格式传唤成长整型格式
