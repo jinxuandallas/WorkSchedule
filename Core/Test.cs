@@ -28,5 +28,25 @@ namespace Core
             string tableName = "重点工作2018";
             ExecuteSql("select * from " + tableName);
         }
+
+        public DataTable DealMonthSchedule()
+        {
+            DataSet ds = new DataSet();
+            DataTable dt = new DataTable();
+            dt.Columns.Add("目标名称", Type.GetType("System.String"));
+            dt.Columns.Add("目标节点", Type.GetType("System.String"));
+            string scheduleName;
+            using (SqlDataReader sdr=GetDataReader("select 目标名称,目标节点或完成时限 from 重点工作2018"))
+            {
+                while(sdr.Read())
+                {
+                    scheduleName = sdr[0].ToString();
+                    foreach (string s in sdr[1].ToString().Split(new char[] { '\n' },StringSplitOptions.RemoveEmptyEntries))
+                        dt.Rows.Add(new object[] { scheduleName, s });
+                }
+            }
+
+            return dt;
+        }
     }
 }

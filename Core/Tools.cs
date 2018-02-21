@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.IO;
+using System.Data;
+using System.Web;
 
 namespace Core
 {
@@ -135,6 +138,51 @@ namespace Core
                 new SqlParameter("@工作人员ID", staffID)
             });
         }
+
+        public DataTable DealMonthSchedule()
+        {
+            DataSet ds = new DataSet();
+            DataTable dt = new DataTable();
+            dt.Columns.Add("目标名称", Type.GetType("System.String"));
+            dt.Columns.Add("目标节点", Type.GetType("System.String"));
+            string scheduleName;
+            using (SqlDataReader sdr = GetDataReader("select 目标名称,目标节点或完成时限 from 重点工作2018"))
+            {
+                while (sdr.Read())
+                {
+                    scheduleName = sdr[0].ToString();
+                    foreach (string s in sdr[1].ToString().Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+                        dt.Rows.Add(new object[] { scheduleName, s });
+                }
+            }
+
+            return dt;
+        }
+
+
+        public void BuildMonthSchedule(string workTable)
+        {
+            
+        }
+
+        public void BuildTempMonthTable(string workTable)
+        {
+            StreamReader sr = new StreamReader(HttpContext.Current.Server.MapPath(@"\App_Data\目标节点.txt"), Encoding.Default);
+            //List<string> l = new List<string>();
+            string line = null;
+            while ((line = sr.ReadLine()) != null)
+            {
+                string[] s = line.Split(new string[] { "         " }, StringSplitOptions.RemoveEmptyEntries);
+                ExecuteSql("insert 临时目标节点(工作ID,目标节点) select id,@目标节点 from 工作 where 目标名称=@目标名称",new SqlParameter[] {
+                    new SqlParameter("@目标名称",s[0]) ,
+                    new SqlParameter("@目标节点",s[1])
+                } );
+            }
+            sr.Close();
+            //return l;
+        }
+
+
 
         /*
         /// <summary>

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Core;
+using System.Data;
 
 namespace WorkSchedule
 {
@@ -14,7 +15,12 @@ namespace WorkSchedule
         protected void Page_Load(object sender, EventArgs e)
         {
             t = new Core.Test();
-            t.OnlyTest();
+            //t.OnlyTest();
+            //DataTable dt = t.DealMonthSchedule();
+            //foreach (DataRow dr in dt.Rows)
+            //    Response.Write(dr[0] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + dr[1] + "<br>");
+
+            Response.Write(System.IO.File.Exists(Server.MapPath(@"\App_Data\目标节点.txt")));
 
         }
 

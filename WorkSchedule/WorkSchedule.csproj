@@ -72,6 +72,7 @@
     <Content Include="App_Data\WorkSchedule_log.ldf">
       <DependentUpon>WorkSchedule.mdf</DependentUpon>
     </Content>
+    <Content Include="App_Data\目标节点.txt" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
