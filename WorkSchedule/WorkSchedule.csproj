@@ -85,8 +85,8 @@
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Schedule.aspx" />
-    <Content Include="ScheduleTest.aspx" />
-    <Content Include="Test.aspx" />
+    <Content Include="Test\ScheduleTest.aspx" />
+    <Content Include="Test\Test.aspx" />
     <Content Include="Tools\AddMonthSchedule.aspx" />
     <Content Include="Tools\InitDB.aspx" />
     <Content Include="Web.config" />
@@ -110,18 +110,18 @@
     <Compile Include="Schedule.aspx.designer.cs">
       <DependentUpon>Schedule.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ScheduleTest.aspx.cs">
+    <Compile Include="Test\ScheduleTest.aspx.cs">
       <DependentUpon>ScheduleTest.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ScheduleTest.aspx.designer.cs">
+    <Compile Include="Test\ScheduleTest.aspx.designer.cs">
       <DependentUpon>ScheduleTest.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Test.aspx.cs">
+    <Compile Include="Test\Test.aspx.cs">
       <DependentUpon>Test.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Test.aspx.designer.cs">
+    <Compile Include="Test\Test.aspx.designer.cs">
       <DependentUpon>Test.aspx</DependentUpon>
     </Compile>
     <Compile Include="Tools\AddMonthSchedule.aspx.cs">

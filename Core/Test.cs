@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
-
+using System.Text.RegularExpressions;
 namespace Core
 {
     public class Test : Database
@@ -47,6 +47,13 @@ namespace Core
             }
 
             return dt;
+        }
+
+        public int DealString()
+        {
+            string num = "92302 95612 61011";
+            int i  = Regex.Match(num, @"6\d{3}1$").Index;
+            return i;
         }
     }
 }

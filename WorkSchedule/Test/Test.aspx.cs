@@ -20,7 +20,9 @@ namespace WorkSchedule
             //foreach (DataRow dr in dt.Rows)
             //    Response.Write(dr[0] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + dr[1] + "<br>");
 
-            Response.Write(System.IO.File.Exists(Server.MapPath(@"\App_Data\目标节点.txt")));
+            //Response.Write(System.IO.File.Exists(Server.MapPath(@"\App_Data\目标节点.txt")));
+
+            Response.Write(t.DealString());
 
         }
 

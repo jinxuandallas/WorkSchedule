@@ -17,7 +17,7 @@ namespace WorkSchedule.Tools
             //t.AddStaff(tableName);
             //t.ImportWorks(tableName);
             //t.BuildWorkLeader(tableName);
-            t.BuildTempMonthTable(tableName);
+            //t.BuildTempMonthTable(tableName);
         }
     }
 }

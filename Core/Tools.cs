@@ -160,12 +160,23 @@ namespace Core
         }
 
 
-        public void BuildMonthSchedule(string workTable)
+        public void BuildMonthSchedule()
         {
-            
+            List<string> a = new List<string>();
+            List<string> b = new List<string>();
+
+            string task;
+            using (SqlDataReader sdr=GetDataReader("select 工作ID,目标节点 from 临时目标节点"))
+            {
+                while (sdr.Read())
+                {
+                    task = sdr[1].ToString();
+                    //task = task.Substring(task.i)
+                }
+            }
         }
 
-        public void BuildTempMonthTable(string workTable)
+        public void BuildTempMonthTable()
         {
             StreamReader sr = new StreamReader(HttpContext.Current.Server.MapPath(@"\App_Data\目标节点.txt"), Encoding.Default);
             //List<string> l = new List<string>();
