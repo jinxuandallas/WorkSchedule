@@ -18,6 +18,8 @@ namespace WorkSchedule.Tools
             //t.ImportWorks(tableName);
             //t.BuildWorkLeader(tableName);
             //t.BuildTempMonthTable(tableName);
+
+            t.BuildMonthSchedule();
         }
     }
 }

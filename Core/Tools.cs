@@ -7,6 +7,8 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Data;
 using System.Web;
+using System.Text.RegularExpressions;
+
 
 namespace Core
 {
@@ -166,11 +168,22 @@ namespace Core
             List<string> b = new List<string>();
 
             string task;
+            string r;
+            string workID;
+            int startMonth, endMonth;
             using (SqlDataReader sdr=GetDataReader("select 工作ID,目标节点 from 临时目标节点"))
             {
                 while (sdr.Read())
                 {
                     task = sdr[1].ToString();
+                    workID = sdr[0].ToString();
+                    if ((r = Regex.Match(task, @"^\d*-\d*月").Value) != "")
+                    {
+                        startMonth= int.Parse(Regex.Match(Regex.Match(r, @"^\d*-").Value, @"^\d*").Value);
+
+                        //注意此处正则表达式@"\d*月"不能写为@"-\d*月"，否则会把-当成负号，"-4月"理解成-4
+                        endMonth = int.Parse(Regex.Match(Regex.Match(r, @"\d*月").Value, @"\d*").Value);
+                    }
                     //task = task.Substring(task.i)
                 }
             }
