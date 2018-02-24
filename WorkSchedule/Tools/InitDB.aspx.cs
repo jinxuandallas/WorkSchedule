@@ -19,7 +19,7 @@ namespace WorkSchedule.Tools
             //t.BuildWorkLeader(tableName);
             //t.BuildTempMonthTable();
 
-            t.BuildMonthSchedule();
+            //t.BuildMonthSchedule();
         }
     }
 }
