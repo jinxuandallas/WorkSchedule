@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Test.aspx.cs" Inherits="WorkSchedule.Test" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Test.aspx.cs" Inherits="WorkSchedule.Test.Test" %>
 
 <!DOCTYPE html>
 
@@ -10,8 +10,7 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            <asp:TextBox ID="TextBox_SN" runat="server" TextMode="Number"></asp:TextBox>
-            <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="确定" />
+             <asp:TextBox ID="TextBox_SN" runat="server" TextMode="Number"></asp:TextBox>
         </div>
     </form>
 </body>

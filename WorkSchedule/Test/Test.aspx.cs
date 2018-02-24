@@ -8,7 +8,7 @@ using Core;
 using System.Data;
 using System.Text.RegularExpressions;
 
-namespace WorkSchedule
+namespace WorkSchedule.Test
 {
     public partial class Test : System.Web.UI.Page
     {
@@ -25,6 +25,10 @@ namespace WorkSchedule
             //string s = "xxxx";
             //Response.Write((s => int.Parse(s)));
 
+            //string s = "拜泉路6月份完工通车。 清江支路清江之路丰华地块3月份签订收地协议， 4月份完成清江之路丰华地块收地.后续施工根据收地情况开展";
+            //string st = Regex.Match(s, @"\d*月").Value;
+            //Response.Write(st);
+
         }
 
         private void TestRegex()
@@ -38,14 +42,15 @@ namespace WorkSchedule
                 Response.Write("未匹配");
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            Response.Write(t.TestReader(int.Parse(TextBox_SN.Text.ToString())));
-        }
 
         public string DealString(string s)
         {
             return Regex.Match(s, @"\d*-\d月").Value;
+        }
+
+        protected void Button1_Click1(object sender, EventArgs e)
+        {
+            Response.Write(t.TestReader(int.Parse(TextBox_SN.Text.ToString())));
         }
     }
 }

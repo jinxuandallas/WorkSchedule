@@ -93,7 +93,7 @@ namespace Core
                 }
 
             }
-            
+
             foreach (WorkLeader wl in l)
             {
                 taskID = GetTaskIDBySN(wl.SN);
@@ -117,7 +117,7 @@ namespace Core
                 if (sdr.Read())
                     return Guid.Parse(sdr[0].ToString());
             }
-                
+
             return Guid.Empty;
         }
 
@@ -128,7 +128,7 @@ namespace Core
                 if (sdr.Read())
                     return int.Parse(sdr[0].ToString());
             }
-                
+
             return 0;
         }
 
@@ -171,23 +171,33 @@ namespace Core
             string r;
             string workID;
             int startMonth, endMonth;
-            using (SqlDataReader sdr=GetDataReader("select 工作ID,目标节点 from 临时目标节点"))
+            DataTable dt = GetDataSet("select 工作ID,目标节点,ID from 临时目标节点").Tables[0];
+            foreach (DataRow dr in dt.Rows)
             {
-                while (sdr.Read())
+                task = dr[1].ToString();
+                workID = dr[0].ToString();
+                if ((r = Regex.Match(task, @"^\d*-\d*月").Value) != "")
                 {
-                    task = sdr[1].ToString();
-                    workID = sdr[0].ToString();
-                    if ((r = Regex.Match(task, @"^\d*-\d*月").Value) != "")
-                    {
-                        startMonth= int.Parse(Regex.Match(Regex.Match(r, @"^\d*-").Value, @"^\d*").Value);
+                    startMonth = int.Parse(Regex.Match(Regex.Match(r, @"^\d*-").Value, @"^\d*").Value);
 
-                        //注意此处正则表达式@"\d*月"不能写为@"-\d*月"，否则会把-当成负号，"-4月"理解成-4
-                        endMonth = int.Parse(Regex.Match(Regex.Match(r, @"\d*月").Value, @"\d*").Value);
-                    }
-                    //task = task.Substring(task.i)
+                    //注意此处正则表达式@"\d*月"不能写为@"-\d*月"，否则会把-当成负号，"-4月"理解成-4
+                    endMonth = int.Parse(Regex.Match(Regex.Match(r, @"\d*月").Value, @"\d*").Value);
+                    ExecuteSql("update 临时目标节点 set 识别=1 where ID=@ID",new SqlParameter[] {new SqlParameter("@ID",int.Parse(dr[2].ToString())) });
                 }
+                else if ((r = Regex.Match(task, @"^\d*月：").Value) != "")
+                {
+                    startMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
+                    ExecuteSql("update 临时目标节点 set 识别=2 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                }
+                //else if()
+                //{
+
+                //}
+                //task = task.Substring(task.i)
             }
+
         }
+
 
         public void BuildTempMonthTable()
         {
@@ -197,10 +207,10 @@ namespace Core
             while ((line = sr.ReadLine()) != null)
             {
                 string[] s = line.Split(new string[] { "         " }, StringSplitOptions.RemoveEmptyEntries);
-                ExecuteSql("insert 临时目标节点(工作ID,目标节点) select id,@目标节点 from 工作 where 目标名称=@目标名称",new SqlParameter[] {
+                ExecuteSql("insert 临时目标节点(工作ID,目标节点) select id,@目标节点 from 工作 where 目标名称=@目标名称", new SqlParameter[] {
                     new SqlParameter("@目标名称",s[0]) ,
                     new SqlParameter("@目标节点",s[1])
-                } );
+                });
             }
             sr.Close();
             //return l;

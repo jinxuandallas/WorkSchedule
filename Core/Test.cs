@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
+
 namespace Core
 {
     public class Test : Database
