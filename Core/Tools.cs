@@ -176,23 +176,39 @@ namespace Core
             {
                 task = dr[1].ToString();
                 workID = dr[0].ToString();
+
+                //匹配1-8月
                 if ((r = Regex.Match(task, @"^\d*-\d*月").Value) != "")
                 {
                     startMonth = int.Parse(Regex.Match(Regex.Match(r, @"^\d*-").Value, @"^\d*").Value);
 
                     //注意此处正则表达式@"\d*月"不能写为@"-\d*月"，否则会把-当成负号，"-4月"理解成-4
                     endMonth = int.Parse(Regex.Match(Regex.Match(r, @"\d*月").Value, @"\d*").Value);
-                    ExecuteSql("update 临时目标节点 set 识别=1 where ID=@ID",new SqlParameter[] {new SqlParameter("@ID",int.Parse(dr[2].ToString())) });
+                    ExecuteSql("update 临时目标节点 set 识别=1 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
                 }
+
+                //匹配8月：
                 else if ((r = Regex.Match(task, @"^\d*月：").Value) != "")
                 {
                     startMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
                     ExecuteSql("update 临时目标节点 set 识别=2 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
                 }
-                //else if()
-                //{
 
-                //}
+                //匹配8月底前或者8月底之前或者8月底
+                else if ((r = Regex.Match(task, @"^\d*月底前").Value) != "" || (r = Regex.Match(task, @"^\d*月底之前").Value) != "" || (r = Regex.Match(task, @"^\d*月底").Value) != "")
+                {
+                    //startMonth需判断前面几个月有没有目标节点，如果没有则从1月份开始，如果有则续接上个节点目标的月份
+                    endMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
+                    ExecuteSql("update 临时目标节点 set 识别=3 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                }
+
+                //匹配7、8月
+                else if ((r = Regex.Match(task, @"^\d*、\d*月").Value) != "")
+                {
+                    startMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
+                    endMonth = int.Parse(Regex.Match(r, @"、\d*").Value.Remove(0, 1));
+                    ExecuteSql("update 临时目标节点 set 识别=4 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                }
                 //task = task.Substring(task.i)
             }
 
