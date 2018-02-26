@@ -161,7 +161,9 @@ namespace Core
             return dt;
         }
 
-
+        /// <summary>
+        /// 构建月节点表
+        /// </summary>
         public void BuildMonthSchedule()
         {
             List<string> a = new List<string>();
@@ -200,6 +202,8 @@ namespace Core
                     //startMonth需判断前面几个月有没有目标节点，如果没有则从1月份开始，如果有则续接上个节点目标的月份
                     endMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
                     ExecuteSql("update 临时目标节点 set 识别=3 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+
+                    //此处需要添加生成startMonth代码，比较复杂还未完成
                 }
 
                 //匹配7、8月
@@ -209,12 +213,26 @@ namespace Core
                     endMonth = int.Parse(Regex.Match(r, @"、\d*").Value.Remove(0, 1));
                     ExecuteSql("update 临时目标节点 set 识别=4 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
                 }
+
+                //匹配7月
+                else if ((r = Regex.Match(task, @"\d+月").Value) != "")
+                {
+                    startMonth = int.Parse(Regex.Match(r, @"\d+").Value);
+                    ExecuteSql("update 临时目标节点 set 识别=5 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                }
                 //task = task.Substring(task.i)
             }
 
         }
 
+        public void AddMonthSchedule()
+        {
 
+        }
+
+        /// <summary>
+        /// 构建临时节点目标表
+        /// </summary>
         public void BuildTempMonthTable()
         {
             StreamReader sr = new StreamReader(HttpContext.Current.Server.MapPath(@"\App_Data\目标节点.txt"), Encoding.Default);
@@ -231,8 +249,11 @@ namespace Core
             sr.Close();
             //return l;
         }
-
-
+        
+        public void AddOtherMonthSchedule(int id ,Guid workID,string shedule,int startMonth,int endMonth)
+        {
+            ExecuteSql("update 临时目标节点 set 识别=6 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", id )});
+        }
 
         /*
         /// <summary>
