@@ -29,6 +29,10 @@ namespace WorkSchedule.Test
             //string st = Regex.Match(s, @"\d*月").Value;
             //Response.Write(st);
 
+            //for (int i = 3; i <= 6; i++)
+            //    Response.Write(i + "<br>");
+
+
         }
 
         private void TestRegex()
