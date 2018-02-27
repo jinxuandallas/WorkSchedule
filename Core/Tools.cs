@@ -171,13 +171,13 @@ namespace Core
 
             string task;
             string r;
-            string workID;
+            Guid workID;
             int startMonth, endMonth;
             DataTable dt = GetDataSet("select 工作ID,目标节点,ID from 临时目标节点").Tables[0];
             foreach (DataRow dr in dt.Rows)
             {
                 task = dr[1].ToString();
-                workID = dr[0].ToString();
+                workID = Guid.Parse(dr[0].ToString());
 
                 //匹配1-8月
                 if ((r = Regex.Match(task, @"^\d*-\d*月").Value) != "")
@@ -186,24 +186,36 @@ namespace Core
 
                     //注意此处正则表达式@"\d*月"不能写为@"-\d*月"，否则会把-当成负号，"-4月"理解成-4
                     endMonth = int.Parse(Regex.Match(Regex.Match(r, @"\d*月").Value, @"\d*").Value);
-                    ExecuteSql("update 临时目标节点 set 识别=1 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                    //ExecuteSql("update 临时目标节点 set 识别=1 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                    AddMonthSchedule(workID, task, startMonth, endMonth);
                 }
 
                 //匹配8月：
                 else if ((r = Regex.Match(task, @"^\d*月：").Value) != "")
                 {
                     startMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
-                    ExecuteSql("update 临时目标节点 set 识别=2 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                    //ExecuteSql("update 临时目标节点 set 识别=2 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                    AddMonthSchedule(workID, task, startMonth, 0);
                 }
 
                 //匹配8月底前或者8月底之前或者8月底
                 else if ((r = Regex.Match(task, @"^\d*月底前").Value) != "" || (r = Regex.Match(task, @"^\d*月底之前").Value) != "" || (r = Regex.Match(task, @"^\d*月底").Value) != "")
                 {
                     //startMonth需判断前面几个月有没有目标节点，如果没有则从1月份开始，如果有则续接上个节点目标的月份
-                    endMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
-                    ExecuteSql("update 临时目标节点 set 识别=3 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                    using (SqlDataReader sdr = GetDataReader("select top 1 month(年份) from 月节点 where 工作ID=@工作ID order by 年份 desc ", new SqlParameter[] { new SqlParameter("@工作ID", workID) }))
+                        if (sdr.HasRows)
+                        {
+                            sdr.Read();
+                            startMonth = int.Parse(sdr[0].ToString()) + 1;
+                        }
+                        else
+                            startMonth = 1;
 
-                    //此处需要添加生成startMonth代码，比较复杂还未完成
+                    endMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
+
+                    //ExecuteSql("update 临时目标节点 set 识别=3 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+
+                    AddMonthSchedule(workID, task, startMonth, endMonth);
                 }
 
                 //匹配7、8月
@@ -211,7 +223,8 @@ namespace Core
                 {
                     startMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
                     endMonth = int.Parse(Regex.Match(r, @"、\d*").Value.Remove(0, 1));
-                    ExecuteSql("update 临时目标节点 set 识别=4 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                    //ExecuteSql("update 临时目标节点 set 识别=4 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                    AddMonthSchedule(workID, task, startMonth, endMonth);
                 }
 
                 //匹配7月
@@ -219,16 +232,56 @@ namespace Core
                 {
                     startMonth = int.Parse(Regex.Match(r, @"\d+").Value);
                     ExecuteSql("update 临时目标节点 set 识别=5 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                    AddMonthSchedule(workID, task, startMonth, 0);
                 }
                 //task = task.Substring(task.i)
             }
 
         }
 
-        public void AddMonthSchedule()
+        public void AddMonthSchedule(Guid workID, string task, int startMonth, int endMonth)
         {
-
+            if (endMonth == 0 || startMonth == endMonth)
+                UpdateMonthSchedule(workID, task, startMonth);
+            else
+                for (int i = startMonth; i <= endMonth; i++)
+                    UpdateMonthSchedule(workID, task, i);
         }
+
+        public void UpdateMonthSchedule(Guid workID, string task, int month)
+        {
+            string date = DateTime.Now.Year + "-" + month + "-1";
+            string id=string.Empty;
+            //先判断月节点表中有没有此月的节点数据，如果有则用update语句在原数据后面追加新的节点数据，如果没有则用insert添加新节点数据
+            using (SqlDataReader sdr = GetDataReader("select 目标节点,ID from 月节点 where 工作ID=@工作ID and 年份=@年份", new SqlParameter[] { new SqlParameter("@工作ID",workID),
+                new SqlParameter("@年份",date)
+            }))
+            {
+                string sql = string.Empty;
+                if (sdr.HasRows)
+                {
+                    sdr.Read();
+                    task = sdr[0].ToString() + " " + task;
+                    sql = "update 月节点 set 目标节点=@目标节点 where ID=@ID";
+                    id = sdr[1].ToString();
+                }
+                sdr.Close();
+
+                if (sql != string.Empty)
+                {
+                    ExecuteSql(sql, new SqlParameter[] { new SqlParameter("@目标节点",task),
+                        new SqlParameter("@ID",id)
+                    });
+                    return;
+                }
+            }
+
+            ExecuteSql("insert 月节点(工作ID,目标节点,年份) values(@工作ID,@目标节点,@年份)", new SqlParameter[] {new SqlParameter("@工作ID",workID),
+                    new SqlParameter("@目标节点",task),
+                    new SqlParameter("@年份",date)
+                    });
+        }
+
 
         /// <summary>
         /// 构建临时节点目标表
@@ -249,10 +302,10 @@ namespace Core
             sr.Close();
             //return l;
         }
-        
-        public void AddOtherMonthSchedule(int id ,Guid workID,string shedule,int startMonth,int endMonth)
+
+        public void ManualAddMonthSchedule(int id, Guid workID, string shedule, int startMonth, int endMonth)
         {
-            ExecuteSql("update 临时目标节点 set 识别=6 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", id )});
+            ExecuteSql("update 临时目标节点 set 识别=6 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", id) });
         }
 
         /*
