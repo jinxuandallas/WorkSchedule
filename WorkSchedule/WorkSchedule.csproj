@@ -89,6 +89,7 @@
     <Content Include="Test\ScheduleTest.aspx" />
     <Content Include="Test\Test.aspx" />
     <Content Include="Tools\AddOtherWorkMonthSchedule.aspx" />
+    <Content Include="Tools\BuildWeeks.aspx" />
     <Content Include="Tools\InitDB.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -138,6 +139,13 @@
     </Compile>
     <Compile Include="Tools\AddOtherWorkMonthSchedule.aspx.designer.cs">
       <DependentUpon>AddOtherWorkMonthSchedule.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\BuildWeeks.aspx.cs">
+      <DependentUpon>BuildWeeks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tools\BuildWeeks.aspx.designer.cs">
+      <DependentUpon>BuildWeeks.aspx</DependentUpon>
     </Compile>
     <Compile Include="Tools\InitDB.aspx.cs">
       <DependentUpon>InitDB.aspx</DependentUpon>

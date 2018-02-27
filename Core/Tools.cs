@@ -241,6 +241,10 @@ namespace Core
 
         public void AddMonthSchedule(Guid workID, string task, int startMonth, int endMonth)
         {
+            //如果初始月份为0则不添加本条工作计划
+            if (startMonth == 0)
+                return;
+
             if (endMonth == 0 || startMonth == endMonth)
                 UpdateMonthSchedule(workID, task, startMonth);
             else
@@ -303,11 +307,46 @@ namespace Core
             //return l;
         }
 
-        public void ManualAddMonthSchedule(int id, Guid workID, string shedule, int startMonth, int endMonth)
+
+        public void BuildWeekOfYear(int year)
         {
-            ExecuteSql("update 临时目标节点 set 识别=6 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", id) });
+            int month = 1;
+            DateTime weekStart = new DateTime(year, month, 1);
+            DateTime monthEnd = weekStart.AddMonths(1).AddDays(-1);
+            TimeSpan ts = new TimeSpan(monthEnd.Ticks - weekStart.Ticks);
+            //int weeks = (int)Math.Ceiling(ts.TotalDays / 7);
+            DateTime weekEnd = weekStart.AddDays(7 - Convert.ToInt16(weekStart.DayOfWeek));
+            int i = 1;
+            for (int m = 1; m <= 12; m++)
+            {
+                do
+                {
+                    ExecuteSql("insert 周(周数,开始日期,结束日期) values(@周数,@开始日期,@结束日期)",new SqlParameter[] {new SqlParameter("@周数",i),
+                        new SqlParameter("@开始日期",weekStart),
+                        new SqlParameter("@结束日期",weekEnd),
+                    });
+                    //Response.Write("第" + i + "周：" + weekStart + " " + weekEnd + "<br>");
+                    i++;
+                    weekStart = weekEnd.AddDays(1);
+                    weekEnd = weekStart.AddDays(6);
+                } while (weekStart.Month == m);
+
+            }
         }
 
+        public int GetWeeksOfMonth(int year,int month)
+        {
+            int m;
+            using (SqlDataReader sdr=GetDataReader("select count(*) from 周 where datepart(yyyy,开始日期)=@年份 and datepart(mm,开始日期)=@月份", new SqlParameter[] { new SqlParameter("@年份", year),
+            new SqlParameter("@月份", month)
+            }))
+            {
+                sdr.Read();
+                m = int.Parse(sdr[0].ToString());
+            }
+
+            return m;
+        }
         /*
         /// <summary>
         /// 将注册资本从文本格式传唤成长整型格式
