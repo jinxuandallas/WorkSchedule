@@ -86,6 +86,7 @@
     <Content Include="Global.asax" />
     <Content Include="Schedule.aspx" />
     <Content Include="Test\LoaclStroage.aspx" />
+    <Content Include="Test\RepeaterTest.aspx" />
     <Content Include="Test\ScheduleTest.aspx" />
     <Content Include="Test\Test.aspx" />
     <Content Include="Tools\AddOtherWorkMonthSchedule.aspx" />
@@ -118,6 +119,13 @@
     </Compile>
     <Compile Include="Test\LoaclStroage.aspx.designer.cs">
       <DependentUpon>LoaclStroage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Test\RepeaterTest.aspx.cs">
+      <DependentUpon>RepeaterTest.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Test\RepeaterTest.aspx.designer.cs">
+      <DependentUpon>RepeaterTest.aspx</DependentUpon>
     </Compile>
     <Compile Include="Test\ScheduleTest.aspx.cs">
       <DependentUpon>ScheduleTest.aspx</DependentUpon>
