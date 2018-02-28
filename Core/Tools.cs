@@ -255,7 +255,7 @@ namespace Core
         public void UpdateMonthSchedule(Guid workID, string task, int month)
         {
             string date = DateTime.Now.Year + "-" + month + "-1";
-            string id=string.Empty;
+            string id = string.Empty;
             //先判断月节点表中有没有此月的节点数据，如果有则用update语句在原数据后面追加新的节点数据，如果没有则用insert添加新节点数据
             using (SqlDataReader sdr = GetDataReader("select 目标节点,ID from 月节点 where 工作ID=@工作ID and 年份=@年份", new SqlParameter[] { new SqlParameter("@工作ID",workID),
                 new SqlParameter("@年份",date)
@@ -321,7 +321,7 @@ namespace Core
             {
                 do
                 {
-                    ExecuteSql("insert 周(周数,开始日期,结束日期) values(@周数,@开始日期,@结束日期)",new SqlParameter[] {new SqlParameter("@周数",i),
+                    ExecuteSql("insert 周(周数,开始日期,结束日期) values(@周数,@开始日期,@结束日期)", new SqlParameter[] {new SqlParameter("@周数",i),
                         new SqlParameter("@开始日期",weekStart),
                         new SqlParameter("@结束日期",weekEnd),
                     });
@@ -334,10 +334,21 @@ namespace Core
             }
         }
 
-        public int GetWeeksOfMonth(int year,int month)
+        public bool HasMonthTask(Guid workID, DateTime dt)
+        {
+            bool result;
+            using (SqlDataReader sdr = GetDataReader("select ID from 月节点 where 工作ID=@工作ID and 年份=@年份", new SqlParameter[] { new SqlParameter("@工作ID", workID),
+                new SqlParameter("@年份", dt.ToString("yyyy/MM/dd")) }))
+            {
+                sdr.Read();
+                result = sdr.HasRows ? true : false;
+            }
+            return result;
+        }
+        public int GetWeeksOfMonth(int year, int month)
         {
             int m;
-            using (SqlDataReader sdr=GetDataReader("select count(*) from 周 where datepart(yyyy,开始日期)=@年份 and datepart(mm,开始日期)=@月份", new SqlParameter[] { new SqlParameter("@年份", year),
+            using (SqlDataReader sdr = GetDataReader("select count(*) from 周 where datepart(yyyy,开始日期)=@年份 and datepart(mm,开始日期)=@月份", new SqlParameter[] { new SqlParameter("@年份", year),
             new SqlParameter("@月份", month)
             }))
             {
