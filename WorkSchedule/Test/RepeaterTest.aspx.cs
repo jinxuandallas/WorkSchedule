@@ -5,22 +5,28 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace WorkSchedule
+namespace WorkSchedule.Test
 {
-    public partial class ScheduleTest : System.Web.UI.Page
+    public partial class RepeaterTest : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            generateTable();
-            //Panel1.ToolTip = "xx\ndd/ndee";
+            //Repeater1.DataSource = SqlDataSource1;
+            //Repeater1.DataMember = "ID";
+            //DataBind();
         }
 
-        private void generateTable()
+        protected void Repeater1_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            //ScheduleTable.Style.Value = "border-collapse:collapse;border-spacing:0px;padding: 0px; margin: 0px; ";
-            ScheduleTable.Rows[0].Style.Value = "border-collapse:collapse;border-spacing:0px;padding: 0px; margin: 0px; ";
-            foreach (TableCell tc in ScheduleTable.Rows[0].Cells)
+            //Response.Write(e.Item.DataItem + "<br>");
+            //return;
+            //if (e.Item.DataItem)
+            //Table tt = (Table)e.Item.FindControl("ScheduleTable");
+            TableRow tr = ((Table)e.Item.FindControl("ScheduleTable")).Rows[0];
+            tr.Style.Value = "border-collapse:collapse;border-spacing:0px;padding: 0px; margin: 0px; ";
+            for (int i = 1; i <= 12; i++)
             {
+                TableCell tc = new TableCell();
                 tc.Style.Value = "border-collapse: collapse; border-spacing: 0px; border: 0px;padding: 0px; margin: 0px;border: 1px solid #000000";
                 Table t = new Table();
                 /*
@@ -36,12 +42,12 @@ namespace WorkSchedule
                 t.Rows[0].Cells[0].Text = "aaaa";
                 t.Rows[0].Cells[0].ColumnSpan = 4;
                 //t.Rows[0].Cells[0].Style.Value = " border-style: solid; border-width: 1px 1px 1px 1px; border-color: #000000;";
-                
-                for (int i = 0; i < 4; i++)
+
+                for (int j = 0; j < 4; j++)
                 {
                     t.Rows.Add(new TableRow());
                     TableCell wtc = new TableCell();
-                    wtc.Text = i.ToString();
+                    wtc.Text = j.ToString();
                     /*
                      * TableItemStyle tis = new TableItemStyle();
                     
@@ -53,32 +59,12 @@ namespace WorkSchedule
                     wtc.Style.Value = "padding: 0px; margin: 0px; border-style: solid; border-width: 1px 1px 1px 0px; border-color: #000000;";
                     t.Rows[1].Cells.Add(wtc);
                 }
-                
+
                 tc.Controls.Add(t);
+                tr.Cells.Add(tc);
             }
-        }
-
-        protected void LinkButton1_Click(object sender, EventArgs e)
-        {
-            //Panel1.ToolTip = DateTime.Now.ToString();
-            //return;
-            Panel1.Visible = !Panel1.Visible;
-            if (Panel1.Visible)
-                LinkButton1.Text = "折叠";
-            else
-                LinkButton1.Text = "详细";
-
-        }
-
-        protected void Panel1_PreRender(object sender, EventArgs e)
-        {
-            Response.Write("aaa<br>");
-        }
-
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            Panel1.ToolTip = DateTime.Now.ToString();
-            Label1.Text = DateTime.Now.ToString();
+            //Response.Write("xxx");
+            //e.Item.con = tt;
         }
     }
 }
