@@ -17,11 +17,17 @@ namespace Core
             t = new Tools();
         }
 
-        public int GetWeekState(Guid monthID,int weekOfYear)
+        /// <summary>
+        /// 获取当前周的周状态
+        /// </summary>
+        /// <param name="monthID"></param>
+        /// <param name="weekOfYear"></param>
+        /// <returns></returns>
+        public int GetWeekState(Guid workID,int weekOfYear)
         {
             int state=0;
-            using (SqlDataReader sdr = GetDataReader("select 周状态 from 周节点 where 月节点ID=@月节点ID and 周数=@周数", new SqlParameter[] {
-                new SqlParameter("@月节点ID",monthID),
+            using (SqlDataReader sdr = GetDataReader("select 周状态 from 周节点视图 where 工作ID=@工作ID and 周数=@周数", new SqlParameter[] {
+                new SqlParameter("@工作ID",workID),
                  new SqlParameter("@周数",weekOfYear)
             }))
                 if (sdr.Read())

@@ -388,13 +388,10 @@ namespace Core
             //    w[i] = int.Parse(ds.Tables[0].Rows[i][0].ToString());
             return GetIntArrFromDataSet(ds);
         }
-        public int[] GetExistTaskMonths(Guid workID, int year)
+        public int[] GetExistTaskMonths(Guid workID)
         {
-            if (year == 0)
-                year = DateTime.Now.Year;
-            DataSet ds = GetDataSet("select distinct datepart(mm,日期) from 月节点 where 工作ID = @工作ID and datepart(yyyy,日期) = @年份", new SqlParameter[] { new SqlParameter("@工作ID",workID),
-                new SqlParameter("@年份",year)
-            });
+           
+            DataSet ds = GetDataSet("select distinct datepart(mm,日期) from 月节点 where 工作ID = @工作ID", new SqlParameter[] { new SqlParameter("@工作ID",workID) });
             return GetIntArrFromDataSet(ds);
         }
 

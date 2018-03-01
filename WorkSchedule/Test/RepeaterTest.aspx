@@ -1,8 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="RepeaterTest.aspx.cs" Inherits="WorkSchedule.Test.RepeaterTest" %>
-<%@ OutputCache Duration="3600"
-               Location="Any"
-               VaryByCustom="browser"
-               VaryByParam="RequestID" %>
+
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -18,17 +15,55 @@
 
             <asp:Repeater ID="Repeater1" runat="server" OnItemDataBound="Repeater1_ItemDataBound" DataSourceID="SqlDataSource1" DataMember="DefaultView" OnItemCommand="Repeater1_ItemCommand">
                 <HeaderTemplate>
-                    <table style="width:100%">
+                    <table style="width: 100%">
                         <tr>
-                            <td style="text-align:center"><span style="font-size: xx-large">青岛中央商务区重点工作管理平台</span></td>
-                            
+                            <td style="text-align: center"><span style="font-size: xx-large">青岛中央商务区重点工作管理平台</span></td>
+
                         </tr>
                         <tr>
-                            <td style="text-align:center"><span style="font-size: x-large">（<%#DateTime.Now.Year%>年）</span></td>
+                            <td style="text-align: center"><span style="font-size: x-large">（<%#DateTime.Now.Year%>年）</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table style="width: 100%">
+                                    <tr>
+                                        <td style="width: 55%"></td>
+                                        <td style="width: 200px">
+                                            <table>
+                                                <tr>
+                                                    <td></td>
+                                                    <td style="width: 30px; background-color: #FFFF99;"></td>
+                                                    <td style="width: 150px; font-size: small">正在进行的工作</td>
+                                                    <td></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td style="width: 200px">
+                                            <table>
+                                                <tr>
+                                                    <td></td>
+                                                    <td style="width: 30px; background-color: #D04242;"></td>
+                                                    <td style="width: 150px; font-size: small">未完成计划的工作</td>
+                                                    <td></td>
+                                                </tr>
+                                            </table>
+                                        </td><td style="width: 200px">
+                                            <table>
+                                                <tr>
+                                                    <td></td>
+                                                    <td style="width: 30px; background-color: #3399FF;"></td>
+                                                    <td style="width: 150px; font-size: small">按计划完成的工作</td>
+                                                    <td></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
                     </table>
                     <br />
-                    <hr style="width: 1200px" />
+                    <hr style="width: 1500px;text-align:left;margin-left:0" />
                 </HeaderTemplate>
                 <ItemTemplate>
                     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
@@ -59,10 +94,9 @@
                             <br />
                         </ContentTemplate>
                     </asp:UpdatePanel>
-                    <hr style="width: 1200px" />
-
+                    
+                    <hr style="width: 1500px;text-align:left;margin-left:0" />
                     <br />
-
                 </ItemTemplate>
             </asp:Repeater>
 

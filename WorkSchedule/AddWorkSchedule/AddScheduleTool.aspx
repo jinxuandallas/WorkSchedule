@@ -20,7 +20,7 @@
             <asp:Label ID="LabelWork" runat="server"></asp:Label>
             <br />
             <br />
-            第<asp:DropDownList ID="DropDownListMonth" DataSource="<%#t.GetExistTaskMonths(Guid.Parse(DropDownListWork.SelectedValue),0) %>" runat="server" OnSelectedIndexChanged="DropDownListMonth_SelectedIndexChanged" AutoPostBack="True"></asp:DropDownList>月目标节点：
+            第<asp:DropDownList ID="DropDownListMonth" DataSource="<%#t.GetExistTaskMonths(Guid.Parse(DropDownListWork.SelectedValue)) %>" runat="server" OnSelectedIndexChanged="DropDownListMonth_SelectedIndexChanged" AutoPostBack="True"></asp:DropDownList>月目标节点：
             
             <asp:Label ID="LabelMonthTask" runat="server"></asp:Label>
             <br />

@@ -23,6 +23,7 @@ namespace WorkSchedule.Test
 
         protected void Repeater1_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
+            //return;
             int weekOfYear = 0;
 
 
@@ -39,7 +40,7 @@ namespace WorkSchedule.Test
             tr.Style.Value = "border-collapse:collapse;border-spacing:0px;padding: 0px; margin: 0px;";
             for (int i = 1; i <= 12; i++)
             {
-                int[] existMonth = tool.GetExistTaskMonths(workID, DateTime.Now.Year);
+                int[] existMonth = tool.GetExistTaskMonths(workID);
                 //int[] existMonth = { 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12 };
                 //月表格
                 TableCell tc = new TableCell();
@@ -90,7 +91,7 @@ namespace WorkSchedule.Test
                         wtc.ApplyStyle(tis);
                         */
                         wtc.Style.Value = "padding: 0px; margin: 0px; border-style: solid; border-width: 1px 1px 1px 0px; border-color: #000000;width:25px";
-                        switch (ss.GetWeekState(tool.GetMonthID(workID, i), weekOfYear))
+                        switch (ss.GetWeekState(workID, weekOfYear))
                         {
                             case 0:
                                 break;

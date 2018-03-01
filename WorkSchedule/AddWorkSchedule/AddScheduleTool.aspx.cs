@@ -65,7 +65,7 @@ namespace WorkSchedule.AddWorkSchedule
                 else
                     state = ((CheckBox)ri.FindControl("CheckBoxState")).Checked ? 3 : 2;
 
-                if (!aws.InsertWeekSchedule(monnthTaskID, weekOfYear, weekSchedule, weekExecution, state))
+                if (!aws.InputWeekSchedule(monnthTaskID, weekOfYear, weekSchedule, weekExecution, state))
                     succeed = false;
             }
 
