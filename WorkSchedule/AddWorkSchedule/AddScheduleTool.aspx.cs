@@ -70,7 +70,7 @@ namespace WorkSchedule.AddWorkSchedule
             }
 
             string result = succeed ? "成功" : "不成功";
-            Response.Write("周计划添加" + result + "<br>");
+            Response.Write("周计划添加" + result + "<br/><br/>");
             Repeater1.Visible = false;
         }
     }

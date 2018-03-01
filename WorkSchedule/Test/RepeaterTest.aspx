@@ -28,31 +28,31 @@
                                 <table style="width: 100%">
                                     <tr>
                                         <td style="width: 55%"></td>
-                                        <td style="width: 200px">
+                                        <td style="width: 250px">
                                             <table>
                                                 <tr>
                                                     <td></td>
                                                     <td style="width: 30px; background-color: #FFFF99;"></td>
-                                                    <td style="width: 150px; font-size: small">正在进行的工作</td>
+                                                    <td style="width: 200px; font-size: small">正在进行的工作</td>
                                                     <td></td>
                                                 </tr>
                                             </table>
                                         </td>
-                                        <td style="width: 200px">
+                                        <td style="width: 250px">
                                             <table>
                                                 <tr>
                                                     <td></td>
                                                     <td style="width: 30px; background-color: #D04242;"></td>
-                                                    <td style="width: 150px; font-size: small">未完成计划的工作</td>
+                                                    <td style="width: 200px; font-size: small">未完成计划的工作</td>
                                                     <td></td>
                                                 </tr>
                                             </table>
-                                        </td><td style="width: 200px">
+                                        </td><td style="width: 250px">
                                             <table>
                                                 <tr>
                                                     <td></td>
                                                     <td style="width: 30px; background-color: #3399FF;"></td>
-                                                    <td style="width: 150px; font-size: small">按计划完成的工作</td>
+                                                    <td style="width: 200px; font-size: small">按计划完成的工作</td>
                                                     <td></td>
                                                 </tr>
                                             </table>
