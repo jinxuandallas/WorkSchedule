@@ -11,39 +11,36 @@ namespace WorkSchedule.Test
 {
     public partial class RepeaterTest : System.Web.UI.Page
     {
-        Core.Tools tool;
+        static protected Core.Tools tool = new Core.Tools();
+        static int[] weeksOfMonth = tool.GetWeeksOfMonths(DateTime.Now.Year);
+        protected ShowSchedule ss;
         protected void Page_Load(object sender, EventArgs e)
         {
-            //Repeater1.DataSource = SqlDataSource1;
-            //Repeater1.DataMember = "ID";
-            //DataBind();
-            tool = new Core.Tools();
+            ss = new ShowSchedule();
             //if (!IsPostBack)
-            DataBind();
+            Repeater1.DataBind();
         }
 
         protected void Repeater1_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            int weekOfMonth, weekOfYear = 0;
+            int weekOfYear = 0;
 
-            //Response.Write(e.Item.DataItem + "<br>");
-            //return;
-            //if (e.Item.DataItem)
-            //Table tt = (Table)e.Item.FindControl("ScheduleTable");
+
             //if (e.Item.ItemType != ListItemType.Item)
             //    return;
             Table table = (Table)e.Item.FindControl("ScheduleTable");
-            //table.Width = 53 * 25;
             if (table == null)
                 return;
 
             Guid workID = Guid.Parse((((DataRowView)e.Item.DataItem)["ID"].ToString()));
+
             TableRow tr = table.Rows[0];
             //任务中的一行表格
             tr.Style.Value = "border-collapse:collapse;border-spacing:0px;padding: 0px; margin: 0px;";
             for (int i = 1; i <= 12; i++)
             {
-                weekOfMonth = tool.GetWeeksOfMonth(DateTime.Now.Year, i);
+                int[] existMonth = tool.GetExistTaskMonths(workID, DateTime.Now.Year);
+                //int[] existMonth = { 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12 };
                 //月表格
                 TableCell tc = new TableCell();
                 tc.Style.Value = "border-collapse: collapse; border-spacing: 0px; border: 0px;padding: 0px; margin: 0px;border: 1px solid #000000;";
@@ -57,29 +54,33 @@ namespace WorkSchedule.Test
                 t.ApplyStyle(ts);
                 */
 
-                t.Style.Value = "border-collapse: collapse; border-spacing: 0px;width:" + weekOfMonth * 22 + "px; text-align: center;";
+                t.Style.Value = "border-collapse: collapse; border-spacing: 0px;width:" + weeksOfMonth[i - 1] * 22 + "px; text-align: center;";
                 t.Rows.Add(new TableRow());
                 t.Rows[0].Cells.Add(new TableCell());
-                if (tool.HasMonthTask(workID, new DateTime(DateTime.Now.Year, i, 1)))
+                //if (tool.HasMonthTask(workID, new DateTime(DateTime.Now.Year, i, 1)))
                 //t.Style.Value += "background-color: #FFFF99";
-
+                if (Array.IndexOf(existMonth, i) != -1)
                 {
-                    t.Rows[0].Cells[0].Text = i + "月";
-                    t.Rows[0].Cells[0].ColumnSpan = weekOfMonth;
+                    t.Rows[0].Cells[0].ColumnSpan = weeksOfMonth[i - 1];
+
+                    LinkButton lb = new LinkButton();
+                    lb.Text = i + "月";
+                    lb.Font.Underline = false;
+                    lb.CommandName = "monthLinkButton";
+                    lb.CommandArgument = i.ToString();
+                    t.Rows[0].Cells[0].Controls.Add(lb);
+
                     //t.Rows[0].Cells[0].Style.Value = " border-style: solid; border-width: 1px 1px 1px 1px; border-color: #000000;";
 
-                    for (int w = 1; w <= weekOfMonth; w++)
+                    for (int w = 1; w <= weeksOfMonth[i - 1]; w++)
                     {
                         weekOfYear++;
                         //添加第二行
                         t.Rows.Add(new TableRow());
                         TableCell wtc = new TableCell();
-                        LinkButton lb = new LinkButton();
-                        lb.Text = weekOfYear.ToString("00");
-                        lb.Font.Underline = false;
-                        lb.CommandName = "weekLinkButton";
-                        lb.CommandArgument = weekOfYear.ToString();
-                        wtc.Controls.Add(lb);
+                        wtc.Text = weekOfYear.ToString("00");
+
+
                         /*
                          * TableItemStyle tis = new TableItemStyle();
 
@@ -89,12 +90,27 @@ namespace WorkSchedule.Test
                         wtc.ApplyStyle(tis);
                         */
                         wtc.Style.Value = "padding: 0px; margin: 0px; border-style: solid; border-width: 1px 1px 1px 0px; border-color: #000000;width:25px";
+                        switch (ss.GetWeekState(tool.GetMonthID(workID, i), weekOfYear))
+                        {
+                            case 0:
+                                break;
+                            case 1:
+                                wtc.Style.Value += "; background-color: #FFFF99;";
+                                break;
+                            case 2:
+                                wtc.Style.Value += "; background-color: #D04242";
+                                break;
+                            case 3:
+                                wtc.Style.Value += "; background-color: #3399FF;";
+                                break;
+
+                        }
                         t.Rows[1].Cells.Add(wtc);
                     }
                 }
                 else
                 {
-                    weekOfYear += weekOfMonth;
+                    weekOfYear += weeksOfMonth[i - 1];
                     tc.Style.Value = tc.Style.Value.Replace("border: 1px solid #000000;", "border-width:0px");
                 }
                 tc.Controls.Add(t);
@@ -104,20 +120,6 @@ namespace WorkSchedule.Test
             //e.Item.con = tt;
         }
 
-        //protected void LinkButton1_Click(object sender, EventArgs e)
-        //{
-        //    Panel1.Visible = !Panel1.Visible;
-        //    if (Panel1.Visible)
-        //        LinkButton1.Text = "折叠";
-        //    else
-        //        LinkButton1.Text = "详细";
-        //}
-
-        //protected void Button1_Click(object sender, EventArgs e)
-        //{
-        //    Panel1.ToolTip = DateTime.Now.ToString();
-        //    Label1.Text = DateTime.Now.ToString();
-        //}
 
         protected void Repeater1_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
@@ -128,18 +130,18 @@ namespace WorkSchedule.Test
                 ((LinkButton)e.Item.FindControl("LinkButton1")).Text = p.Visible ? "折叠" : "详细";
             }
 
-            if (e.CommandName == "button")
+            else if (e.CommandName == "button")
             {
                 ((Label)e.Item.FindControl("Label1")).Text = DateTime.Now.ToString();
             }
 
-            if (e.CommandName == "weekLinkButton")
+            else if (e.CommandName == "monthLinkButton")
             {
-                Panel p = (Panel)e.Item.FindControl("weekPanel");
+                Panel p = (Panel)e.Item.FindControl("monthPanel");
                 p.Visible = true;
-                ((Label)e.Item.FindControl("weekLabel")).Text = e.CommandArgument + "：";
+                ((Label)e.Item.FindControl("monthLabel")).Text = e.CommandArgument + "：";
             }
-            //DataBind();
+            //Repeater1.DataBind();
         }
     }
 }
