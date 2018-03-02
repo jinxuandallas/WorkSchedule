@@ -18,7 +18,12 @@ namespace WorkSchedule.Test
         {
             ss = new ShowSchedule();
             //if (!IsPostBack)
+            //{
             Repeater1.DataBind();
+            //    ViewState["repeater"] = Repeater1.ItemTemplate;
+            //}
+            //else
+            //    Repeater1.ItemTemplate = (ITemplate )ViewState["repeater"];
         }
 
         protected void Repeater1_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -68,7 +73,7 @@ namespace WorkSchedule.Test
                     lb.Text = i + "月";
                     lb.Font.Underline = false;
                     lb.CommandName = "monthLinkButton";
-                    lb.CommandArgument = i.ToString();
+                    lb.CommandArgument =workID+"$"+ i.ToString();
                     t.Rows[0].Cells[0].Controls.Add(lb);
 
                     //t.Rows[0].Cells[0].Style.Value = " border-style: solid; border-width: 1px 1px 1px 1px; border-color: #000000;";
@@ -140,7 +145,9 @@ namespace WorkSchedule.Test
             {
                 Panel p = (Panel)e.Item.FindControl("monthPanel");
                 p.Visible = true;
-                ((Label)e.Item.FindControl("monthLabel")).Text = e.CommandArgument + "：";
+                string[] arg = e.CommandArgument.ToString().Split(new char[] { '$'});
+                string monthDeail = ss.GetMonthScheduleDetail(Guid.Parse(arg[0]), int.Parse(arg[1]));
+                ((Label)e.Item.FindControl("monthLabel")).Text = monthDeail;
             }
             //Repeater1.DataBind();
         }

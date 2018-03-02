@@ -12,7 +12,7 @@
         <div>
             <asp:ScriptManager ID="ScriptManager1" runat="server">
             </asp:ScriptManager>
-
+            
             <asp:Repeater ID="Repeater1" runat="server" OnItemDataBound="Repeater1_ItemDataBound" DataSourceID="SqlDataSource1" DataMember="DefaultView" OnItemCommand="Repeater1_ItemCommand">
                 <HeaderTemplate>
                     <table style="width: 100%">
@@ -88,8 +88,10 @@
                             <%--<asp:UpdatePanel ID="UpdatePanel2" runat="server">--%>
                             <%--<ContentTemplate>--%>
                             <asp:Panel ID="monthPanel" runat="server">
-
+                                <br />
+                                <div style="font-size: small;background-color:#ffff99;" >
                                 <asp:Label ID="monthLabel" BackColor="#ffff99" runat="server"></asp:Label>
+                                    </div>
                             </asp:Panel>
                             <br />
                         </ContentTemplate>
