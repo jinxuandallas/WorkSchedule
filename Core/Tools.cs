@@ -52,7 +52,7 @@ namespace Core
         }
 
 
-        public void ImportTasts(string workTable)
+        public void ImportTasks(string workTable)
         {
             ExecuteSql("insert 工作 (序号,目标名称,目标内容,年份,备注) select 序号,目标名称,目标内容,year(getdate()),备注 from " + workTable);
         }
@@ -108,7 +108,16 @@ namespace Core
             }
 
         }
+        public string GetTaskNameByID(Guid workID)
+        {
+            using (SqlDataReader sdr = GetDataReader("select 目标名称 from 工作 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", workID) }))
+            {
+                if (sdr.Read())
+                    return sdr[0].ToString();
+            }
 
+            return string.Empty;
+        }
 
         public Guid GetTaskIDBySN(int sn)
         {
@@ -202,7 +211,7 @@ namespace Core
                 else if ((r = Regex.Match(task, @"^\d*月底前").Value) != "" || (r = Regex.Match(task, @"^\d*月底之前").Value) != "" || (r = Regex.Match(task, @"^\d*月底").Value) != "")
                 {
                     //startMonth需判断前面几个月有没有目标节点，如果没有则从1月份开始，如果有则续接上个节点目标的月份
-                    using (SqlDataReader sdr = GetDataReader("select top 1 month(年份) from 月节点 where 工作ID=@工作ID order by 年份 desc ", new SqlParameter[] { new SqlParameter("@工作ID", workID) }))
+                    using (SqlDataReader sdr = GetDataReader("select top 1 month(日期) from 月节点 where 工作ID=@工作ID order by 日期 desc ", new SqlParameter[] { new SqlParameter("@工作ID", workID) }))
                         if (sdr.HasRows)
                         {
                             sdr.Read();
@@ -257,8 +266,8 @@ namespace Core
             string date = DateTime.Now.Year + "-" + month + "-1";
             string id = string.Empty;
             //先判断月节点表中有没有此月的节点数据，如果有则用update语句在原数据后面追加新的节点数据，如果没有则用insert添加新节点数据
-            using (SqlDataReader sdr = GetDataReader("select 目标节点,ID from 月节点 where 工作ID=@工作ID and 年份=@年份", new SqlParameter[] { new SqlParameter("@工作ID",workID),
-                new SqlParameter("@年份",date)
+            using (SqlDataReader sdr = GetDataReader("select 目标节点,ID from 月节点 where 工作ID=@工作ID and 日期=@日期", new SqlParameter[] { new SqlParameter("@工作ID",workID),
+                new SqlParameter("@日期",date)
             }))
             {
                 string sql = string.Empty;
@@ -280,9 +289,9 @@ namespace Core
                 }
             }
 
-            ExecuteSql("insert 月节点(工作ID,目标节点,年份) values(@工作ID,@目标节点,@年份)", new SqlParameter[] {new SqlParameter("@工作ID",workID),
+            ExecuteSql("insert 月节点(工作ID,目标节点,日期) values(@工作ID,@目标节点,@日期)", new SqlParameter[] {new SqlParameter("@工作ID",workID),
                     new SqlParameter("@目标节点",task),
-                    new SqlParameter("@年份",date)
+                    new SqlParameter("@日期",date)
                     });
         }
 
@@ -321,7 +330,7 @@ namespace Core
             {
                 do
                 {
-                    ExecuteSql("insert 周(周数,开始日期,结束日期) values(@周数,@开始日期,@结束日期)", new SqlParameter[] {new SqlParameter("@周数",i),
+                    ExecuteSql("insert 周数(周数,开始日期,结束日期) values(@周数,@开始日期,@结束日期)", new SqlParameter[] {new SqlParameter("@周数",i),
                         new SqlParameter("@开始日期",weekStart),
                         new SqlParameter("@结束日期",weekEnd),
                     });
@@ -337,18 +346,21 @@ namespace Core
         public bool HasMonthTask(Guid workID, DateTime dt)
         {
             bool result;
-            using (SqlDataReader sdr = GetDataReader("select ID from 月节点 where 工作ID=@工作ID and 年份=@年份", new SqlParameter[] { new SqlParameter("@工作ID", workID),
-                new SqlParameter("@年份", dt.ToString("yyyy/MM/dd")) }))
+            using (SqlDataReader sdr = GetDataReader("select ID from 月节点 where 工作ID=@工作ID and 日期=@日期", new SqlParameter[] { new SqlParameter("@工作ID", workID),
+                new SqlParameter("@日期", dt.ToString("yyyy/MM/dd")) }))
             {
                 sdr.Read();
                 result = sdr.HasRows ? true : false;
             }
             return result;
         }
-        public int GetWeeksOfMonth(int year, int month)
+
+        public int GetWeekCountOfMonth(int year, int month)
         {
+            if (year == 0)
+                year = DateTime.Now.Year;
             int m;
-            using (SqlDataReader sdr = GetDataReader("select count(*) from 周 where datepart(yyyy,开始日期)=@年份 and datepart(mm,开始日期)=@月份", new SqlParameter[] { new SqlParameter("@年份", year),
+            using (SqlDataReader sdr = GetDataReader("select count(*) from 周数 where datepart(yyyy,开始日期)=@年份 and datepart(mm,开始日期)=@月份", new SqlParameter[] { new SqlParameter("@年份", year),
             new SqlParameter("@月份", month)
             }))
             {
@@ -356,6 +368,65 @@ namespace Core
                 m = int.Parse(sdr[0].ToString());
             }
 
+            return m;
+        }
+
+
+        public DataSet GetWeeksOfMonth(int year, int month)
+        {
+            if (year == 0)
+                year = DateTime.Now.Year;
+            return GetDataSet("select 周数,开始日期,结束日期 from 周数 where datepart(yyyy,开始日期)=@年份 and datepart(mm,开始日期)=@月份", new SqlParameter[] { new SqlParameter("@年份", year),
+            new SqlParameter("@月份", month)
+            });
+        }
+        public int[] GetWeeksOfMonths(int year)
+        {
+            DataSet ds = GetDataSet("select count(ID) from 周数 where datepart(yyyy,开始日期)=@年份 group by datepart(mm,开始日期)", new SqlParameter[] { new SqlParameter("@年份", year) });
+            //int[] w = new int[12];
+            //for (int i = 0; i < 12; i++)
+            //    w[i] = int.Parse(ds.Tables[0].Rows[i][0].ToString());
+            return GetIntArrFromDataSet(ds);
+        }
+        public int[] GetExistTaskMonths(Guid workID)
+        {
+           
+            DataSet ds = GetDataSet("select distinct datepart(mm,日期) from 月节点 where 工作ID = @工作ID", new SqlParameter[] { new SqlParameter("@工作ID",workID) });
+            return GetIntArrFromDataSet(ds);
+        }
+
+
+        public Guid GetMonthID(Guid workID, int month)
+        {
+            Guid monthID;
+            using (SqlDataReader sdr = GetDataReader("select ID from 月节点 where 工作ID=@工作ID and datepart(mm,日期)=@月份", new SqlParameter[] { new SqlParameter("@工作ID",workID),
+            new SqlParameter("@月份",month)
+            }))
+            {
+                sdr.Read();
+                monthID = Guid.Parse(sdr[0].ToString());
+            }
+            return monthID;
+        }
+        public string GetMonthTask(Guid workID, int month)
+        {
+            string task;
+            using (SqlDataReader sdr = GetDataReader("select 目标节点 from 月节点 where 工作ID=@工作ID and datepart(mm,日期)=@月份", new SqlParameter[] { new SqlParameter("@工作ID",workID),
+            new SqlParameter("@月份",month)
+            }))
+            {
+                sdr.Read();
+                task = sdr[0].ToString();
+            }
+
+            return task;
+        }
+        public int[] GetIntArrFromDataSet(DataSet ds)
+        {
+            int l = ds.Tables[0].Rows.Count;
+            int[] m = new int[l];
+            for (int i = 0; i < l; i++)
+                m[i] = int.Parse(ds.Tables[0].Rows[i][0].ToString());
             return m;
         }
         /*

@@ -18,7 +18,7 @@ namespace WorkSchedule.Tools
             //t.BuildWeekOfYear(DateTime.Now.Year);
 
             for (int i = 1; i <= 12; i++)
-                Response.Write(i+"月"+t.GetWeeksOfMonth(DateTime.Now.Year,i)+"个周<br>");
+                Response.Write(i+"月"+t.GetWeekCountOfMonth(DateTime.Now.Year,i)+"个周<br>");
             Response.Write("执行成功");
         }
 

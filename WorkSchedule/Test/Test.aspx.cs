@@ -13,9 +13,12 @@ namespace WorkSchedule.Test
     public partial class Test : System.Web.UI.Page
     {
         public Core.Test t;
+        public ShowSchedule ss;
         protected void Page_Load(object sender, EventArgs e)
         {
             t = new Core.Test();
+            ss = new ShowSchedule();
+            Response.Write(ss.GetMonthScheduleDetail(Guid.Parse("c521878e-1615-e811-82f1-b083fe979874"), 9));
             //t.OnlyTest();
             //DataTable dt = t.DealMonthSchedule();
             //foreach (DataRow dr in dt.Rows)
