@@ -87,10 +87,10 @@
 
                             <%--<asp:UpdatePanel ID="UpdatePanel2" runat="server">--%>
                             <%--<ContentTemplate>--%>
-                            <asp:Panel ID="monthPanel" runat="server">
+                            <asp:Panel ID="monthPanel" runat="server" >
                                 <br />
-                                <div style="font-size: small;background-color:#ffff99;" >
-                                <asp:Label ID="monthLabel" BackColor="#ffff99" runat="server"></asp:Label>
+                                <div style="font-size: small;background-color:#ffff99; width: 500px;" >
+                                <asp:Label ID="monthLabel" BackColor="#ffff99" runat="server" ></asp:Label>
                                     </div>
                             </asp:Panel>
                             <br />

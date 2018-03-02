@@ -19,7 +19,7 @@ namespace WorkSchedule.AddWorkSchedule
             aws = new AddMonthSchedule();
             if (!IsPostBack)
             {
-                Repeater1.Visible = false;
+                //Repeater1.Visible = false;
                 DataBind();
             }
 
