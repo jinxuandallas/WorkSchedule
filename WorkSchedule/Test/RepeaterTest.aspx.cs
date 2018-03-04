@@ -11,12 +11,21 @@ namespace WorkSchedule.Test
 {
     public partial class RepeaterTest : System.Web.UI.Page
     {
-        static protected Core.Tools tool = new Core.Tools();
-        static int[] weeksOfMonth = tool.GetWeeksOfMonths(DateTime.Now.Year);
+        protected Core.Tools tool;
+        int[] weeksOfMonth;
+
+        /// <summary>
+        /// 本年度所有工作的ID
+        /// </summary>
+        Guid[] allWorkID;
         protected ShowSchedule ss;
+        protected Dictionary<Guid, List<Dictionary<int,int>>> allMonthWeekInfo;
         protected void Page_Load(object sender, EventArgs e)
         {
+            tool = new Core.Tools();
             ss = new ShowSchedule();
+            PreLoadData();
+            
             //if (!IsPostBack)
             //{
             Repeater1.DataBind();
@@ -25,7 +34,22 @@ namespace WorkSchedule.Test
             //else
             //    Repeater1.ItemTemplate = (ITemplate )ViewState["repeater"];
         }
+        
+        /// <summary>
+        /// 预读repeater控件中所需的数据以提高效率
+        /// </summary>
+        protected void PreLoadData()
+        {
+            //获取一年中所有月份的每个月包含的周数量
+            weeksOfMonth = tool.GetWeeksOfAllMonth();
 
+            allWorkID = tool.GetAllWorkID();
+
+            //foreach(Guid wid in allWorkID)
+
+
+            
+        }
         protected void Repeater1_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             //return;

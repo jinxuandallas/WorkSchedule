@@ -14,9 +14,10 @@ namespace Core
 {
     public class Tools : Database
     {
+        public int year;
         public Tools()
         {
-
+            year = DateTime.Now.Year;
         }
 
         /// <summary>
@@ -119,6 +120,11 @@ namespace Core
             return string.Empty;
         }
 
+        /// <summary>
+        /// 通过序号获取工作ID
+        /// </summary>
+        /// <param name="sn"></param>
+        /// <returns></returns>
         public Guid GetTaskIDBySN(int sn)
         {
             using (SqlDataReader sdr = GetDataReader("select ID from 工作 where 序号=@SN", new SqlParameter[] { new SqlParameter("@SN", sn) }))
@@ -316,7 +322,16 @@ namespace Core
             //return l;
         }
 
+        public void BuildWeekOfYear()
+        {
+            BuildWeekOfYear(year);
+        }
 
+
+        /// <summary>
+        /// 生成某年的所有月份的周数信息
+        /// </summary>
+        /// <param name="year"></param>
         public void BuildWeekOfYear(int year)
         {
             int month = 1;
@@ -355,12 +370,21 @@ namespace Core
             return result;
         }
 
+        public int GetWeekCountOfMonth(int month)
+        {
+            return GetWeekCountOfMonth(year, month);
+        }
+
+        /// <summary>
+        /// 获取某个月有几个周
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
         public int GetWeekCountOfMonth(int year, int month)
         {
-            if (year == 0)
-                year = DateTime.Now.Year;
             int m;
-            using (SqlDataReader sdr = GetDataReader("select count(*) from 周数 where datepart(yyyy,开始日期)=@年份 and datepart(mm,开始日期)=@月份", new SqlParameter[] { new SqlParameter("@年份", year),
+            using (SqlDataReader sdr = GetDataReader("select count(Id) from 周数 where datepart(yyyy,开始日期)=@年份 and datepart(mm,开始日期)=@月份", new SqlParameter[] { new SqlParameter("@年份", year),
             new SqlParameter("@月份", month)
             }))
             {
@@ -371,27 +395,83 @@ namespace Core
             return m;
         }
 
+        public DataSet GetWeeksOfMonth(int month)
+        {
+            return GetWeeksOfMonth(year, month);
+        }
 
+        /// <summary>
+        /// 获取某个月的所有周信息
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
         public DataSet GetWeeksOfMonth(int year, int month)
         {
-            if (year == 0)
-                year = DateTime.Now.Year;
             return GetDataSet("select 周数,开始日期,结束日期 from 周数 where datepart(yyyy,开始日期)=@年份 and datepart(mm,开始日期)=@月份", new SqlParameter[] { new SqlParameter("@年份", year),
             new SqlParameter("@月份", month)
             });
         }
-        public int[] GetWeeksOfMonths(int year)
+
+
+        /// <summary>
+        /// 获取一年所有月份每个月有几个周（为预读数据做准备）
+        /// </summary>
+        /// <returns></returns>
+        public int[] GetWeeksOfAllMonth()
         {
+            return GetWeeksOfAllMonth(year);
+        }
+
+        /// <summary>
+        /// 获取一年所有月份每个月有几个周（为预读数据做准备）
+        /// </summary>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public int[] GetWeeksOfAllMonth(int year)
+        {
+
             DataSet ds = GetDataSet("select count(ID) from 周数 where datepart(yyyy,开始日期)=@年份 group by datepart(mm,开始日期)", new SqlParameter[] { new SqlParameter("@年份", year) });
             //int[] w = new int[12];
             //for (int i = 0; i < 12; i++)
             //    w[i] = int.Parse(ds.Tables[0].Rows[i][0].ToString());
             return GetIntArrFromDataSet(ds);
         }
+
+        /// <summary>
+        /// 获取某年的所有工作的工作ID
+        /// </summary>
+        /// <returns></returns>
+        public Guid[] GetAllWorkID()
+        {
+            return GetAllWorkID(year);
+        }
+
+        /// <summary>
+        /// 获取某年的所有工作的工作ID
+        /// </summary>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public Guid[] GetAllWorkID(int year)
+        {
+            Guid[] allWorkID;
+            DataTable dt = GetDataSet("select ID from 工作 where 年份=@年份", new SqlParameter[] { new SqlParameter("@年份", year) }).Tables[0];
+
+            allWorkID = new Guid[dt.Rows.Count];
+            for (int i = 0; i < dt.Rows.Count; i++)
+                allWorkID[i] = Guid.Parse(dt.Rows[i][0].ToString());
+
+            return allWorkID;
+        }
+        /// <summary>
+        /// 获取某项工作的所有存在计划的月份列表
+        /// </summary>
+        /// <param name="workID"></param>
+        /// <returns></returns>
         public int[] GetExistTaskMonths(Guid workID)
         {
-           
-            DataSet ds = GetDataSet("select distinct datepart(mm,日期) from 月节点 where 工作ID = @工作ID", new SqlParameter[] { new SqlParameter("@工作ID",workID) });
+
+            DataSet ds = GetDataSet("select distinct datepart(mm,日期) from 月节点 where 工作ID = @工作ID", new SqlParameter[] { new SqlParameter("@工作ID", workID) });
             return GetIntArrFromDataSet(ds);
         }
 

@@ -85,6 +85,7 @@
   <ItemGroup>
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Pic\报错.png" />
     <Content Include="Schedule.aspx" />
     <Content Include="Test\LoaclStroage.aspx" />
     <Content Include="Test\RepeaterTest.aspx" />

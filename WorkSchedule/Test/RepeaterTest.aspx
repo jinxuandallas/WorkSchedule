@@ -9,6 +9,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
+        <%--<div style="background-position: 500px; background-image: url('../Pic/报错.png'); background-repeat: repeat-y">--%>
         <div>
             <asp:ScriptManager ID="ScriptManager1" runat="server">
             </asp:ScriptManager>
@@ -69,9 +70,7 @@
                     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                         <ContentTemplate>
                             第<%#Eval("序号") %>项：<span style="background-color: #ffff99"> <%#Eval("目标名称") %></span><br />
-                            <span style="font-size: small">目标内容：<%#Eval("目标内容") %><br />
-                                备注：<%#Eval("备注") %><br />
-                                责任领导：<%# ss.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %> </span>
+                            <span style="font-size: small">目标内容：<%#Eval("目标内容") %><br />备注：<%#Eval("备注") %><br />责任领导：<%# ss.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span>
 
                         </ContentTemplate>
                     </asp:UpdatePanel>
