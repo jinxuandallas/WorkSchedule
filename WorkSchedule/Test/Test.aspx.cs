@@ -14,11 +14,21 @@ namespace WorkSchedule.Test
     {
         public Core.Test t;
         public ShowSchedule ss;
+        public Core.Tools tool;
+        int[] weeksOfMonth;
+        Guid[] allWorkID;
+        Dictionary<Guid, int[]> existMonths;
+        Dictionary<Guid, Dictionary<int, int>> existWeeks;
+        protected Dictionary<Guid, List<Dictionary<int, int>>> allMonthWeekInfo;
         protected void Page_Load(object sender, EventArgs e)
         {
             t = new Core.Test();
             ss = new ShowSchedule();
-
+            tool = new Core.Tools();
+            //if (!IsPostBack)
+                PreLoadData();
+            Response.Write(existMonths.Count);
+            Response.Write("<br/>" +existMonths[Guid.Parse("e121878e-1615-e811-82f1-b083fe979874")]);
             //Response.Write(ss.GetMonthScheduleDetail(Guid.Parse("c521878e-1615-e811-82f1-b083fe979874"), 9));
             //t.OnlyTest();
             //DataTable dt = t.DealMonthSchedule();
@@ -35,6 +45,23 @@ namespace WorkSchedule.Test
 
             //for (int i = 3; i <= 6; i++)
             //    Response.Write(i + "<br>");
+
+
+        }
+        protected void PreLoadData()
+        {
+            //获取一年中所有月份的每个月包含的周数量
+            weeksOfMonth = tool.GetWeeksOfAllMonth();
+
+            allWorkID = tool.GetAllWorkID();
+
+            existMonths = new Dictionary<Guid, int[]>();
+            existWeeks = new Dictionary<Guid, Dictionary<int, int>>();
+            foreach (Guid wid in allWorkID)
+            {
+                existMonths.Add(wid, tool.GetExistTaskMonths(wid));
+                existWeeks.Add(wid, tool.GetExistTaskWeeksAndState(wid));
+            }
 
 
         }

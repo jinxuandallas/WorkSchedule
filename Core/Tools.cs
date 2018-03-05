@@ -475,7 +475,27 @@ namespace Core
             return GetIntArrFromDataSet(ds);
         }
 
+        /// <summary>
+        /// 获取某项工作的全部有工作任务信息的周
+        /// </summary>
+        /// <param name="workID"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
+        public Dictionary<int, int> GetExistTaskWeeksAndState(Guid workID)
+        {
+            Dictionary<int, int> weekAndState = new Dictionary<int, int>();
+            DataSet ds = GetDataSet("select 周数,周状态 from 周节点视图 where 工作ID = @工作ID and 周状态!=0", new SqlParameter[] { new SqlParameter("@工作ID", workID) });
+            foreach (DataRow dr in ds.Tables[0].Rows)
+                weekAndState.Add(int.Parse(dr[0].ToString()), int.Parse(dr[1].ToString()));
+            return weekAndState;
+        }
 
+        /// <summary>
+        /// 根据工作ID和月份获取月份的ID
+        /// </summary>
+        /// <param name="workID"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
         public Guid GetMonthID(Guid workID, int month)
         {
             Guid monthID;
@@ -488,6 +508,13 @@ namespace Core
             }
             return monthID;
         }
+
+        /// <summary>
+        /// 根据工作ID和月份获取月份的目标节点
+        /// </summary>
+        /// <param name="workID"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
         public string GetMonthTask(Guid workID, int month)
         {
             string task;
@@ -501,14 +528,23 @@ namespace Core
 
             return task;
         }
+
+        /// <summary>
+        /// 将DataSet转换为int数组
+        /// </summary>
+        /// <param name="ds">要转换的DataSet</param>
+        /// <returns>返回转换后的数组</returns>
         public int[] GetIntArrFromDataSet(DataSet ds)
         {
             int l = ds.Tables[0].Rows.Count;
+            if (l == 0)
+                return null;
             int[] m = new int[l];
             for (int i = 0; i < l; i++)
                 m[i] = int.Parse(ds.Tables[0].Rows[i][0].ToString());
             return m;
         }
+
         /*
         /// <summary>
         /// 将注册资本从文本格式传唤成长整型格式

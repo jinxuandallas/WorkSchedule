@@ -86,7 +86,7 @@
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Pic\报错.png" />
-    <Content Include="Schedule.aspx" />
+    <Content Include="ShowSchedule\Schedule.aspx" />
     <Content Include="Test\LoaclStroage.aspx" />
     <Content Include="Test\RepeaterTest.aspx" />
     <Content Include="Test\ScheduleTest.aspx" />
@@ -115,11 +115,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Schedule.aspx.cs">
+    <Compile Include="ShowSchedule\Schedule.aspx.cs">
       <DependentUpon>Schedule.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Schedule.aspx.designer.cs">
+    <Compile Include="ShowSchedule\Schedule.aspx.designer.cs">
       <DependentUpon>Schedule.aspx</DependentUpon>
     </Compile>
     <Compile Include="Test\LoaclStroage.aspx.cs">
