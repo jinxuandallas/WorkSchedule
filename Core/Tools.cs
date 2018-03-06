@@ -20,6 +20,10 @@ namespace Core
             year = DateTime.Now.Year;
         }
 
+        public Tools(int pyear)
+        {
+            year = pyear;
+        }
         /// <summary>
         /// 生成工作人员表
         /// </summary>

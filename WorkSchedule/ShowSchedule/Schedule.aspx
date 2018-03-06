@@ -9,6 +9,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
+        <%--<asp:HiddenField  Value="<%# tool.year %>" runat="server" id="inputYear" />--%>
         <div>
             <asp:ScriptManager ID="ScriptManager1" runat="server">
             </asp:ScriptManager>
@@ -70,9 +71,7 @@
                     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                         <ContentTemplate>
                             第<%#Eval("序号") %>项：<span style="background-color: #ffff99"> <%#Eval("目标名称") %></span><br />
-                            <span style="font-size: small">目标内容：<%#Eval("目标内容") %><br />
-                                备注：<%#Eval("备注") %><br />
-                                责任领导：<%# ss.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span>
+                            <span style="font-size: small">责任领导：<%# ss.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span>
 
                         </ContentTemplate>
                     </asp:UpdatePanel>
@@ -88,10 +87,10 @@
 
                             <%--<asp:UpdatePanel ID="UpdatePanel2" runat="server">--%>
                             <%--<ContentTemplate>--%>
-                            <asp:Panel ID="monthPanel" runat="server">
+                            <asp:Panel ID="monthPanel" runat="server" Visible="false">
                                 <br />
                                 <div style="font-size: small; background-color: #ffff99; width: 500px;">
-                                    <asp:Label ID="monthLabel" BackColor="#ffff99" runat="server"></asp:Label>
+                                    &nbsp;&nbsp;<asp:Label ID="monthLabel" BackColor="#ffff99" runat="server"></asp:Label>
                                 </div>
                             </asp:Panel>
                             <br />
@@ -103,7 +102,11 @@
                 </ItemTemplate>
             </asp:Repeater>
 
-            <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand="SELECT Id, 序号, 目标名称, 目标内容, 备注 FROM 工作 WHERE (年份 = DATENAME(YYYY,GETDATE()))"></asp:SqlDataSource>
+            <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand="SELECT Id, 序号, 目标名称  FROM 工作 WHERE (年份 = @year)" ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">
+                <SelectParameters>
+                    <asp:Parameter  Name="year" Type="Int32"  />
+                </SelectParameters>
+            </asp:SqlDataSource>
         </div>
     </form>
 

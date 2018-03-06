@@ -28,6 +28,8 @@ namespace WorkSchedule
             ss = new ShowSchedule();
             PreLoadData();
 
+            //SqlDataSource1.SelectParameters["@年份"].DefaultValue = tool.year.ToString();
+            //SqlDataSource1.DataBind();
             //if (!IsPostBack)
             //{
             RepeaterSchedule.DataBind();
