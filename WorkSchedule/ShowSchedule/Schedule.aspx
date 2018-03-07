@@ -90,7 +90,7 @@
                             <asp:Panel ID="monthPanel" runat="server" Visible="false">
                                 <br />
                                 <div style="font-size: small; background-color: #ffff99; width: 500px;">
-                                    &nbsp;&nbsp;<asp:Label ID="monthLabel" BackColor="#ffff99" runat="server"></asp:Label>
+                                   <asp:Label ID="monthLabel" BackColor="#ffff99" runat="server"></asp:Label>
                                 </div>
                             </asp:Panel>
                             <br />

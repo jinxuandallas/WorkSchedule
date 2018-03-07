@@ -68,12 +68,15 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Account\Login.aspx" />
     <Content Include="AddWorkSchedule\AddScheduleTool.aspx" />
     <Content Include="App_Data\WorkSchedule.mdf" />
     <Content Include="App_Data\WorkSchedule_log.ldf">
       <DependentUpon>WorkSchedule.mdf</DependentUpon>
     </Content>
     <Content Include="App_Data\目标节点.txt" />
+    <Content Include="images\banner.swf" />
+    <Content Include="images\beijing.jpg" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -97,6 +100,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Account\Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AddWorkSchedule\AddScheduleTool.aspx.cs">
       <DependentUpon>AddScheduleTool.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

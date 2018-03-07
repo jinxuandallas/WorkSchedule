@@ -52,7 +52,7 @@ namespace Core
 
         public string GetMonthScheduleDetail(Guid workID,int month)
         {
-            string monthScheduleDeatil= "<br/>&nbsp;" + month+"月目标节点：";
+            string monthScheduleDeatil= "<br/>&nbsp;&nbsp;&nbsp;&nbsp;" + month+"月目标节点：";
             using (SqlDataReader sdr = GetDataReader("select 目标节点 from 月节点 where 工作ID=@工作ID and datepart(mm,日期)=@月份", new SqlParameter[] {
                 new SqlParameter("@工作ID",workID),
                 new SqlParameter("@月份",month)
@@ -67,7 +67,7 @@ namespace Core
             //此处也许需要判断weekDetail中是否有数据
             if(weekDetail.Tables[0].Rows.Count>0)
                 foreach (DataRow dr in weekDetail.Tables[0].Rows)
-                    monthScheduleDeatil += "&nbsp;第" + dr["周数"] + "周：" + dr["状态"] + "<br/>" + "周工作计划：" + dr["周计划"] + "&nbsp;&nbsp;&nbsp;&nbsp;周落实情况：" + dr["周完成"] + "<br/>";
+                    monthScheduleDeatil += "&nbsp;&nbsp;&nbsp;&nbsp;第" + dr["周数"] + "周：" + dr["状态"] + "<br/>&nbsp;&nbsp;&nbsp;&nbsp;" + "周工作计划：" + dr["周计划"] + "&nbsp;&nbsp;&nbsp;&nbsp;周落实情况：" + dr["周完成"] + "<br/>";
 
             monthScheduleDeatil += "<br/>";
             return monthScheduleDeatil;
