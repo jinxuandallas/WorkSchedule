@@ -13,7 +13,7 @@ namespace WorkSchedule.Test
     public partial class Test : System.Web.UI.Page
     {
         public Core.Test t;
-        public ShowSchedule ss;
+        public ShowScheduleClass ss;
         public Core.Tools tool;
         int[] weeksOfMonth;
         Guid[] allWorkID;
@@ -23,7 +23,7 @@ namespace WorkSchedule.Test
         protected void Page_Load(object sender, EventArgs e)
         {
             t = new Core.Test();
-            ss = new ShowSchedule();
+            ss = new ShowScheduleClass();
             tool = new Core.Tools();
             //if (!IsPostBack)
                 PreLoadData();

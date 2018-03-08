@@ -9,10 +9,10 @@ using System.Data.SqlClient;
 
 namespace Core
 {
-    public class ShowSchedule:Database
+    public class ShowScheduleClass : Database
     {
         protected Tools t;
-        public ShowSchedule()
+        public ShowScheduleClass()
         {
             t = new Tools();
         }

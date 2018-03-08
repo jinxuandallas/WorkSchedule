@@ -21,11 +21,11 @@ namespace WorkSchedule
 
         protected Dictionary<Guid, int[]> existMonths;
         protected Dictionary<Guid, Dictionary<int, int>> existWeeks;
-        protected ShowSchedule ss;
+        protected ShowScheduleClass ss;
         protected void Page_Load(object sender, EventArgs e)
         {
             tool = new Core.Tools();
-            ss = new ShowSchedule();
+            ss = new ShowScheduleClass();
             PreLoadData();
 
             SqlDataSource1.SelectParameters["year"].DefaultValue = tool.year.ToString();

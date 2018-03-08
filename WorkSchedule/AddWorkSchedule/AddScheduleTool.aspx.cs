@@ -10,7 +10,7 @@ namespace WorkSchedule.AddWorkSchedule
     public partial class AddScheduleTool : System.Web.UI.Page
     {
         protected Core.Tools t;
-        protected ShowSchedule ss;
+        protected ShowScheduleClass ss;
         protected Core.AddMonthSchedule aws;
         protected void Page_Load(object sender, EventArgs e)
         {

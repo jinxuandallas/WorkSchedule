@@ -18,12 +18,12 @@ namespace WorkSchedule.Test
         /// 本年度所有工作的ID
         /// </summary>
         Guid[] allWorkID;
-        protected ShowSchedule ss;
+        protected ShowScheduleClass ss;
         protected Dictionary<Guid, List<Dictionary<int,int>>> allMonthWeekInfo;
         protected void Page_Load(object sender, EventArgs e)
         {
             tool = new Core.Tools();
-            ss = new ShowSchedule();
+            ss = new ShowScheduleClass();
             PreLoadData();
             
             //if (!IsPostBack)
