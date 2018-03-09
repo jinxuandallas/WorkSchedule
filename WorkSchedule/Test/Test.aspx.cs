@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using Core;
 using System.Data;
 using System.Text.RegularExpressions;
+//using ICSharpCode.SharpZipLib.Zip.Compression;
+using System.IO;
 
 namespace WorkSchedule.Test
 {
@@ -63,7 +65,10 @@ namespace WorkSchedule.Test
                 existWeeks.Add(wid, tool.GetExistTaskWeeksAndState(wid));
             }
 
-
+            ViewState["weeksOfMonth"] = weeksOfMonth;
+            ViewState["allWorkID"] = allWorkID;
+            ViewState["existMonths"] = existMonths;
+            ViewState["existWeeks"] = existWeeks;
         }
 
         private void TestRegex()
@@ -87,5 +92,55 @@ namespace WorkSchedule.Test
         {
             Response.Write(t.TestReader(int.Parse(TextBox_SN.Text.ToString())));
         }
-    }
+
+        protected override void SavePageStateToPersistenceMedium(Object pViewState)
+        {
+            LosFormatter mFormat = new LosFormatter();
+            StringWriter mWriter = new StringWriter();
+            mFormat.Serialize(mWriter, pViewState);
+            String mViewStateStr = mWriter.ToString();
+            byte[] pBytes = System.Convert.FromBase64String(mViewStateStr);
+            pBytes = tool.Compress(pBytes);
+            String vStateStr = System.Convert.ToBase64String(pBytes);
+            ClientScript.RegisterHiddenField("__MSPVSTATE", vStateStr);
+        }
+        protected override Object LoadPageStateFromPersistenceMedium()
+        {
+            String vState = this.Request.Form.Get("__MSPVSTATE");
+            byte[] pBytes = System.Convert.FromBase64String(vState);
+            pBytes = tool.DeCompress(pBytes);
+            LosFormatter mFormat = new LosFormatter();
+            return mFormat.Deserialize(System.Convert.ToBase64String(pBytes));
+        }
+        //public static byte[] Compress(byte[] pBytes)
+        //{
+        //    MemoryStream mMemory = new MemoryStream();
+        //    Deflater mDeflater = new Deflater(ICSharpCode.SharpZipLib.Zip.Compression.Deflater.BEST_COMPRESSION);
+        //    ICSharpCode.SharpZipLib.Zip.Compression.Streams.DeflaterOutputStream mStream = new ICSharpCode.SharpZipLib.Zip.Compression.Streams.DeflaterOutputStream(mMemory, mDeflater, 131072);
+        //    mStream.Write(pBytes, 0, pBytes.Length);
+        //    mStream.Close();
+        //    return mMemory.ToArray();
+        //}
+        //public static byte[] DeCompress(byte[] pBytes)
+        //{
+        //    ICSharpCode.SharpZipLib.Zip.Compression.Streams.InflaterInputStream mStream = new ICSharpCode.SharpZipLib.Zip.Compression.Streams.InflaterInputStream(new MemoryStream(pBytes));
+        //    MemoryStream mMemory = new MemoryStream();
+        //    Int32 mSize;
+        //    byte[] mWriteData = new byte[4096];
+        //    while (true)
+        //    {
+        //        mSize = mStream.Read(mWriteData, 0, mWriteData.Length);
+        //        if (mSize > 0)
+        //        {
+        //            mMemory.Write(mWriteData, 0, mSize);
+        //        }
+        //        else
+        //        {
+        //            break;
+        //        }
+        //    }
+        //    mStream.Close();
+        //    return mMemory.ToArray();
+        //}
+}
 }

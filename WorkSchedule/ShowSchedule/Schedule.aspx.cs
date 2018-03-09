@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Core;
 using System.Data;
+using System.IO;
 
 namespace WorkSchedule
 {
@@ -26,12 +27,21 @@ namespace WorkSchedule
         {
             tool = new Core.Tools();
             ss = new ShowScheduleClass();
-            PreLoadData();
 
+            if (IsPostBack)
+            {
+                weeksOfMonth = (int[])ViewState["weeksOfMonth"];
+                allWorkID = (Guid[])ViewState["allWorkID"];
+                existMonths = (Dictionary<Guid, int[]>)ViewState["existMonths"];
+                existWeeks = (Dictionary<Guid, Dictionary<int, int>>)ViewState["existWeeks"];
+            }
+            else
+            {
+                PreLoadData();
+            }
             SqlDataSource1.SelectParameters["year"].DefaultValue = tool.year.ToString();
             //SqlDataSource1.DataBind();
-            //if (!IsPostBack)
-            //{
+
             RepeaterSchedule.DataBind();
             //    ViewState["repeater"] = Repeater1.ItemTemplate;
             //}
@@ -54,6 +64,10 @@ namespace WorkSchedule
                 existWeeks.Add(wid, tool.GetExistTaskWeeksAndState(wid));
             }
 
+            ViewState["weeksOfMonth"] = weeksOfMonth;
+            ViewState["allWorkID"] = allWorkID;
+            ViewState["existMonths"] = existMonths;
+            ViewState["existWeeks"] = existWeeks;
         }
 
         protected void RepeaterSchedule_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -81,7 +95,7 @@ namespace WorkSchedule
                 tc.Style.Value = "border-collapse: collapse; border-spacing: 0px; border: 0px;padding: 0px; margin: 0px;border: 1px solid #000000;";
                 //月表格中的嵌套表格
                 Table t = new Table();
-                
+
 
                 t.Style.Value = "border-collapse: collapse; border-spacing: 0px;width:" + weeksOfMonth[i - 1] * 22 + "px; text-align: center;";
                 t.Rows.Add(new TableRow());
@@ -116,20 +130,20 @@ namespace WorkSchedule
 
                         if (existWeeks[workID].ContainsKey(weekOfYear))
                         {
-                            switch(existWeeks[workID][weekOfYear])
+                            switch (existWeeks[workID][weekOfYear])
                             //switch (ss.GetWeekState(workID, weekOfYear))
                             {
-                            case 0:
-                                break;
-                            case 1:
-                                wtc.Style.Value += "; background-color: #FFFF99;";
-                                break;
-                            case 2:
-                                wtc.Style.Value += "; background-color: #D04242";
-                                break;
-                            case 3:
-                                wtc.Style.Value += "; background-color: #3399FF;";
-                                break;
+                                case 0:
+                                    break;
+                                case 1:
+                                    wtc.Style.Value += "; background-color: #FFFF99;";
+                                    break;
+                                case 2:
+                                    wtc.Style.Value += "; background-color: #D04242";
+                                    break;
+                                case 3:
+                                    wtc.Style.Value += "; background-color: #3399FF;";
+                                    break;
 
                             }
                         }
@@ -169,5 +183,25 @@ namespace WorkSchedule
                 ((Label)e.Item.FindControl("monthLabel")).Text = monthDeail;
             }
         }
+
+        //protected override void SavePageStateToPersistenceMedium(Object pViewState)
+        //{
+        //    LosFormatter mFormat = new LosFormatter();
+        //    StringWriter mWriter = new StringWriter();
+        //    mFormat.Serialize(mWriter, pViewState);
+        //    String mViewStateStr = mWriter.ToString();
+        //    byte[] pBytes = System.Convert.FromBase64String(mViewStateStr);
+        //    pBytes = tool.Compress(pBytes);
+        //    String vStateStr = System.Convert.ToBase64String(pBytes);
+        //    ClientScript.RegisterHiddenField("__MSPVSTATE", vStateStr);
+        //}
+        //protected override Object LoadPageStateFromPersistenceMedium()
+        //{
+        //    String vState = this.Request.Form.Get("__MSPVSTATE");
+        //    byte[] pBytes = System.Convert.FromBase64String(vState);
+        //    pBytes = tool.DeCompress(pBytes);
+        //    LosFormatter mFormat = new LosFormatter();
+        //    return mFormat.Deserialize(System.Convert.ToBase64String(pBytes));
+        //}
     }
 }

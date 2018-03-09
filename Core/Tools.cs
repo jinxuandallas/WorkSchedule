@@ -8,7 +8,7 @@ using System.IO;
 using System.Data;
 using System.Web;
 using System.Text.RegularExpressions;
-
+using ICSharpCode.SharpZipLib.Zip.Compression;
 
 namespace Core
 {
@@ -547,6 +547,48 @@ namespace Core
             for (int i = 0; i < l; i++)
                 m[i] = int.Parse(ds.Tables[0].Rows[i][0].ToString());
             return m;
+        }
+
+        /// <summary>
+        /// 压缩字符串
+        /// </summary>
+        /// <param name="pBytes"></param>
+        /// <returns></returns>
+        public byte[] Compress(byte[] pBytes)
+        {
+            MemoryStream mMemory = new MemoryStream();
+            Deflater mDeflater = new Deflater(ICSharpCode.SharpZipLib.Zip.Compression.Deflater.BEST_COMPRESSION);
+            ICSharpCode.SharpZipLib.Zip.Compression.Streams.DeflaterOutputStream mStream = new ICSharpCode.SharpZipLib.Zip.Compression.Streams.DeflaterOutputStream(mMemory, mDeflater, 131072);
+            mStream.Write(pBytes, 0, pBytes.Length);
+            mStream.Close();
+            return mMemory.ToArray();
+        }
+
+        /// <summary>
+        /// 解压字符串
+        /// </summary>
+        /// <param name="pBytes"></param>
+        /// <returns></returns>
+        public byte[] DeCompress(byte[] pBytes)
+        {
+            ICSharpCode.SharpZipLib.Zip.Compression.Streams.InflaterInputStream mStream = new ICSharpCode.SharpZipLib.Zip.Compression.Streams.InflaterInputStream(new MemoryStream(pBytes));
+            MemoryStream mMemory = new MemoryStream();
+            Int32 mSize;
+            byte[] mWriteData = new byte[4096];
+            while (true)
+            {
+                mSize = mStream.Read(mWriteData, 0, mWriteData.Length);
+                if (mSize > 0)
+                {
+                    mMemory.Write(mWriteData, 0, mSize);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            mStream.Close();
+            return mMemory.ToArray();
         }
 
         /*
