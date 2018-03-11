@@ -91,7 +91,6 @@
   <ItemGroup>
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="Pic\报错.png" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="ShowSchedule\Schedule.aspx" />
     <Content Include="Test\LoaclStroage.aspx" />
