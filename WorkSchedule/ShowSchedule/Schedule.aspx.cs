@@ -61,7 +61,7 @@ namespace WorkSchedule
             foreach (Guid wid in allWorkID)
             {
                 existMonths.Add(wid, tool.GetExistTaskMonths(wid));
-                existWeeks.Add(wid, tool.GetExistTaskWeeksAndState(wid));
+                existWeeks.Add(wid, tool.GetExistTaskWeeksAndState(wid,true));
             }
 
             ViewState["weeksOfMonth"] = weeksOfMonth;
@@ -74,7 +74,6 @@ namespace WorkSchedule
         {
             //return;
             int weekOfYear = 0;
-
 
             //if (e.Item.ItemType != ListItemType.Item)
             //    return;
@@ -134,11 +133,12 @@ namespace WorkSchedule
                             //switch (ss.GetWeekState(workID, weekOfYear))
                             {
                                 case 0:
-                                    break;
                                 case 1:
-                                    wtc.Style.Value += "; background-color: #FFFF99;";
                                     break;
                                 case 2:
+                                    wtc.Style.Value += "; background-color: #FF6600;";
+                                    break;
+                                case 4:
                                     wtc.Style.Value += "; background-color: #D04242";
                                     break;
                                 case 3:

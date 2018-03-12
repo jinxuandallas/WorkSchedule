@@ -11,7 +11,7 @@
     <form id="form1" runat="server">
         <div>
              <asp:TextBox ID="TextBox_SN" runat="server" TextMode="Number"></asp:TextBox><br />
-            <asp:Button ID="Button1" runat="server" Text="Button" />
+            <asp:Button ID="Button1" runat="server" Text="Button" BackColor="" />
         </div>
     </form>
 </body>

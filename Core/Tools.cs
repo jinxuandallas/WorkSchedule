@@ -485,12 +485,38 @@ namespace Core
         /// <param name="workID"></param>
         /// <param name="month"></param>
         /// <returns></returns>
-        public Dictionary<int, int> GetExistTaskWeeksAndState(Guid workID)
+        public Dictionary<int, int> GetExistTaskWeeksAndState(Guid workID, bool dealUnfinishedAgain)
         {
+            bool lastWeekUnfinished = false;
             Dictionary<int, int> weekAndState = new Dictionary<int, int>();
             DataSet ds = GetDataSet("select 周数,周状态 from 周节点视图 where 工作ID = @工作ID and 周状态!=0", new SqlParameter[] { new SqlParameter("@工作ID", workID) });
-            foreach (DataRow dr in ds.Tables[0].Rows)
-                weekAndState.Add(int.Parse(dr[0].ToString()), int.Parse(dr[1].ToString()));
+
+            //判断是否需要处理第二次未完成的周工作状态
+            if (dealUnfinishedAgain)
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    //判断本周是否未完成
+                    if (int.Parse(dr[1].ToString()) == 2)
+                    {
+                        //判断上周是否未完成并且本周是否仍然未完成
+                        if (lastWeekUnfinished)
+                        {
+                            weekAndState.Add(int.Parse(dr[0].ToString()), 4);
+                            continue;
+                        }
+                        else
+                            //将上周没完成状态设置为true，为下周判断是否第二次未完成做准备
+                            lastWeekUnfinished = true;
+                    }
+                    else
+                        //如果本周已完成，将下周未完成状态设置为false
+                        lastWeekUnfinished = false;
+                    weekAndState.Add(int.Parse(dr[0].ToString()), int.Parse(dr[1].ToString()));
+                }
+            else
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                    weekAndState.Add(int.Parse(dr[0].ToString()), int.Parse(dr[1].ToString()));
+
             return weekAndState;
         }
 

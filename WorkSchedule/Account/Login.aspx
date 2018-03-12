@@ -29,8 +29,8 @@
   <%--  --%>          
             <br />
 
-            <div style="width:300px; margin:0 auto;display:table-cell;vertical-align:middle;text-align: center;">
-                <asp:Login ID="LoginUser" runat="server" BackColor="#EFF3FB" BorderColor="#B5C7DE" BorderPadding="4" BorderStyle="Solid" BorderWidth="1px" Font-Names="Verdana" Font-Size="0.9em" ForeColor="#333333" Height="100px" Width="250px" OnAuthenticate="LoginUser_Authenticate">
+            <div style="width:300px; margin:0 auto;vertical-align:middle;text-align: center;">
+                <asp:Login ID="LoginUser" runat="server" BackColor="#EFF3FB" BorderColor="#B5C7DE" BorderPadding="4" BorderStyle="Solid" BorderWidth="1px" Font-Names="Verdana" Font-Size="0.9em" ForeColor="#333333" Height="100px" Width="230px" OnAuthenticate="LoginUser_Authenticate">
                 <InstructionTextStyle Font-Italic="True" ForeColor="Black" />
                 <LoginButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid" BorderWidth="1px" Font-Names="Verdana" Font-Size="0.8em" ForeColor="#284E98" />
                 <TextBoxStyle Font-Size="0.8em" />

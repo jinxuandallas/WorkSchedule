@@ -62,7 +62,7 @@ namespace WorkSchedule.Test
             foreach (Guid wid in allWorkID)
             {
                 existMonths.Add(wid, tool.GetExistTaskMonths(wid));
-                existWeeks.Add(wid, tool.GetExistTaskWeeksAndState(wid));
+                existWeeks.Add(wid, tool.GetExistTaskWeeksAndState(wid,true));
             }
 
             ViewState["weeksOfMonth"] = weeksOfMonth;
