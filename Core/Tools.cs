@@ -467,6 +467,37 @@ namespace Core
 
             return allWorkID;
         }
+
+
+        /// <summary>
+        /// 获取某年某用户所有管理的工作ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Guid[] GetUserWorkID(int id)
+        {
+            return GetUserWorkID(id, year);
+        }
+
+        /// <summary>
+        /// 获取某年某用户所有管理的工作ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public Guid[] GetUserWorkID(int id, int year)
+        {
+            Guid[] userWorkID;
+            DataTable dt = GetDataSet("select 工作ID from 工作责任领导视图 where 年份=@年份 and (信息管理用户ID=@用户ID or 用户ID=@用户ID)", new SqlParameter[] { new SqlParameter("@年份", year) }).Tables[0];
+
+            userWorkID = new Guid[dt.Rows.Count];
+            for (int i = 0; i < dt.Rows.Count; i++)
+                userWorkID[i] = Guid.Parse(dt.Rows[i][0].ToString());
+
+            return userWorkID;
+        }
+
+
         /// <summary>
         /// 获取某项工作的所有存在计划的月份列表
         /// </summary>

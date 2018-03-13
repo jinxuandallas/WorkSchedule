@@ -36,9 +36,8 @@ namespace WorkSchedule
                 existWeeks = (Dictionary<Guid, Dictionary<int, int>>)ViewState["existWeeks"];
             }
             else
-            {
                 PreLoadData();
-            }
+
             SqlDataSource1.SelectParameters["year"].DefaultValue = tool.year.ToString();
             //SqlDataSource1.DataBind();
 

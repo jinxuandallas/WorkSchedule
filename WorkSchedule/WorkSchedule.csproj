@@ -80,6 +80,7 @@
     <Content Include="App_Data\目标节点.txt" />
     <Content Include="images\banner.swf" />
     <Content Include="images\beijing.jpg" />
+    <Content Include="Input\InputPreviousSchedule.aspx" />
     <Content Include="Input\InputSchedule.aspx" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
@@ -128,6 +129,13 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Input\InputPreviousSchedule.aspx.cs">
+      <DependentUpon>InputPreviousSchedule.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Input\InputPreviousSchedule.aspx.designer.cs">
+      <DependentUpon>InputPreviousSchedule.aspx</DependentUpon>
     </Compile>
     <Compile Include="Input\InputSchedule.aspx.cs">
       <DependentUpon>InputSchedule.aspx</DependentUpon>
