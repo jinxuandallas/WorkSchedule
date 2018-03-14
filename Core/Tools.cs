@@ -417,7 +417,6 @@ namespace Core
             });
         }
 
-
         /// <summary>
         /// 获取一年所有月份每个月有几个周（为预读数据做准备）
         /// </summary>
@@ -488,7 +487,9 @@ namespace Core
         public Guid[] GetUserWorkID(int id, int year)
         {
             Guid[] userWorkID;
-            DataTable dt = GetDataSet("select 工作ID from 工作责任领导视图 where 年份=@年份 and (信息管理用户ID=@用户ID or 用户ID=@用户ID)", new SqlParameter[] { new SqlParameter("@年份", year) }).Tables[0];
+            DataTable dt = GetDataSet("select 工作ID from 工作责任领导视图 where 年份=@年份 and (信息管理用户ID=@用户ID or 用户ID=@用户ID)", new SqlParameter[] { new SqlParameter("@年份", year),
+                new SqlParameter("@用户ID",id)
+            }).Tables[0];
 
             userWorkID = new Guid[dt.Rows.Count];
             for (int i = 0; i < dt.Rows.Count; i++)

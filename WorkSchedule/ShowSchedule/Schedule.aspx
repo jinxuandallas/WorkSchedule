@@ -18,11 +18,11 @@
                 <HeaderTemplate>
                     <table style="width: 100%">
                         <tr>
-                            <td style="text-align: center"><span style="font-size: xx-large">青岛中央商务区重点工作管理平台</span></td>
+                            <td style="text-align: center;font-size: xx-large">青岛中央商务区重点工作管理平台</td>
 
                         </tr>
                         <tr>
-                            <td style="text-align: center"><span style="font-size: x-large">（<%#DateTime.Now.Year%>年）</span></td>
+                            <td style="text-align: center;font-size: x-large">（<%#DateTime.Now.Year%>年）</td>
                         </tr>
                         <tr>
                             <td>
@@ -34,7 +34,7 @@
                                                 <tr>
                                                     <td></td>
                                                     <td ><table style="width: 20px;height:15px; background-color: #FF6600;"><tr><td></td></tr></table></td>
-                                                    <td style="width: 100px; font-size: small">第一次未完成的工作</td>
+                                                    <td style="width: 100px; font-size: small">首次未完成的工作</td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -84,9 +84,8 @@
 
                             <%--<asp:UpdatePanel ID="UpdatePanel2" runat="server">--%>
                             <%--<ContentTemplate>--%>
-                            <asp:Panel ID="monthPanel" runat="server" Visible="false">
-                                <br />
-                                <div style="font-size: small; background-color: #ffff99; width: 500px;">
+                            <asp:Panel ID="monthPanel" runat="server" Visible="false" Width="800px">
+                                <div style="font-size: small; background-color: #ffff99;float:left;margin-top:20px;margin-bottom :20px;padding-left:15px;padding-right:15px">
                                    <asp:Label ID="monthLabel" BackColor="#ffff99" runat="server"></asp:Label>
                                 </div>
                             </asp:Panel>

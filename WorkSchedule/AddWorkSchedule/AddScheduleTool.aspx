@@ -27,7 +27,7 @@
             <br />
             周工作计划：
             <br />
-            <asp:Repeater ID="Repeater1" runat="server" DataSource="<%#t.GetWeeksOfMonth(0,int.Parse(DropDownListMonth.SelectedValue)) %>">
+            <asp:Repeater ID="Repeater1" runat="server" DataSource="<%#t.GetWeeksOfMonth(int.Parse(DropDownListMonth.SelectedValue)) %>">
                 <ItemTemplate>
                     第<asp:Label ID="lbWeek" runat="server" Text='<%# Eval("周数") %>'></asp:Label>周（<%#DateTime.Parse(Eval("开始日期").ToString()).ToShortDateString() %>--<%#DateTime.Parse(Eval("结束日期").ToString()).ToShortDateString() %>）：<br />
                     周工作计划：<asp:TextBox ID="TextBoxWeekSchedule" Width="200px" runat="server"></asp:TextBox>

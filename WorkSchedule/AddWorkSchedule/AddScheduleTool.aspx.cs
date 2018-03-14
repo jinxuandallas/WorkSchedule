@@ -54,7 +54,7 @@ namespace WorkSchedule.AddWorkSchedule
             string weekSchedule, weekExecution;
             int state, weekOfYear;
             Guid monnthTaskID = t.GetMonthID(Guid.Parse(DropDownListWork.SelectedValue), int.Parse(DropDownListMonth.SelectedValue));
-            bool succeed=true;
+            bool succeed = true ;
             foreach (RepeaterItem ri in Repeater1.Items)
             {
                 weekOfYear = int.Parse(((Label)ri.FindControl("lbWeek")).Text);
@@ -65,8 +65,7 @@ namespace WorkSchedule.AddWorkSchedule
                 else
                     state = ((CheckBox)ri.FindControl("CheckBoxState")).Checked ? 3 : 2;
 
-                if (!aws.InputWeekSchedule(monnthTaskID, weekOfYear, weekSchedule, weekExecution, state))
-                    succeed = false;
+                succeed = !aws.InputWeekSchedule(monnthTaskID, weekOfYear, weekSchedule, weekExecution, state);
             }
 
             string result = succeed ? "成功" : "不成功";

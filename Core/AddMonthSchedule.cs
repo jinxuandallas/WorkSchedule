@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Core;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
+
 
 namespace Core
 {
@@ -56,6 +58,11 @@ namespace Core
 
         }
         */
+
+        //public int ConvertLabeltoWeek(string l)
+        //{
+        //    return int.Parse(Regex.Match(Regex.Match(l, @"第\d*周").Value, @"\d*").Value);
+        //}
     }
 
 }

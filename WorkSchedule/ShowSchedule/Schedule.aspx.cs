@@ -161,14 +161,14 @@ namespace WorkSchedule
 
         protected void RepeaterSchedule_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
-            if (e.CommandName == "Detail")
-            {
-                Panel p = (Panel)e.Item.FindControl("Panel1");
-                p.Visible = !p.Visible;
-                ((LinkButton)e.Item.FindControl("LinkButton1")).Text = p.Visible ? "折叠" : "详细";
-            }
+            //if (e.CommandName == "Detail")
+            //{
+            //    Panel p = (Panel)e.Item.FindControl("Panel1");
+            //    p.Visible = !p.Visible;
+            //    ((LinkButton)e.Item.FindControl("LinkButton1")).Text = p.Visible ? "折叠" : "详细";
+            //}
 
-            else if (e.CommandName == "button")
+            if (e.CommandName == "button")
             {
                 ((Label)e.Item.FindControl("Label1")).Text = DateTime.Now.ToString();
             }

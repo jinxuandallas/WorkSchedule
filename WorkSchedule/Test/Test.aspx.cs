@@ -112,6 +112,11 @@ namespace WorkSchedule.Test
             LosFormatter mFormat = new LosFormatter();
             return mFormat.Deserialize(System.Convert.ToBase64String(pBytes));
         }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+
+        }
         //public static byte[] Compress(byte[] pBytes)
         //{
         //    MemoryStream mMemory = new MemoryStream();
@@ -142,5 +147,5 @@ namespace WorkSchedule.Test
         //    mStream.Close();
         //    return mMemory.ToArray();
         //}
-}
+    }
 }

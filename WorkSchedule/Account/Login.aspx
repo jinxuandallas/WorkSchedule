@@ -26,8 +26,10 @@
                     <embed src="http://122.4.72.60:8000/statics/images/zyswq/banner.swf" width="1002" height="220" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" wmode="transparent"></embed>
                 </object>
             </div>
-  <%--  --%>          
             <br />
+            <br />
+            <br />
+  <%--  --%>          
 
             <div style="width:300px; margin:0 auto;vertical-align:middle;text-align: center;">
                 <asp:Login ID="LoginUser" runat="server" BackColor="#EFF3FB" BorderColor="#B5C7DE" BorderPadding="4" BorderStyle="Solid" BorderWidth="1px" Font-Names="Verdana" Font-Size="0.9em" ForeColor="#333333" Height="100px" Width="230px" OnAuthenticate="LoginUser_Authenticate">
