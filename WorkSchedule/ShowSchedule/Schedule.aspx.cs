@@ -25,6 +25,9 @@ namespace WorkSchedule
         protected ShowScheduleClass ss;
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
+                Response.Redirect("~/Account/Login.aspx");
+
             tool = new Core.Tools();
             ss = new ShowScheduleClass();
 
@@ -54,13 +57,16 @@ namespace WorkSchedule
             weeksOfMonth = tool.GetWeeksOfAllMonth();
 
             allWorkID = tool.GetAllWorkID();
-
+            int[] existTaskMonths;
             existMonths = new Dictionary<Guid, int[]>();
             existWeeks = new Dictionary<Guid, Dictionary<int, int>>();
             foreach (Guid wid in allWorkID)
             {
-                existMonths.Add(wid, tool.GetExistTaskMonths(wid));
-                existWeeks.Add(wid, tool.GetExistTaskWeeksAndState(wid,true));
+                existTaskMonths = tool.GetExistTaskMonths(wid);
+                //判断此项工作是否有月节点计划
+                if (existTaskMonths != null)
+                    existMonths.Add(wid, tool.GetExistTaskMonths(wid));
+                existWeeks.Add(wid, tool.GetExistTaskWeeksAndState(wid, true));
             }
 
             ViewState["weeksOfMonth"] = weeksOfMonth;
@@ -101,17 +107,22 @@ namespace WorkSchedule
 
                 //if (tool.HasMonthTask(workID, new DateTime(DateTime.Now.Year, i, 1)))
                 //t.Style.Value += "background-color: #FFFF99";
+                //existMonths[workID] != null &&
 
-                if (existMonths.ContainsKey(workID) && Array.IndexOf(existMonths[workID], i) != -1)
+                if (existMonths.ContainsKey(workID) &&  Array.IndexOf(existMonths[workID], i) != -1)
                 {
                     t.Rows[0].Cells[0].ColumnSpan = weeksOfMonth[i - 1];
 
-                    LinkButton lb = new LinkButton();
-                    lb.Text = i + "月";
-                    lb.Font.Underline = false;
-                    lb.CommandName = "monthLinkButton";
-                    lb.CommandArgument = workID + "$" + i.ToString();
-                    t.Rows[0].Cells[0].Controls.Add(lb);
+                    //LinkButton lb = new LinkButton();
+                    //lb.Text = i + "月";
+                    //lb.Font.Underline = false;
+                    //lb.CommandName = "monthLinkButton";
+                    //lb.CommandArgument = workID + "$" + i.ToString();
+                    //lb.Width = Unit.Percentage(100);
+                    //lb.Height = Unit.Percentage(100);
+                    //lb.BackColor = System.Drawing.Color.Lavender;
+
+                    t.Rows[0].Cells[0].Controls.Add(ss.GetLinkButton(workID,i));
 
                     //t.Rows[0].Cells[0].Style.Value = " border-style: solid; border-width: 1px 1px 1px 1px; border-color: #000000;";
 

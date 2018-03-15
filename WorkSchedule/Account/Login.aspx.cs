@@ -15,16 +15,16 @@ namespace WorkSchedule.Account
         {
             uc = new UserClass();
 
-            /*
-            if (Request.Cookies["ID"] != null)
+            ///*
+            if (Request.Cookies["UserID"] != null)
             {
-                Session["ID"] = Request.Cookies["ID"].Value;
-                LoginUser.DestinationPageUrl = @"..\default.aspx";
-                Response.Redirect(@"..\default.aspx");
+                Session["UserID"] = Request.Cookies["UserID"].Value;
+                //LoginUser.DestinationPageUrl = "~/ShowSchedule/Schedule.aspx";
+                Response.Redirect(uc.RediRedirectUrl(int.Parse(Session["UserID"].ToString())));
             }
 
-            */
-            //Response.Write(Request.Cookies["ID"].Value + "<br/>");
+            //*/
+            //Response.Write(Request.Cookies["UserID"].Value + "<br/>");
             //foreach (string s in Request.Cookies.AllKeys)
             //    Response.Write(s + "<br/>");
         }
@@ -38,11 +38,12 @@ namespace WorkSchedule.Account
                 Session["UserID"] = id;
                 if (LoginUser.RememberMeSet)
                 {
-                    HttpCookie hc = new HttpCookie("ID", id.ToString());
+                    HttpCookie hc = new HttpCookie("UserID", id.ToString());
                     hc.Expires = DateTime.MaxValue;
                     Response.Cookies.Add(hc);
                 }
-                LoginUser.DestinationPageUrl = @"..\default.aspx";
+                //LoginUser.DestinationPageUrl = "~/ShowSchedule/Schedule.aspx";
+                Response.Redirect(uc.RediRedirectUrl(id));
                 //Response.Write(LoginUser.RememberMeSet);
             }
         }

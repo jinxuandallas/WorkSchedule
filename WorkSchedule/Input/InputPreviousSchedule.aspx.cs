@@ -36,14 +36,15 @@ namespace WorkSchedule.Input
             aws = new AddMonthSchedule();
 
 
-            Session["ID"] = 4;
+            //Session["UserID"] = 4;
 
-            if (Request.QueryString["id"] != null)
-                Session["ID"] = Request.QueryString["id"];
-            if (Session["ID"] == null || string.IsNullOrWhiteSpace(Session["ID"].ToString()))
+            //if (Request.QueryString["id"] != null)
+            //    Session["UserID"] = Request.QueryString["UserID"];
+
+            if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
                 Response.Redirect("~/default.aspx");
 
-            userID = int.Parse(Session["ID"].ToString());
+            userID = int.Parse(Session["UserID"].ToString());
 
             if (IsPostBack)
             {
@@ -64,13 +65,16 @@ namespace WorkSchedule.Input
             //获取一年中所有月份的每个月包含的周数量
             weeksOfMonth = tool.GetWeeksOfAllMonth();
 
-            userWorkID = tool.GetUserWorkID(userID);
-
+            userWorkID = tool.GetAllWorkID();
+            int[] existTaskMonths;
             existMonths = new Dictionary<Guid, int[]>();
             existWeeks = new Dictionary<Guid, Dictionary<int, int>>();
             foreach (Guid wid in userWorkID)
             {
-                existMonths.Add(wid, tool.GetExistTaskMonths(wid));
+                existTaskMonths = tool.GetExistTaskMonths(wid);
+                //判断此项工作是否有月节点计划
+                if (existTaskMonths != null)
+                    existMonths.Add(wid, tool.GetExistTaskMonths(wid));
                 existWeeks.Add(wid, tool.GetExistTaskWeeksAndState(wid, true));
             }
 
@@ -111,12 +115,13 @@ namespace WorkSchedule.Input
                 {
                     t.Rows[0].Cells[0].ColumnSpan = weeksOfMonth[i - 1];
 
-                    LinkButton lb = new LinkButton();
-                    lb.Text = i + "月";
-                    lb.Font.Underline = false;
-                    lb.CommandName = "monthLinkButton";
-                    lb.CommandArgument = workID + "$" + i.ToString();
-                    t.Rows[0].Cells[0].Controls.Add(lb);
+                    //LinkButton lb = new LinkButton();
+                    //lb.Text = i + "月";
+                    //lb.Font.Underline = false;
+                    //lb.CommandName = "monthLinkButton";
+                    //lb.CommandArgument = workID + "$" + i.ToString();
+
+                    t.Rows[0].Cells[0].Controls.Add(ss.GetLinkButton(workID,i));
 
                     //t.Rows[0].Cells[0].Style.Value = " border-style: solid; border-width: 1px 1px 1px 1px; border-color: #000000;";
 

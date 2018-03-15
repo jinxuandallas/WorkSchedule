@@ -25,5 +25,20 @@ namespace Core
                     return int.Parse(sdr[0].ToString());
             return 0;
         }
+
+        public string RediRedirectUrl(int userID)
+        {
+            int userType = GetUserType(userID);
+            if (userType == 3)
+                return "~/Input/InputPreviousSchedule.aspx";
+            else
+                return "~/ShowSchedule/Schedule.aspx";
+        }
+
+        public int GetUserType(int userID)
+        {
+            DataTable dt = GetDataSet("select 用户类型 from 用户 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", userID) }).Tables[0];
+            return int.Parse(dt.Rows[0][0].ToString());
+        }
     }
 }

@@ -17,9 +17,9 @@ namespace WorkSchedule.Input
             t = new Core.Test();
             ss = new ShowScheduleClass();
 
-            Session["ID"] = 4;
+            Session["UserID"] = 4;
 
-            if (Session["ID"] == null || string.IsNullOrWhiteSpace(Session["ID"].ToString()))
+            if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
                 Response.Redirect("~/default.aspx");
         }
     }

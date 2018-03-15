@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
-
+using System.Web.UI.WebControls;
 
 namespace Core
 {
@@ -49,6 +49,27 @@ namespace Core
 
             return workLeaders;
         }
+        
+        /// <summary>
+        /// 为了生成的统一LinkButton样式
+        /// </summary>
+        /// <param name="workID"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
+        public LinkButton GetLinkButton(Guid workID, int month)
+        {
+            LinkButton lb = new LinkButton();
+
+            lb.Text = month + "月";
+            lb.Font.Underline = false;
+            lb.CommandName = "monthLinkButton";
+            lb.CommandArgument = workID + "$" + month.ToString();
+            lb.Width = Unit.Percentage(100);
+            lb.Height = Unit.Percentage(100);
+            lb.BackColor = System.Drawing.Color.Lavender;
+
+            return lb;
+        }
         public string GetMonthSchedule(Guid workID, int month)
         {
             string monthSchedule= month + "月目标节点："; 
@@ -61,7 +82,12 @@ namespace Core
             return monthSchedule;
         }
 
-
+        /// <summary>
+        /// 获取月节点详细信息（包括周计划）
+        /// </summary>
+        /// <param name="workID"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
         public string GetMonthScheduleDetail(Guid workID,int month)
         {
             string monthScheduleDeatil= "<br/>" + month+"月目标节点：";
@@ -85,6 +111,8 @@ namespace Core
             monthScheduleDeatil += "<br/>";
             return monthScheduleDeatil;
         }
+
+
     }
 
     

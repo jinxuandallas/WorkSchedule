@@ -1,14 +1,6 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="InputPreviousSchedule.aspx.cs" Inherits="WorkSchedule.Input.InputPreviousSchedule" EnableEventValidation="false" %>
+﻿ <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="InputPreviousSchedule.aspx.cs" Inherits="WorkSchedule.Input.InputPreviousSchedule" EnableEventValidation="false"  MasterPageFile="~/MasterPage/MainSite.Master"   %>
 
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
+<asp:Content ID="ContentInput" ContentPlaceHolderID="ContentPlaceHolderTop" runat="server">
         <div>
             <asp:ScriptManager ID="ScriptManager1" runat="server">
             </asp:ScriptManager>
@@ -128,9 +120,7 @@
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand="SELECT distinct(工作.Id), 序号, 目标名称,工作.目标内容,工作.备注  FROM 工作,工作责任领导视图,月节点 WHERE 工作责任领导视图.年份 = @year and (信息管理用户ID=@用户ID or 用户ID=@用户ID) and 工作责任领导视图.工作ID=工作.Id and 月节点.工作ID=工作.Id and MONTH(月节点.日期)<=month(getdate())+1" ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">
             <SelectParameters>
                 <asp:Parameter Name="year" Type="Int32" />
-                <asp:SessionParameter Name="用户ID" SessionField="ID" />
+                <asp:SessionParameter Name="用户ID" SessionField="UserID" />
             </SelectParameters>
         </asp:SqlDataSource>
-    </form>
-</body>
-</html>
+   </asp:Content>

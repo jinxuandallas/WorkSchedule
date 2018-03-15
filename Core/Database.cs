@@ -25,7 +25,7 @@ namespace Core
         /// </summary>
         public Database()
         {
-            connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString"].ToString();
+            connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString1"].ToString();
             Connection = new SqlConnection(connectionString);
         }
 

@@ -50,16 +50,22 @@ namespace Core
                 }
             }
 
+            DataView dv = GetDataSet("select 姓名 from 工作人员").Tables[0].DefaultView;
+            dv.Sort = "姓名";
             foreach (string ins in staff)
-                ExecuteSql(@"insert 工作人员(姓名,所属部门,人员类型) values (@姓名,1,1)", new SqlParameter[] { new SqlParameter("@姓名", ins) });
+                if (dv.Find(ins) == -1)
+                    ExecuteSql(@"insert 工作人员(姓名) values (@姓名)", new SqlParameter[] { new SqlParameter("@姓名", ins) });
             //List<string> distinctStaff = staff.Distinct<string>().ToList<string>();
             //int i = 3;
         }
 
-
+        /// <summary>
+        /// 导入工作任务
+        /// </summary>
+        /// <param name="workTable"></param>
         public void ImportTasks(string workTable)
         {
-            ExecuteSql("insert 工作 (序号,目标名称,目标内容,年份,备注) select 序号,目标名称,目标内容,year(getdate()),备注 from " + workTable);
+            ExecuteSql("insert 工作 (序号,目标名称,目标内容,年份,备注,工作类别) select 序号,目标名称,目标内容,year(getdate()),备注,工作类别 from " + workTable);
         }
 
         /*
@@ -69,6 +75,10 @@ namespace Core
         }
         */
 
+        /// <summary>
+        /// 构建工作责任领导表
+        /// </summary>
+        /// <param name="workTable"></param>
         public void BuildWorkLeader(string workTable)
         {
             Guid taskID;
@@ -198,6 +208,9 @@ namespace Core
                 task = dr[1].ToString();
                 workID = Guid.Parse(dr[0].ToString());
 
+                //注意顺序
+
+
                 //匹配1-8月
                 if ((r = Regex.Match(task, @"^\d*-\d*月").Value) != "")
                 {
@@ -205,7 +218,7 @@ namespace Core
 
                     //注意此处正则表达式@"\d*月"不能写为@"-\d*月"，否则会把-当成负号，"-4月"理解成-4
                     endMonth = int.Parse(Regex.Match(Regex.Match(r, @"\d*月").Value, @"\d*").Value);
-                    //ExecuteSql("update 临时目标节点 set 识别=1 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                    ExecuteSql("update 临时目标节点 set 识别=1 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
                     AddMonthSchedule(workID, task, startMonth, endMonth);
                 }
 
@@ -213,7 +226,7 @@ namespace Core
                 else if ((r = Regex.Match(task, @"^\d*月：").Value) != "")
                 {
                     startMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
-                    //ExecuteSql("update 临时目标节点 set 识别=2 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                    ExecuteSql("update 临时目标节点 set 识别=2 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
                     AddMonthSchedule(workID, task, startMonth, 0);
                 }
 
@@ -232,7 +245,7 @@ namespace Core
 
                     endMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
 
-                    //ExecuteSql("update 临时目标节点 set 识别=3 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                    ExecuteSql("update 临时目标节点 set 识别=3 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
 
                     AddMonthSchedule(workID, task, startMonth, endMonth);
                 }
@@ -240,9 +253,19 @@ namespace Core
                 //匹配7、8月
                 else if ((r = Regex.Match(task, @"^\d*、\d*月").Value) != "")
                 {
-                    startMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
-                    endMonth = int.Parse(Regex.Match(r, @"、\d*").Value.Remove(0, 1));
+                    //startMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
+                    //endMonth = int.Parse(Regex.Match(r, @"、\d*").Value.Remove(0, 1));
                     //ExecuteSql("update 临时目标节点 set 识别=4 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                    //AddMonthSchedule(workID, task, startMonth, endMonth);
+                }
+
+                if ((r = Regex.Match(task, @"^\d*-\d*").Value) != "")
+                {
+                    string[] s = r.Trim().Split(new char[]{ '-'});
+                    startMonth = int.Parse(s[0]);
+
+                    endMonth = int.Parse(s[1]);
+                    ExecuteSql("update 临时目标节点 set 识别=5 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
                     AddMonthSchedule(workID, task, startMonth, endMonth);
                 }
 
@@ -250,7 +273,7 @@ namespace Core
                 else if ((r = Regex.Match(task, @"\d+月").Value) != "")
                 {
                     startMonth = int.Parse(Regex.Match(r, @"\d+").Value);
-                    ExecuteSql("update 临时目标节点 set 识别=5 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                    ExecuteSql("update 临时目标节点 set 识别=6 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
                     AddMonthSchedule(workID, task, startMonth, 0);
                 }
                 //task = task.Substring(task.i)
@@ -258,6 +281,22 @@ namespace Core
 
         }
 
+        public bool HasInput(int userId)
+        {
+            bool hasInput = false;
+            using (SqlDataReader sdr = GetDataReader("select id from 工作人员 where 信息管理用户ID=@ID or 用户ID=@ID", new SqlParameter[] { new SqlParameter("@ID", userId) }))
+                if (sdr.Read())
+                    hasInput = true;
+            return hasInput;
+        }
+
+        /// <summary>
+        /// 添加月节点
+        /// </summary>
+        /// <param name="workID"></param>
+        /// <param name="task"></param>
+        /// <param name="startMonth"></param>
+        /// <param name="endMonth"></param>
         public void AddMonthSchedule(Guid workID, string task, int startMonth, int endMonth)
         {
             //如果初始月份为0则不添加本条工作计划
@@ -326,6 +365,37 @@ namespace Core
             //return l;
         }
 
+        /// <summary>
+        /// 构建临时月节点表
+        /// </summary>
+        /// <param name="tableName"></param>
+        public void BuildTempMonthTable(string tableName)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("目标名称", Type.GetType("System.String"));
+            dt.Columns.Add("目标节点", Type.GetType("System.String"));
+
+            using (SqlDataReader sdr = GetDataReader("select 目标名称,目标节点 from " + tableName))
+                while (sdr.Read())
+                {
+                    string[] monthSchedule = sdr[1].ToString().Split(new string[] { "\n", "  " }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string s in monthSchedule)
+                    {
+                        if (s.Trim() == "")
+                            continue;
+                        DataRow dr = dt.NewRow();
+                        dr[0] = sdr[0];
+                        dr[1] = s.Trim();
+                        dt.Rows.Add(dr);
+                    }
+                }
+            foreach (DataRow dr in dt.Rows)
+                ExecuteSql("insert 临时目标节点(工作ID,目标节点) select id,@目标节点 from 工作 where 目标名称=@目标名称", new SqlParameter[] {
+                    new SqlParameter("@目标名称",dr[0]) ,
+                    new SqlParameter("@目标节点",dr[1])
+                });
+            //return;
+        }
         public void BuildWeekOfYear()
         {
             BuildWeekOfYear(year);
@@ -362,6 +432,14 @@ namespace Core
             }
         }
 
+        public bool ArrangeDatabase(string argument)
+        {
+            if (argument == "目标节点")
+            {
+                //ExecuteSql("update 重点工作 set 目标节点=")
+            }
+            return true;
+        }
         public bool HasMonthTask(Guid workID, DateTime dt)
         {
             bool result;
@@ -551,6 +629,31 @@ namespace Core
 
             return weekAndState;
         }
+
+
+        /// <summary>
+        /// 获取工作类别分类所在位置的工作ID
+        /// </summary>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public Guid[] GetProjectCategoryLocationID(int year)
+        {
+            Guid[] projectCategoryLocationID;
+            DataTable category = GetDataSet("select ID from [工作类别]").Tables[0];
+            projectCategoryLocationID = new Guid[category.Rows.Count];
+
+            int i = 0;
+            foreach(DataRow dr in category.Rows)
+                using (SqlDataReader sdr = GetDataReader("select top 1 ID from 工作 where 工作类别=@工作类别 order by 序号", new SqlParameter[] { new SqlParameter("@工作类别", dr[0]) }))
+                {
+                    sdr.Read();
+                    projectCategoryLocationID[i] = Guid.Parse(sdr[0].ToString());
+                    i++;
+                }
+
+            return projectCategoryLocationID;
+        }
+
 
         /// <summary>
         /// 根据工作ID和月份获取月份的ID

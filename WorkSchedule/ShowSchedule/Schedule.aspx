@@ -1,14 +1,6 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Schedule.aspx.cs" Inherits="WorkSchedule.Schedule" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Schedule.aspx.cs" Inherits="WorkSchedule.Schedule"  MasterPageFile="~/MasterPage/MainSite.Master"  %>
 
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
+<asp:Content ID="ContentSchedule" ContentPlaceHolderID="ContentPlaceHolderTop" runat="server">
         <%--<asp:HiddenField  Value="<%# tool.year %>" runat="server" id="inputYear" />--%>
         <div>
             <asp:ScriptManager ID="ScriptManager1" runat="server">
@@ -104,8 +96,4 @@
                 </SelectParameters>
             </asp:SqlDataSource>
         </div>
-    </form>
-
-
-</body>
-</html>
+ </asp:Content>
