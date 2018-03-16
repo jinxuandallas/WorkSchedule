@@ -60,8 +60,8 @@
                     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                         <ContentTemplate>
                             <asp:Panel ID="ProjectCategory" Visible="false" runat="server">
-                                <div style="width: 150px; height: 25px; font-size:large; background-color:#e7e6e5;padding:3px;text-align:center;margin-top:30px"><asp:Label ID="lbCategoryName" runat="server"></asp:Label> </div>
-                                <div style="width:1500px; height:2px; border-top:1px solid #e7e6e5; clear:both;margin-bottom:15px"></div>
+                                <div style="width: 150px; height: 25px; font-size:large; background-color:#d7d6d5;padding:3px;text-align:center;margin-top:30px"><asp:Label ID="lbCategoryName" runat="server"></asp:Label> </div>
+                                <div style="width:1500px; height:2px; border-top:1px solid #d7d6d5; clear:both;margin-bottom:15px"></div>
                                 <%--<hr style="width: 1500px; text-align: left; margin-left: 0" />--%>
                             </asp:Panel>
                             第<%#Eval("序号") %>项：<span style="background-color: #ffff99"> <%#Eval("目标名称") %></span><br />
@@ -82,8 +82,8 @@
                             <%--<asp:UpdatePanel ID="UpdatePanel2" runat="server">--%>
                             <%--<ContentTemplate>--%>
                             <asp:Panel ID="monthPanel" runat="server" Visible="false" Width="1000px">
-                                <div style="font-size: small; background-color: #ffff99;float:left;margin-top:20px;margin-bottom :20px;padding-left:15px;padding-right:15px">
-                                   <asp:Label ID="monthLabel" BackColor="#ffff99" runat="server"></asp:Label>
+                                <div style="font-size: small; background-color: #ffffb0;float:left;margin-top:20px;margin-bottom :20px;padding-left:15px;padding-right:15px">
+                                   <asp:Label ID="monthLabel"  runat="server"></asp:Label>
                                 </div>
                             </asp:Panel>
                             <br />

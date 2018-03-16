@@ -219,7 +219,7 @@ namespace Core
                     //注意此处正则表达式@"\d*月"不能写为@"-\d*月"，否则会把-当成负号，"-4月"理解成-4
                     endMonth = int.Parse(Regex.Match(Regex.Match(r, @"\d*月").Value, @"\d*").Value);
                     ExecuteSql("update 临时目标节点 set 识别=1 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
-                    AddMonthSchedule(workID, task, startMonth, endMonth);
+                    AddMonthSchedule(workID, task, startMonth, endMonth, true);
                 }
 
                 //匹配8月：
@@ -227,7 +227,7 @@ namespace Core
                 {
                     startMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
                     ExecuteSql("update 临时目标节点 set 识别=2 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
-                    AddMonthSchedule(workID, task, startMonth, 0);
+                    AddMonthSchedule(workID, task, startMonth, 0,true);
                 }
 
                 //匹配8月底前或者8月底之前或者8月底
@@ -247,7 +247,7 @@ namespace Core
 
                     ExecuteSql("update 临时目标节点 set 识别=3 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
 
-                    AddMonthSchedule(workID, task, startMonth, endMonth);
+                    AddMonthSchedule(workID, task, startMonth, endMonth,true);
                 }
 
                 //匹配7、8月
@@ -259,14 +259,14 @@ namespace Core
                     //AddMonthSchedule(workID, task, startMonth, endMonth);
                 }
 
-                if ((r = Regex.Match(task, @"^\d*-\d*").Value) != "")
+                else if ((r = Regex.Match(task, @"^\d*-\d*").Value) != "")
                 {
-                    string[] s = r.Trim().Split(new char[]{ '-'});
+                    string[] s = r.Trim().Split(new char[] { '-' });
                     startMonth = int.Parse(s[0]);
 
                     endMonth = int.Parse(s[1]);
                     ExecuteSql("update 临时目标节点 set 识别=5 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
-                    AddMonthSchedule(workID, task, startMonth, endMonth);
+                    AddMonthSchedule(workID, task, startMonth, endMonth,true);
                 }
 
                 //匹配7月
@@ -274,13 +274,129 @@ namespace Core
                 {
                     startMonth = int.Parse(Regex.Match(r, @"\d+").Value);
                     ExecuteSql("update 临时目标节点 set 识别=6 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
-                    AddMonthSchedule(workID, task, startMonth, 0);
+                    AddMonthSchedule(workID, task, startMonth, 0,true);
                 }
                 //task = task.Substring(task.i)
             }
 
         }
 
+        public List<string> GetMonthScheduleFormTxt(string ss)
+        {
+            List<string> result = new List<string>();
+            DataTable dt;
+            int startMonth, endMonth = 0;
+            foreach (string s in ss.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                dt = RecognizeMonthScheduleFormTxt(s, endMonth);
+                startMonth = int.Parse(dt.Rows[0][0].ToString());
+                endMonth = int.Parse(dt.Rows[0][1].ToString());
+
+                if (dt.Rows.Count > 0)
+                    for (int i = startMonth; i <= endMonth; i++)
+                        result.Add(i + "月——“" + s+"”");
+            }
+
+            return result;
+        }
+
+        public bool BatchUpdateMonthScheduleFormTxt(string ss, Guid workID)
+        {
+            DataTable dt;
+            int startMonth, endMonth = 0;
+            foreach (string s in ss.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                dt = RecognizeMonthScheduleFormTxt(s, endMonth);
+                startMonth = int.Parse(dt.Rows[0][0].ToString());
+                endMonth = int.Parse(dt.Rows[0][1].ToString());
+
+                if (dt.Rows.Count > 0)
+                    AddMonthSchedule(workID, s, startMonth, endMonth, false);
+            }
+            return true;
+        }
+
+
+        public DataTable RecognizeMonthScheduleFormTxt(string task, int lastMonth)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("开始月份");
+            dt.Columns.Add("结束月份");
+
+            int startMonth=0, endMonth=0;
+            string r;
+
+            //注意顺序
+
+
+            //匹配1-8月
+            if ((r = Regex.Match(task, @"^\d*-\d*月").Value) != "")
+            {
+                startMonth = int.Parse(Regex.Match(Regex.Match(r, @"^\d*-").Value, @"^\d*").Value);
+
+                //注意此处正则表达式@"\d*月"不能写为@"-\d*月"，否则会把-当成负号，"-4月"理解成-4
+                endMonth = int.Parse(Regex.Match(Regex.Match(r, @"\d*月").Value, @"\d*").Value);
+            }
+            //匹配1月-8月
+            else if ((r = Regex.Match(task, @"^\d*月-\d*月").Value) != "")
+            {
+                startMonth = int.Parse(Regex.Match(Regex.Match(r, @"^\d*月-").Value, @"^\d*").Value);
+
+                //注意此处正则表达式@"\d*月"不能写为@"-\d*月"，否则会把-当成负号，"-4月"理解成-4
+                endMonth = System.Math.Abs((int.Parse(Regex.Match(Regex.Match(r, @"月-\d*月").Value, @"-\d*").Value)));
+            }
+            //匹配8月：
+            else if ((r = Regex.Match(task, @"^\d*月：").Value) != "")
+            {
+                startMonth = endMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
+
+            }
+
+            //匹配8月底前或者8月底之前或者8月底
+            else if ((r = Regex.Match(task, @"^\d*月底前").Value) != "" || (r = Regex.Match(task, @"^\d*月底之前").Value) != "" || (r = Regex.Match(task, @"^\d*月底").Value) != "")
+            {
+                //startMonth需判断前面几个月有没有目标节点，如果没有则从1月份开始，如果有则续接上个节点目标的月份
+
+                startMonth = lastMonth + 1;
+
+                endMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
+
+            }
+
+            //匹配7、8月
+            else if ((r = Regex.Match(task, @"^\d*、\d*月").Value) != "")
+            {
+                //startMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
+                //endMonth = int.Parse(Regex.Match(r, @"、\d*").Value.Remove(0, 1));
+                //ExecuteSql("update 临时目标节点 set 识别=4 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
+                //AddMonthSchedule(workID, task, startMonth, endMonth);
+            }
+
+            else if ((r = Regex.Match(task, @"^\d*-\d*").Value) != "")
+            {
+                string[] s = r.Trim().Split(new char[] { '-' });
+                startMonth = int.Parse(s[0]);
+
+                endMonth = int.Parse(s[1]);
+            }
+
+            //匹配7月
+            else if ((r = Regex.Match(task, @"\d+月").Value) != "")
+            {
+                startMonth = endMonth = int.Parse(Regex.Match(r, @"\d+").Value);
+
+            }
+            else
+            {
+                return dt;
+            }
+            DataRow dr = dt.NewRow();
+            dr[0] = startMonth;
+            dr[1] = endMonth;
+            dt.Rows.Add(dr);
+
+            return dt;
+        }
         public bool HasInput(int userId)
         {
             bool hasInput = false;
@@ -297,22 +413,22 @@ namespace Core
         /// <param name="task"></param>
         /// <param name="startMonth"></param>
         /// <param name="endMonth"></param>
-        public void AddMonthSchedule(Guid workID, string task, int startMonth, int endMonth)
+        public void AddMonthSchedule(Guid workID, string task, int startMonth, int endMonth, bool append)
         {
             //如果初始月份为0则不添加本条工作计划
             if (startMonth == 0)
                 return;
 
             if (endMonth == 0 || startMonth == endMonth)
-                UpdateMonthSchedule(workID, task, startMonth);
+                UpdateMonthSchedule(workID, task, startMonth, append);
             else
                 for (int i = startMonth; i <= endMonth; i++)
-                    UpdateMonthSchedule(workID, task, i);
+                    UpdateMonthSchedule(workID, task, i, append);
         }
 
-        public void UpdateMonthSchedule(Guid workID, string task, int month)
+        public void UpdateMonthSchedule(Guid workID, string task, int month, bool append)
         {
-            string date = DateTime.Now.Year + "-" + month + "-1";
+            string date = year + "-" + month + "-1";
             string id = string.Empty;
             //先判断月节点表中有没有此月的节点数据，如果有则用update语句在原数据后面追加新的节点数据，如果没有则用insert添加新节点数据
             using (SqlDataReader sdr = GetDataReader("select 目标节点,ID from 月节点 where 工作ID=@工作ID and 日期=@日期", new SqlParameter[] { new SqlParameter("@工作ID",workID),
@@ -323,12 +439,17 @@ namespace Core
                 if (sdr.HasRows)
                 {
                     sdr.Read();
-                    task = sdr[0].ToString() + " " + task;
+
+                    //如果为附加模式
+                    if (append)
+                        task = sdr[0].ToString() + " " + task;
+
                     sql = "update 月节点 set 目标节点=@目标节点 where ID=@ID";
                     id = sdr[1].ToString();
                 }
                 sdr.Close();
 
+                //如果此时sdr.HasRows为真则sql不为空，则运行update命令并退出函数，放在后面是因为必须先关闭SqlDataReader才能执行其他sql命令
                 if (sql != string.Empty)
                 {
                     ExecuteSql(sql, new SqlParameter[] { new SqlParameter("@目标节点",task),
@@ -338,12 +459,20 @@ namespace Core
                 }
             }
 
+            //如果原来没有此月的计划则添加
             ExecuteSql("insert 月节点(工作ID,目标节点,日期) values(@工作ID,@目标节点,@日期)", new SqlParameter[] {new SqlParameter("@工作ID",workID),
                     new SqlParameter("@目标节点",task),
                     new SqlParameter("@日期",date)
                     });
         }
 
+        public bool UpdateWorkContent(Guid workID, string content)
+        {
+            ExecuteSql("update 工作 set 目标内容=@目标内容 where ID=@ID", new SqlParameter[] { new SqlParameter("@目标内容",content),
+                new SqlParameter("@ID",workID)
+            });
+            return true;
+        }
 
         /// <summary>
         /// 构建临时节点目标表
@@ -648,7 +777,7 @@ namespace Core
             projectCategoryLocationID = new Guid[category.Rows.Count];
 
             int i = 0;
-            foreach(DataRow dr in category.Rows)
+            foreach (DataRow dr in category.Rows)
                 using (SqlDataReader sdr = GetDataReader("select top 1 ID from 工作 where 工作类别=@工作类别 order by 序号", new SqlParameter[] { new SqlParameter("@工作类别", dr[0]) }))
                 {
                     sdr.Read();
@@ -719,7 +848,7 @@ namespace Core
                 m[i] = int.Parse(ds.Tables[0].Rows[i][0].ToString());
             return m;
         }
-        
+
 
         /// <summary>
         /// 将DataSet转换为string数组
@@ -777,6 +906,15 @@ namespace Core
             }
             mStream.Close();
             return mMemory.ToArray();
+        }
+
+        public string GetWorkContent(Guid workID)
+        {
+            using (SqlDataReader sdr = GetDataReader("select 目标内容 from 工作 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", workID) }))
+                if (sdr.Read())
+                    return sdr[0].ToString();
+                else
+                    return string.Empty;
         }
 
         /*

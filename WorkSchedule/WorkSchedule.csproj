@@ -82,6 +82,7 @@
     <Content Include="images\beijing.jpg" />
     <Content Include="Input\InputPreviousSchedule.aspx" />
     <Content Include="Input\InputSchedule.aspx" />
+    <Content Include="Manage\ManageWork.aspx" />
     <Content Include="packages.config" />
     <Content Include="MasterPage\MainSite.Master" />
     <None Include="Web.Debug.config">
@@ -145,6 +146,13 @@
     </Compile>
     <Compile Include="Input\InputSchedule.aspx.designer.cs">
       <DependentUpon>InputSchedule.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Manage\ManageWork.aspx.cs">
+      <DependentUpon>ManageWork.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Manage\ManageWork.aspx.designer.cs">
+      <DependentUpon>ManageWork.aspx</DependentUpon>
     </Compile>
     <Compile Include="MasterPage\MainSite.Master.cs">
       <DependentUpon>MainSite.Master</DependentUpon>

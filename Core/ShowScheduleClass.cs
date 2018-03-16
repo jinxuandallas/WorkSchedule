@@ -106,7 +106,7 @@ namespace Core
             if(weekDetail.Tables[0].Rows.Count>0)
                 foreach (DataRow dr in weekDetail.Tables[0].Rows)
                     //(dr["状态"].ToString()=="2"|| dr["状态"].ToString() == "4" ? @"<p style=""color:red""> "+ dr["状态"] + "</p>":dr["状态"])
-                    monthScheduleDeatil += "<br/>第" + dr["周数"] + "周（"+ DateTime.Parse(dr["开始日期"].ToString()).ToString("M月d日")+"—"+ DateTime.Parse(dr["结束日期"].ToString()).ToString("M月d日") +"）：" + (dr["状态"].ToString() == "计划未完成"  ? @"<span style=""color:red""> " + dr["状态"] + "</span>" : dr["状态"]) + "<br/>" + "周工作计划：" + dr["周计划"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;周落实情况：" + dr["周完成"] + "<br/>";
+                    monthScheduleDeatil += "<br/>第" + dr["周数"] + "周（"+ DateTime.Parse(dr["开始日期"].ToString()).ToString("M月d日")+"—"+ DateTime.Parse(dr["结束日期"].ToString()).ToString("M月d日") +"）：" + (dr["状态"].ToString() == "计划未完成"  ? @"<span style=""color:red""> " + dr["状态"] + "</span>" : dr["状态"]) + "<br/>" + "周工作计划：" + dr["周计划"] + "<br/>周落实情况：" + dr["周完成"] + "<br/>";
 
             monthScheduleDeatil += "<br/>";
             return monthScheduleDeatil;
