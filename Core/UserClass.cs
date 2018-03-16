@@ -15,6 +15,14 @@ namespace Core
         {
 
         }
+        public string GetUsername(int userID)
+        {
+            using (SqlDataReader sdr = GetDataReader("select 用户名 from 用户 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", userID) }))
+            {
+                sdr.Read();
+                return sdr[0].ToString();
+            }
+        }
 
         public int ValidateUser(string username,string password)
         {

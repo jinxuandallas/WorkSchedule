@@ -631,6 +631,11 @@ namespace Core
         }
 
 
+        public Guid[] GetProjectCategoryLocationID()
+        {
+            return GetProjectCategoryLocationID(year);
+        }
+
         /// <summary>
         /// 获取工作类别分类所在位置的工作ID
         /// </summary>
@@ -694,6 +699,11 @@ namespace Core
             return task;
         }
 
+        public string[] GetCategoryName()
+        {
+            return GetStringArrFromDataSet(GetDataSet("select 类别名称 from 工作类别"));
+        }
+
         /// <summary>
         /// 将DataSet转换为int数组
         /// </summary>
@@ -707,6 +717,23 @@ namespace Core
             int[] m = new int[l];
             for (int i = 0; i < l; i++)
                 m[i] = int.Parse(ds.Tables[0].Rows[i][0].ToString());
+            return m;
+        }
+        
+
+        /// <summary>
+        /// 将DataSet转换为string数组
+        /// </summary>
+        /// <param name="ds"></param>
+        /// <returns></returns>
+        public string[] GetStringArrFromDataSet(DataSet ds)
+        {
+            int l = ds.Tables[0].Rows.Count;
+            if (l == 0)
+                return null;
+            string[] m = new string[l];
+            for (int i = 0; i < l; i++)
+                m[i] = ds.Tables[0].Rows[i][0].ToString();
             return m;
         }
 

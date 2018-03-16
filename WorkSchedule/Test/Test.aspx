@@ -17,7 +17,9 @@
     <form id="form1" runat="server">
         <div>
              <asp:TextBox ID="TextBox_SN" runat="server" TextMode="Number"></asp:TextBox><br />
-            <asp:Button ID="Button1" runat="server" Text="Button" BackColor="" OnClick="Button1_Click" />
+            <asp:Button ID="Button1" runat="server" Text="Button" BackColor="#d7d6d5" OnClick="Button1_Click" />
+
+            <div style="width:150px;height:20px; font-size:large;background-color:#e7e6e5;padding:5px">招商类项目</div>
         </div>
     </form>
     <p>

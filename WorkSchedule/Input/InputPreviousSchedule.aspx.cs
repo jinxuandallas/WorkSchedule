@@ -41,8 +41,8 @@ namespace WorkSchedule.Input
             //if (Request.QueryString["id"] != null)
             //    Session["UserID"] = Request.QueryString["UserID"];
 
-            if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
-                Response.Redirect("~/default.aspx");
+            //if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
+            //    Response.Redirect("~/default.aspx");
 
             userID = int.Parse(Session["UserID"].ToString());
 

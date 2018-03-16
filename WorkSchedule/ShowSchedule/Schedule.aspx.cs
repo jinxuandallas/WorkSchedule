@@ -14,22 +14,27 @@ namespace WorkSchedule
     {
         protected Core.Tools tool;
         protected int[] weeksOfMonth;
-
+        protected Guid[] projectCategoryLocationID;
+        protected int category;
         /// <summary>
         /// 本年度所有工作的ID
         /// </summary>
         protected Guid[] allWorkID;
+        protected string[] categoryName;
 
         protected Dictionary<Guid, int[]> existMonths;
         protected Dictionary<Guid, Dictionary<int, int>> existWeeks;
         protected ShowScheduleClass ss;
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
-                Response.Redirect("~/Account/Login.aspx");
+            //Session["UserID"] = 1;
+
+            //if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
+            //    Response.Redirect("~/Account/Login.aspx");
 
             tool = new Core.Tools();
             ss = new ShowScheduleClass();
+            category = 0;
 
             if (IsPostBack)
             {
@@ -37,6 +42,8 @@ namespace WorkSchedule
                 allWorkID = (Guid[])ViewState["allWorkID"];
                 existMonths = (Dictionary<Guid, int[]>)ViewState["existMonths"];
                 existWeeks = (Dictionary<Guid, Dictionary<int, int>>)ViewState["existWeeks"];
+                projectCategoryLocationID = ViewState["projectCategoryLocationID"] as Guid[];
+                categoryName = ViewState["categoryName"] as string[];
             }
             else
                 PreLoadData();
@@ -56,6 +63,8 @@ namespace WorkSchedule
             //获取一年中所有月份的每个月包含的周数量
             weeksOfMonth = tool.GetWeeksOfAllMonth();
 
+
+
             allWorkID = tool.GetAllWorkID();
             int[] existTaskMonths;
             existMonths = new Dictionary<Guid, int[]>();
@@ -68,11 +77,15 @@ namespace WorkSchedule
                     existMonths.Add(wid, tool.GetExistTaskMonths(wid));
                 existWeeks.Add(wid, tool.GetExistTaskWeeksAndState(wid, true));
             }
+            projectCategoryLocationID = tool.GetProjectCategoryLocationID();
+            categoryName = tool.GetCategoryName();
 
             ViewState["weeksOfMonth"] = weeksOfMonth;
             ViewState["allWorkID"] = allWorkID;
             ViewState["existMonths"] = existMonths;
             ViewState["existWeeks"] = existWeeks;
+            ViewState["projectCategoryLocationID"] = projectCategoryLocationID;
+            ViewState["categoryName"] = categoryName;
         }
 
         protected void RepeaterSchedule_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -89,6 +102,13 @@ namespace WorkSchedule
 
             Guid workID = Guid.Parse((((DataRowView)e.Item.DataItem)["ID"].ToString()));
 
+            if (category < 5 && projectCategoryLocationID[category] == workID)
+            {
+                Panel pc = e.Item.FindControl("ProjectCategory") as Panel;
+                pc.Visible = true;
+                (pc.FindControl("lbCategoryName") as Label).Text = categoryName[category];
+                category++;
+            }
             TableRow tr = table.Rows[0];
             //任务中的一行表格
             tr.Style.Value = "border-collapse:collapse;border-spacing:0px;padding: 0px; margin: 0px;";
@@ -109,7 +129,7 @@ namespace WorkSchedule
                 //t.Style.Value += "background-color: #FFFF99";
                 //existMonths[workID] != null &&
 
-                if (existMonths.ContainsKey(workID) &&  Array.IndexOf(existMonths[workID], i) != -1)
+                if (existMonths.ContainsKey(workID) && Array.IndexOf(existMonths[workID], i) != -1)
                 {
                     t.Rows[0].Cells[0].ColumnSpan = weeksOfMonth[i - 1];
 
@@ -122,7 +142,7 @@ namespace WorkSchedule
                     //lb.Height = Unit.Percentage(100);
                     //lb.BackColor = System.Drawing.Color.Lavender;
 
-                    t.Rows[0].Cells[0].Controls.Add(ss.GetLinkButton(workID,i));
+                    t.Rows[0].Cells[0].Controls.Add(ss.GetLinkButton(workID, i));
 
                     //t.Rows[0].Cells[0].Style.Value = " border-style: solid; border-width: 1px 1px 1px 1px; border-color: #000000;";
 

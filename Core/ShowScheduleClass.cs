@@ -97,7 +97,7 @@ namespace Core
             }))
                 if (sdr.Read())
                     monthScheduleDeatil += "“"+sdr[0]+ "”<br/>";
-            DataSet weekDetail = GetDataSet("select 月节点日期,周数,周计划,周完成,状态 from 周节点视图 where 周状态!=0 and 工作ID=@工作ID and datepart(mm,月节点日期)=@月份",new SqlParameter[] {
+            DataSet weekDetail = GetDataSet("select 月节点日期,周数,周计划,周完成,状态,开始日期,结束日期 from 周节点视图 where 周状态!=0 and 工作ID=@工作ID and datepart(mm,月节点日期)=@月份",new SqlParameter[] {
                 new SqlParameter("@工作ID",workID),
                 new SqlParameter("@月份",month)
             });
@@ -106,7 +106,7 @@ namespace Core
             if(weekDetail.Tables[0].Rows.Count>0)
                 foreach (DataRow dr in weekDetail.Tables[0].Rows)
                     //(dr["状态"].ToString()=="2"|| dr["状态"].ToString() == "4" ? @"<p style=""color:red""> "+ dr["状态"] + "</p>":dr["状态"])
-                    monthScheduleDeatil += "<br/>第" + dr["周数"] + "周：" + (dr["状态"].ToString() == "计划未完成"  ? @"<span style=""color:red""> " + dr["状态"] + "</span>" : dr["状态"]) + "<br/>" + "周工作计划：" + dr["周计划"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;周落实情况：" + dr["周完成"] + "<br/>";
+                    monthScheduleDeatil += "<br/>第" + dr["周数"] + "周（"+ DateTime.Parse(dr["开始日期"].ToString()).ToString("M月d日")+"—"+ DateTime.Parse(dr["结束日期"].ToString()).ToString("M月d日") +"）：" + (dr["状态"].ToString() == "计划未完成"  ? @"<span style=""color:red""> " + dr["状态"] + "</span>" : dr["状态"]) + "<br/>" + "周工作计划：" + dr["周计划"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;周落实情况：" + dr["周完成"] + "<br/>";
 
             monthScheduleDeatil += "<br/>";
             return monthScheduleDeatil;

@@ -10,14 +10,17 @@ namespace WorkSchedule.MasterPage
 {
     public partial class MainSite : System.Web.UI.MasterPage
     {
+        protected Core.UserClass muc;
+        protected int userID;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
                 Response.Redirect("~/Account/Login.aspx");
 
             Core.Tools mt = new Core.Tools();
-            Core.UserClass muc = new UserClass();
-            int userID = int.Parse(Session["UserID"].ToString());
+            muc = new UserClass();
+            userID = int.Parse(Session["UserID"].ToString());
+            lbUsername.Text = muc.GetUsername(userID);
 
             if (!mt.HasInput(userID)|| muc.GetUserType(userID) == 3)
                 lbFunc.Visible = false;

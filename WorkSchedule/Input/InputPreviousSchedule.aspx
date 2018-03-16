@@ -92,7 +92,7 @@
                                     <br />
                                     <asp:Repeater ID="RepeaterWeekSchedule" runat="server" DataSource="<%#tool.GetWeeksOfMonth(editMonth) %>">
                                         <ItemTemplate>
-                                            第<asp:Label ID="lbWeek" runat="server" Text='<%# Eval("周数") %>'></asp:Label>周（<%#DateTime.Parse(Eval("开始日期").ToString()).ToShortDateString() %>--<%#DateTime.Parse(Eval("结束日期").ToString()).ToShortDateString() %>）：<br />
+                                            第<asp:Label ID="lbWeek" runat="server" Text='<%# Eval("周数") %>'></asp:Label>周（<%#DateTime.Parse(Eval("开始日期").ToString()).ToString("M月d日") %>--<%#DateTime.Parse(Eval("结束日期").ToString()).ToString("M月d日") %>）：<br />
                                             周工作计划：<asp:TextBox ID="TextBoxWeekSchedule" Width="400px" runat="server"></asp:TextBox>
                                             <br />
                                             周落实情况：<asp:TextBox ID="TextBoxWeekExecution" Width="400px" runat="server"></asp:TextBox>
