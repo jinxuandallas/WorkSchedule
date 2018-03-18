@@ -86,9 +86,9 @@
                     <%--<asp:UpdatePanel ID="UpdatePanel2" runat="server">
                         <ContentTemplate>--%>
                             <asp:Panel ID="monthPanel" runat="server" Visible="false" Width="800px">
-                                <div style="font-size: small; background-color: #ffff99; float: left; margin-top: 20px; margin-bottom: 50px; padding-left: 15px; padding-right: 15px">
+                                <div style="font-size: small; background-color: #ffffb0; float: left; margin-top: 20px; margin-bottom: 50px; padding-left: 15px; padding-right: 15px">
                                     <br />
-                                    <asp:Label ID="monthLabel" BackColor="#ffff99" runat="server"></asp:Label>
+                                    <asp:Label ID="monthLabel" runat="server"></asp:Label>
                                     <br />
                                     <asp:Repeater ID="RepeaterWeekSchedule" runat="server" DataSource="<%#tool.GetWeeksOfMonth(editMonth) %>">
                                         <ItemTemplate>
