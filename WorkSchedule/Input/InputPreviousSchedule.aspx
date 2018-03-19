@@ -70,8 +70,8 @@
                         <ContentTemplate>
                             第<%#Eval("序号") %>项：<span style="background-color: #ffff99"> <%#Eval("目标名称") %></span><br />
                             <span style="font-size: small">目标内容：<%#Eval("目标内容") %><br />
-                                备注：<%#Eval("备注") %><br />
-                                责任领导：<%# ss.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span>
+                                责任领导：<%# ss.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br />
+                            <span style="font-size: small"><%#Eval("备注").ToString().Trim()==""?"":"备注："+Eval("备注")+"<br />" %></span>
                         </ContentTemplate>
                     </asp:UpdatePanel>
 

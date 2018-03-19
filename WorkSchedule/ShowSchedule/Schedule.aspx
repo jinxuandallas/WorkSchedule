@@ -65,7 +65,8 @@
                                 <%--<hr style="width: 1500px; text-align: left; margin-left: 0" />--%>
                             </asp:Panel>
                             第<%#Eval("序号") %>项：<span style="background-color: #ffff99"> <%#Eval("目标名称") %></span><br />
-                            <span style="font-size: small">责任领导：<%# ss.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span>
+                            <span style="font-size: small">责任领导：<%# ss.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br />
+                            <span style="font-size: small"><%#Eval("备注").ToString().Trim()==""?"":"备注："+Eval("备注")+"<br />" %></span>
 
                         </ContentTemplate>
                     </asp:UpdatePanel>
@@ -95,7 +96,7 @@
                 </ItemTemplate>
             </asp:Repeater>
 
-            <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand="SELECT Id, 序号, 目标名称  FROM 工作 WHERE (年份 = @year)" ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">
+            <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand="SELECT Id, 序号, 目标名称,备注  FROM 工作 WHERE (年份 = @year)" ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">
                 <SelectParameters>
                     <asp:Parameter  Name="year" Type="Int32"  />
                 </SelectParameters>

@@ -27,10 +27,11 @@ namespace WorkSchedule.MasterPage
                 lbFunc.Visible = false;
             else
             {
-                string url = Request.RawUrl.ToLower();
-                if (url == "/input/inputpreviousschedule.aspx"&& muc.GetUserType(userID)==2)
+                string pageName = System.IO.Path.GetFileName(Request.Path.ToLower());
+                
+                if (pageName == "inputpreviousschedule.aspx"&& muc.GetUserType(userID)==2)
                     lbFunc.Text = "查看";
-                if (url== "/showSchedule/schedule.aspx")
+                if (pageName == "/schedule.aspx")
                     lbFunc.Text = "管理";
             }
         }
