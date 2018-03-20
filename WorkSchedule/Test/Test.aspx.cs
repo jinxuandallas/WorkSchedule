@@ -28,9 +28,9 @@ namespace WorkSchedule.Test
             ss = new ShowScheduleClass();
             tool = new Core.Tools();
             //if (!IsPostBack)
-                PreLoadData();
-            Response.Write(existMonths.Count);
-            Response.Write("<br/>" +existMonths[Guid.Parse("e121878e-1615-e811-82f1-b083fe979874")]);
+            //    PreLoadData();
+            //Response.Write(existMonths.Count);
+            //Response.Write("<br/>" +existMonths[Guid.Parse("e121878e-1615-e811-82f1-b083fe979874")]);
             //Response.Write(ss.GetMonthScheduleDetail(Guid.Parse("c521878e-1615-e811-82f1-b083fe979874"), 9));
             //t.OnlyTest();
             //DataTable dt = t.DealMonthSchedule();

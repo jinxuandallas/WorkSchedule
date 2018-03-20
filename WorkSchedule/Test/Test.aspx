@@ -15,14 +15,15 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <div>
+        <div style="background-image: url('../images/DatePrompt.gif'); background-repeat: repeat-y; background-position: 200px">
              <asp:TextBox ID="TextBox_SN" runat="server" TextMode="Number"></asp:TextBox><br />
             <asp:Button ID="Button1" runat="server" Text="Button" BackColor="#d7d6d5" OnClick="Button1_Click" />
 
             <div style="width:150px;height:20px; font-size:large;background-color:#e7e6e5;padding:5px">招商类项目</div>
+            <p>
+        <img alt="" class="auto-style1" src="file:///C:/Users/Administrator/Desktop/QQ截图20180314155351.jpg" /></p>
         </div>
     </form>
-    <p>
-        <img alt="" class="auto-style1" src="file:///C:/Users/Administrator/Desktop/QQ截图20180314155351.jpg" /></p>
+    
 </body>
 </html>

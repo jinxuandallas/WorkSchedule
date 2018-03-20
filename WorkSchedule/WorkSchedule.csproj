@@ -80,8 +80,10 @@
     <Content Include="App_Data\目标节点.txt" />
     <Content Include="images\banner.swf" />
     <Content Include="images\beijing.jpg" />
+    <Content Include="images\DatePrompt.gif" />
     <Content Include="Input\InputPreviousSchedule.aspx" />
     <Content Include="Input\InputSchedule.aspx" />
+    <Content Include="Input\InputThisWeekSchedule.aspx" />
     <Content Include="Manage\ManageWork.aspx" />
     <Content Include="packages.config" />
     <Content Include="MasterPage\MainSite.Master" />
@@ -97,7 +99,6 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="ShowSchedule\Schedule.aspx" />
-    <Content Include="Test\LoaclStroage.aspx" />
     <Content Include="Test\RepeaterTest.aspx" />
     <Content Include="Test\ScheduleTest.aspx" />
     <Content Include="Test\Test.aspx" />
@@ -147,6 +148,13 @@
     <Compile Include="Input\InputSchedule.aspx.designer.cs">
       <DependentUpon>InputSchedule.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Input\InputThisWeekSchedule.aspx.cs">
+      <DependentUpon>InputThisWeekSchedule.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Input\InputThisWeekSchedule.aspx.designer.cs">
+      <DependentUpon>InputThisWeekSchedule.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Manage\ManageWork.aspx.cs">
       <DependentUpon>ManageWork.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -168,13 +176,6 @@
     </Compile>
     <Compile Include="ShowSchedule\Schedule.aspx.designer.cs">
       <DependentUpon>Schedule.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Test\LoaclStroage.aspx.cs">
-      <DependentUpon>LoaclStroage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Test\LoaclStroage.aspx.designer.cs">
-      <DependentUpon>LoaclStroage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Test\RepeaterTest.aspx.cs">
       <DependentUpon>RepeaterTest.aspx</DependentUpon>
