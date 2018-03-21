@@ -120,7 +120,7 @@ namespace WorkSchedule.Test
                         wtc.ApplyStyle(tis);
                         */
                         wtc.Style.Value = "padding: 0px; margin: 0px; border-style: solid; border-width: 1px 1px 1px 0px; border-color: #000000;width:25px";
-                        switch (ss.GetWeekState(workID, weekOfYear))
+                        switch (tool.GetWeekState(workID, weekOfYear))
                         {
                             case 0:
                                 break;

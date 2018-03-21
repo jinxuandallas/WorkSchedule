@@ -22,6 +22,15 @@ namespace WorkSchedule.Input {
         protected global::System.Web.UI.ScriptManager ScriptManager1;
         
         /// <summary>
+        /// UpdatePanel2 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel2;
+        
+        /// <summary>
         /// RepeaterSchedule 控件。
         /// </summary>
         /// <remarks>

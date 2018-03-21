@@ -28,12 +28,12 @@ namespace WorkSchedule.Input
 
         public Core.Tools tool;
         public ShowScheduleClass ss;
-        public Core.AddMonthSchedule aws;
+        public Core.AddScheduleClass asc;
         protected void Page_Load(object sender, EventArgs e)
         {
             tool = new Core.Tools();
             ss = new ShowScheduleClass();
-            aws = new AddMonthSchedule();
+            asc = new AddScheduleClass();
 
 
             //Session["UserID"] = 4;
@@ -217,7 +217,7 @@ namespace WorkSchedule.Input
                 else
                     state = ((CheckBox)ri.FindControl("CheckBoxState")).Checked ? 3 : 2;
 
-                succeed = aws.InputWeekSchedule(monnthTaskID, weekOfYear, weekSchedule, weekExecution, state);
+                succeed = asc.InputWeekSchedule(monnthTaskID, weekOfYear, weekSchedule, weekExecution, state);
 
                 if (succeed)
                 {

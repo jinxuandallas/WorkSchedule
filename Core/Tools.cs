@@ -227,7 +227,7 @@ namespace Core
                 {
                     startMonth = int.Parse(Regex.Match(r, @"^\d*").Value);
                     ExecuteSql("update 临时目标节点 set 识别=2 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
-                    AddMonthSchedule(workID, task, startMonth, 0,true);
+                    AddMonthSchedule(workID, task, startMonth, 0, true);
                 }
 
                 //匹配8月底前或者8月底之前或者8月底
@@ -247,7 +247,7 @@ namespace Core
 
                     ExecuteSql("update 临时目标节点 set 识别=3 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
 
-                    AddMonthSchedule(workID, task, startMonth, endMonth,true);
+                    AddMonthSchedule(workID, task, startMonth, endMonth, true);
                 }
 
                 //匹配7、8月
@@ -266,7 +266,7 @@ namespace Core
 
                     endMonth = int.Parse(s[1]);
                     ExecuteSql("update 临时目标节点 set 识别=5 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
-                    AddMonthSchedule(workID, task, startMonth, endMonth,true);
+                    AddMonthSchedule(workID, task, startMonth, endMonth, true);
                 }
 
                 //匹配7月
@@ -274,7 +274,7 @@ namespace Core
                 {
                     startMonth = int.Parse(Regex.Match(r, @"\d+").Value);
                     ExecuteSql("update 临时目标节点 set 识别=6 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", int.Parse(dr[2].ToString())) });
-                    AddMonthSchedule(workID, task, startMonth, 0,true);
+                    AddMonthSchedule(workID, task, startMonth, 0, true);
                 }
                 //task = task.Substring(task.i)
             }
@@ -294,7 +294,7 @@ namespace Core
 
                 if (dt.Rows.Count > 0)
                     for (int i = startMonth; i <= endMonth; i++)
-                        result.Add(i + "月——“" + s+"”");
+                        result.Add(i + "月——“" + s + "”");
             }
 
             return result;
@@ -323,7 +323,7 @@ namespace Core
             dt.Columns.Add("开始月份");
             dt.Columns.Add("结束月份");
 
-            int startMonth=0, endMonth=0;
+            int startMonth = 0, endMonth = 0;
             string r;
 
             //注意顺序
@@ -917,36 +917,46 @@ namespace Core
                     return string.Empty;
         }
 
-        /*
-        /// <summary>
-        /// 将注册资本从文本格式传唤成长整型格式
-        /// </summary>
-        /// <param name="num">要转换的数字</param>
-        /// <param name="unit">单位（亿、万、千）</param>
-        /// <returns>转换后的长整型注册资本数</returns>
-        public long CapitalStr2Long (string num,string unit)
+        public string GetWeekSchedule(Guid workID, int weekOfYear)
         {
-            int capitalNum;
-            long capital;
-            if (num.Length > 7 || !int.TryParse(num, out capitalNum)) return 0;
-            switch(unit)
-            {
-                case "千":
-                    capital = capitalNum * 1000;
-                    break;
-                case "万":
-                    capital = capitalNum * 10000;
-                    break;
-                case "亿":
-                    capital = capitalNum * 100000000;
-                    break;
-                default:
-                    capital = 0;
-                    break;
-            }
-            return capital;
+            string weekSchedule = "";
+            using (SqlDataReader sdr = GetDataReader("select 周计划 from 周节点视图 where 工作ID=@工作ID and 周数=@周数", new SqlParameter[] { new SqlParameter("@工作ID",workID),
+                 new SqlParameter("@周数",weekOfYear)
+            }))
+                if (sdr.Read())
+                    weekSchedule = sdr[0].ToString();
+            return weekSchedule;
         }
 
+        public string GetWeekExecution(Guid workID, int weekOfYear)
+        {
+            string weekExecution = "";
+            using (SqlDataReader sdr = GetDataReader("select 周完成 from 周节点视图 where 工作ID=@工作ID and 周数=@周数", new SqlParameter[] { new SqlParameter("@工作ID",workID),
+                 new SqlParameter("@周数",weekOfYear)
+            }))
+                if (sdr.Read())
+                    weekExecution = sdr[0].ToString();
+            return weekExecution;
+        }
+
+        /// <summary>
+        /// 获取当前周的周状态
+        /// </summary>
+        /// <param name="monthID"></param>
+        /// <param name="weekOfYear"></param>
+        /// <returns></returns>
+        public int GetWeekState(Guid workID, int weekOfYear)
+        {
+            int state = 0;
+            using (SqlDataReader sdr = GetDataReader("select 周状态 from 周节点视图 where 工作ID=@工作ID and 周数=@周数", new SqlParameter[] {
+                new SqlParameter("@工作ID",workID),
+                 new SqlParameter("@周数",weekOfYear)
+            }))
+                if (sdr.Read())
+                    state = int.Parse(sdr[0].ToString());
+            return state;
+        }
+        /*
         /// <summary>
         /// 转换图片地址，如果地址为空则显示默认无图片的地址
         /// </summary>

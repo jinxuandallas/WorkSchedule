@@ -11,7 +11,6 @@
                 <table style="width: 100%">
                     <tr>
                         <td style="text-align: center; font-size: xx-large">青岛中央商务区重点工作管理平台</td>
-
                     </tr>
                     <tr>
                         <td style="text-align: center; font-size: x-large">（<%#DateTime.Now.Year%>年）</td>
@@ -103,8 +102,8 @@
 
                         <%--<asp:UpdatePanel ID="UpdatePanel2" runat="server">--%>
                         <%--<ContentTemplate>--%>
-                        <asp:Panel ID="monthPanel" runat="server" Visible="false" Width="1000px">
-                            <div style="font-size: small; background-color: #ffffb0; float: left; margin-top: 20px; margin-bottom: 20px; padding-left: 15px; padding-right: 15px">
+                        <asp:Panel ID="monthPanel" runat="server" Visible="false" Width="800px">
+                            <div style="font-size: small; background-color: #ffffb0; float: left; margin-top: 20px; margin-bottom: 20px; padding-left: 15px; padding-right: 15px;border:1px solid #a7a6a5;">
                                 <asp:Label ID="monthLabel" runat="server"></asp:Label>
                             </div>
                         </asp:Panel>

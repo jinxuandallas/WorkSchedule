@@ -22,6 +22,16 @@
             <div style="width:150px;height:20px; font-size:large;background-color:#e7e6e5;padding:5px">招商类项目</div>
             <p>
         <img alt="" class="auto-style1" src="file:///C:/Users/Administrator/Desktop/QQ截图20180314155351.jpg" /></p>
+             
+            <br />
+            <div>
+                xx
+                <br />
+                <p style="margin-top:10px;width:100px">zzsdtfweqrewrwerewfdsfsdfsdfsdafsdvsdavsxvczxvxxzcvvxc</p>
+                <br />
+                <p style="margin-top:10px;margin-bottom:0px ;width :100px">zzsdtfweqrewrwerewfdsfsdfsdfsdafsdvsdavsxvczxvxxzcvvxc</p>
+                <span style="line-height:5px">dd</span>
+            </div>
         </div>
     </form>
     

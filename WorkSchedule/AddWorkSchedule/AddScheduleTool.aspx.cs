@@ -11,12 +11,12 @@ namespace WorkSchedule.AddWorkSchedule
     {
         protected Core.Tools t;
         protected ShowScheduleClass ss;
-        protected Core.AddMonthSchedule aws;
+        protected Core.AddScheduleClass asc;
         protected void Page_Load(object sender, EventArgs e)
         {
             t = new Core.Tools();
             //ss = new ShowSchedule();
-            aws = new AddMonthSchedule();
+            asc = new AddScheduleClass();
             if (!IsPostBack)
             {
                 //Repeater1.Visible = false;
@@ -65,7 +65,7 @@ namespace WorkSchedule.AddWorkSchedule
                 else
                     state = ((CheckBox)ri.FindControl("CheckBoxState")).Checked ? 3 : 2;
 
-                succeed = !aws.InputWeekSchedule(monnthTaskID, weekOfYear, weekSchedule, weekExecution, state);
+                succeed = !asc.InputWeekSchedule(monnthTaskID, weekOfYear, weekSchedule, weekExecution, state);
             }
 
             string result = succeed ? "成功" : "不成功";

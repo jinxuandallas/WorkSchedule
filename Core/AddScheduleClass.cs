@@ -10,9 +10,9 @@ using System.Text.RegularExpressions;
 
 namespace Core
 {
-    public class AddMonthSchedule : Database
+    public class AddScheduleClass : Database
     {
-        public AddMonthSchedule()
+        public AddScheduleClass()
         {
 
         }
