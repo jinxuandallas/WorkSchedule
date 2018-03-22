@@ -87,6 +87,7 @@
     <Content Include="Manage\ManageWork.aspx" />
     <Content Include="packages.config" />
     <Content Include="MasterPage\MainSite.Master" />
+    <Content Include="Test\WebTest.sitemap" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -236,6 +237,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
+    <Folder Include="SiteMap\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

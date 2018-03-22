@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="" title=""  description="">
+    <siteMapNode url="" title="查看"  description="" >
+      <siteMapNode url="" title="查看aaaa"  description="" />
+      <siteMapNode url="" title="查看bbbb"  description="" />
+    </siteMapNode>
+    <siteMapNode url="" title="管理"  description="" >
+      <siteMapNode url="" title="管理cccc"  description="" />
+      <siteMapNode url="" title="管理dddd"  description="" />
+    </siteMapNode>
+  </siteMapNode>
+</siteMap>

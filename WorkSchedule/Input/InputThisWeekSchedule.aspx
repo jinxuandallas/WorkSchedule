@@ -21,7 +21,7 @@
                                 责任领导：<%# ss.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br />
                             <span style="font-size: small"><%#Eval("备注").ToString().Trim()==""?"":"备注："+Eval("备注")+"<br />" %></span>
                             <div style="width: 1000px;">
-                                <div style="float: left; margin-top: 20px; margin-bottom: 30px; padding: 5px; border: 1px solid">
+                                <div style="float: left; margin-top: 20px; margin-bottom: 30px; padding: 5px; border: 1px solid #a7a6a5">
                                     <div style="font-size: small; background-color: #ffffb0; padding: 10px;">
                                         <%# DateTime.Now.Month %>月计划：“<%# Eval("目标节点") %>”<br />
                                         <%--第<asp:Label ID="lbWeek" runat="server" Text='<%#(new GregorianCalendar()).GetWeekOfYear(DateTime.Now,CalendarWeekRule.FirstDay, DayOfWeek.Monday) %>'></asp:Label>周：<br />--%>
