@@ -27,7 +27,7 @@ namespace WorkSchedule
         protected ShowScheduleClass ss;
         protected void Page_Load(object sender, EventArgs e)
         {
-            Session["UserID"] = 1;
+            Session["UserID"] = 11;
 
             if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
                 Response.Redirect("~/Account/Login.aspx");

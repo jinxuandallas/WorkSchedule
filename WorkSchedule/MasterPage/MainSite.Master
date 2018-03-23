@@ -15,9 +15,9 @@
             <tr>
                 <td style="width: 80px"></td>
                 <td style="width: 400px; padding: 0px; height: 25px">
-                    <asp:Menu ID="MenuManage" runat="server" Height="100%" DataSourceID="SiteMapDataSource1" Orientation="Horizontal" BackColor="#38b0e0" Font-Size="Small" ForeColor="#284E98" StaticEnableDefaultPopOutImage="False" StaticSubMenuIndent="10px">
+                    <asp:Menu ID="MenuManage" runat="server" Height="100%" DataSourceID="SiteMapDataSource1" Orientation="Horizontal" BackColor="#38b0e0" Font-Size="Small" ForeColor="#284E98" StaticEnableDefaultPopOutImage="False" StaticSubMenuIndent="10px" Visible="false">
                         <DynamicHoverStyle BackColor="#284E98" ForeColor="White" />
-                        <DynamicMenuItemStyle HorizontalPadding="5px" VerticalPadding="0px" Height="28px" Font-Bold="false" />
+                        <DynamicMenuItemStyle HorizontalPadding="5px" VerticalPadding="1px" Height="28px" Font-Bold="false" />
                         <DynamicMenuStyle BackColor="#B5C7DE" />
                         <DynamicSelectedStyle BackColor="#507CD1" Height="100%" />
                         <StaticHoverStyle BackColor="#284E98" ForeColor="White" Height="28px" />
