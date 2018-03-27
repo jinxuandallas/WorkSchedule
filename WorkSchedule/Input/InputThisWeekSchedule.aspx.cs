@@ -36,7 +36,46 @@ namespace WorkSchedule.Input
         {
             if (e.CommandName == "SubmitSchedule")
             {
-                (e.Item.FindControl("LabelStatus") as Label).Text = e.CommandArgument.ToString();
+                string weekSchedule, weekExecution, nextWeekSchedule;
+                int status;
+
+                weekSchedule = (e.Item.FindControl("TextBoxWeekSchedule") as TextBox).Text;
+                weekExecution = (e.Item.FindControl("TextBoxWeekExecution") as TextBox).Text;
+                if (weekExecution.Trim() == "")
+                    status = weekSchedule.Trim() == "" ? 0 : 1;
+                else
+                    status = (e.Item.FindControl("CheckBoxStatus") as CheckBox).Checked ? 3 : 2;
+
+                //更新本周计划落实情况
+
+                //更新下周计划落实情况
+                if ((e.Item.FindControl("PlaceHolderWeek53") as PlaceHolder).Visible == true)
+                {
+                    nextWeekSchedule = (e.Item.FindControl("TextBoxNextWeekSchedule") as TextBox).Text;
+                }
+
+                Label l = e.Item.FindControl("LabelStatus") as Label;
+                l.Text = "<br/>" + e.CommandArgument.ToString();
+                l.Text += "<br/>" + weekSchedule;
+                l.Text += "<br/>" + weekExecution;
+                l.Text += "<br/>" + status;
+                //l.Text += "<br/>" + nextWeekSchedule;
+
+
+                //修改上周计划
+                if ((e.Item.FindControl("CheckBoxModify") as CheckBox).Checked)
+                {
+                    weekSchedule = (e.Item.FindControl("TextBoxLastWeekSchedule") as TextBox).Text;
+                    weekExecution = (e.Item.FindControl("TextBoxLastWeekExecution") as TextBox).Text;
+                    status = (e.Item.FindControl("CheckBoxLastStatus") as CheckBox).Checked ? 3 : 2;
+                    l.Text += "<br/>" + e.CommandArgument.ToString();
+                    l.Text += "<br/>" + weekSchedule;
+                    l.Text += "<br/>" + weekExecution;
+                    l.Text += "<br/>" + status + "<br/>";
+                }
+
+                
+                
             }
         }
 

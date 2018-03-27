@@ -29,15 +29,15 @@ namespace WorkSchedule.MasterPage
             {
                 string pageName = System.IO.Path.GetFileName(Request.Path.ToLower());
 
-                if (pageName == "inputpreviousschedule.aspx" && muc.GetUserType(userID) == 2)
-                {
-                    lbFunc.Text = "查看";
-                    MenuManage.Visible = true;
-                }
-                if (pageName == "/schedule.aspx")
+                if (pageName == "schedule.aspx")
                 {
                     lbFunc.Text = "管理";
                     MenuManage.Visible = false;
+                }
+                else
+                {
+                    lbFunc.Text = "查看";
+                    MenuManage.Visible = true;
                 }
             }
         }

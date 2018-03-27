@@ -29,15 +29,22 @@
                                         <br />
                                         <%#thisWeek %>周落实情况：<asp:TextBox ID="TextBoxWeekExecution" Width="400px" runat="server"></asp:TextBox>
                                         <br />
-                                        <asp:CheckBox ID="CheckBoxState" Text="已完成" runat="server" />
+                                        <asp:CheckBox ID="CheckBoxStatus" Text="已完成" runat="server" />
                                         <br />
-                                        <%# thisWeek==53?"下一":(thisWeek+1).ToString() %>周工作计划：<asp:TextBox ID="TextBoxNextWeekSchedule" Width="400px" runat="server"></asp:TextBox>
+                                        <asp:PlaceHolder ID="PlaceHolderWeek53" runat="server" Visible='<%# thisWeek==53?false:true %>'>
+                                            <%# thisWeek==53?"下一":(thisWeek+1).ToString() %>周工作计划：<asp:TextBox ID="TextBoxNextWeekSchedule" Width="400px" runat="server"></asp:TextBox>
+                                        </asp:PlaceHolder>
                                         <br />
                                         <br />
                                         <asp:CheckBox ID="CheckBoxModify" Text="修改上周计划" AutoPostBack="true" OnCheckedChanged="CheckBoxModify_CheckedChanged" Enabled='<%# thisWeek==1?false:true %>' runat="server" />
                                         <br />
-                                        <asp:PlaceHolder ID="PlaceHolderModify" runat="server" Visible="false">xxxx
-                                        <br />
+                                        <asp:PlaceHolder ID="PlaceHolderModify" runat="server" Visible="false">
+                                            <%# thisWeek-1 %>周工作计划：<asp:TextBox ID="TextBoxLastWeekSchedule" Width="400px" Text='<%#thisWeek==1?"": tool.GetWeekSchedule(Guid.Parse(Eval("ID").ToString()),thisWeek-1) %>' runat="server"></asp:TextBox>
+                                            <br />
+                                            <%#thisWeek-1 %>周落实情况：<asp:TextBox ID="TextBoxLastWeekExecution" Width="400px" Text='<%#thisWeek==1?"": tool.GetWeekExecution(Guid.Parse(Eval("ID").ToString()),thisWeek-1) %>' runat="server"></asp:TextBox>
+                                            <br />
+                                            <asp:CheckBox ID="CheckBoxLastStatus" Checked='<%# tool.GetWeekState(Guid.Parse(Eval("ID").ToString()), thisWeek-1) == 3 ? true:false %>' Text="已完成" runat="server" />
+                                            <br />
                                         </asp:PlaceHolder>
                                         <br />
                                         <asp:Button ID="ButtonSubmit" runat="server" CommandName="SubmitSchedule" CommandArgument='<%# Eval("Id") %>' Text="提交" /><asp:Label ID="LabelStatus" runat="server"></asp:Label>
@@ -52,8 +59,8 @@
                 </ContentTemplate>
             </asp:UpdatePanel>
         </div>
-
-        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand="SELECT distinct(工作.Id), 序号, 目标名称,工作.目标内容,工作.备注,月节点.目标节点  FROM 工作,工作责任领导视图,月节点 WHERE 工作责任领导视图.年份 = @year and (信息管理用户ID=@用户ID or 用户ID=@用户ID) and 工作责任领导视图.工作ID=工作.Id and 月节点.工作ID=工作.Id and MONTH(月节点.日期)=month(getdate())" ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">
+        dd
+        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand="SELECT distinct(工作.Id), 序号, 目标名称,工作.目标内容,工作.备注,月节点.目标节点  FROM 工作,工作责任领导视图,月节点 WHERE 工作责任领导视图.年份 = @year and (信息管理用户ID=@用户ID or 用户ID=@用户ID) and 工作责任领导视图.工作ID=工作.Id and 月节点.工作ID=工作.Id and MONTH(月节点.日期)=month(getdate()) order by 工作.序号" ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">
             <SelectParameters>
                 <asp:Parameter Name="year" Type="Int32" />
                 <asp:SessionParameter Name="用户ID" SessionField="UserID" />
