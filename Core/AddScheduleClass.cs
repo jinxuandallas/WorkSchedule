@@ -17,7 +17,7 @@ namespace Core
 
         }
 
-        public bool InputWeekSchedule(Guid monthTaskID, int weekOfYear, string weekSchedule, string weekExecution, int state)
+        public bool InputWeekSchedule(Guid monthTaskID, int weekOfYear, string weekSchedule, string weekExecution, int status)
         {
             bool hasData;
             int i;
@@ -37,7 +37,7 @@ namespace Core
                 new SqlParameter("@ID",id),
                 new SqlParameter("@周计划",weekSchedule),
                 new SqlParameter("@周完成",weekExecution),
-                new SqlParameter("@周状态",state)
+                new SqlParameter("@周状态",status)
             });
             }
             else
@@ -46,7 +46,7 @@ namespace Core
                 new SqlParameter("@周数",weekOfYear),
                 new SqlParameter("@周计划",weekSchedule),
                 new SqlParameter("@周完成",weekExecution),
-                new SqlParameter("@周状态",state)
+                new SqlParameter("@周状态",status)
             });
 
             return i == 1 ? true : false;

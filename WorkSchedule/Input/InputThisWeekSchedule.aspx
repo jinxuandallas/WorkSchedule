@@ -59,7 +59,6 @@
                 </ContentTemplate>
             </asp:UpdatePanel>
         </div>
-        dd
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand="SELECT distinct(工作.Id), 序号, 目标名称,工作.目标内容,工作.备注,月节点.目标节点  FROM 工作,工作责任领导视图,月节点 WHERE 工作责任领导视图.年份 = @year and (信息管理用户ID=@用户ID or 用户ID=@用户ID) and 工作责任领导视图.工作ID=工作.Id and 月节点.工作ID=工作.Id and MONTH(月节点.日期)=month(getdate()) order by 工作.序号" ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">
             <SelectParameters>
                 <asp:Parameter Name="year" Type="Int32" />
