@@ -52,7 +52,7 @@ namespace WorkSchedule.MasterPage
         protected void lbFunc_Click(object sender, EventArgs e)
         {
             if (lbFunc.Text == "管理")
-                Response.Redirect("~/Input/InputPreviousSchedule.aspx");
+                Response.Redirect("~/Input/InputSchedule.aspx");
 
             if (lbFunc.Text == "查看")
                 Response.Redirect("~/ShowSchedule/Schedule.aspx");

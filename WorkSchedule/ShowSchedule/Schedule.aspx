@@ -104,7 +104,7 @@
                         <%--<ContentTemplate>--%>
                         <asp:Panel ID="monthPanel" runat="server" Visible="false" Width="800px">
                             <div style="font-size: small; background-color: #ffffb0; float: left; margin-top: 20px; margin-bottom: 20px; padding-left: 15px; padding-right: 15px;border:1px solid #a7a6a5;">
-                                <asp:Label ID="monthLabel" runat="server"></asp:Label>
+                                <br /><asp:Label ID="monthLabel" runat="server"></asp:Label>
                             </div>
                         </asp:Panel>
                         <br />

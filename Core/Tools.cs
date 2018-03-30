@@ -616,7 +616,7 @@ namespace Core
         /// </summary>
         /// <param name="year"></param>
         /// <param name="month"></param>
-        /// <returns></returns>
+        /// <returns>返回DataSet格式：周数，开始日期，结束日期</returns>
         public DataSet GetWeeksOfMonth(int year, int month)
         {
             return GetDataSet("select 周数,开始日期,结束日期 from 周数 where datepart(yyyy,开始日期)=@年份 and datepart(mm,开始日期)=@月份", new SqlParameter[] { new SqlParameter("@年份", year),

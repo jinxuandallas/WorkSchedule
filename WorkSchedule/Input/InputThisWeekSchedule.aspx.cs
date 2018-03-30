@@ -18,6 +18,10 @@ namespace WorkSchedule.Input
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            //此页面不成功
+            return;
+
             Session["UserID"] = 12;
 
             tool = new Core.Tools();

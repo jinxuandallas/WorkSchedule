@@ -74,7 +74,7 @@ namespace Core
         /// <returns></returns>
         public string GetMonthScheduleDetail(Guid workID,int month)
         {
-            string monthScheduleDeatil= "<br/>" + month+"月目标节点：";
+            string monthScheduleDeatil= month+"月目标节点：";
             using (SqlDataReader sdr = GetDataReader("select 目标节点 from 月节点 where 工作ID=@工作ID and datepart(mm,日期)=@月份", new SqlParameter[] {
                 new SqlParameter("@工作ID",workID),
                 new SqlParameter("@月份",month)

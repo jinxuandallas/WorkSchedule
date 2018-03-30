@@ -38,7 +38,7 @@ namespace Core
         {
             int userType = GetUserType(userID);
             if (userType == 3)
-                return "~/Input/InputPreviousSchedule.aspx";
+                return "~/Input/InputSchedule.aspx";
             else
                 return "~/ShowSchedule/Schedule.aspx";
         }
