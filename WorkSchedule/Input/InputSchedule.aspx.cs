@@ -36,7 +36,7 @@ namespace WorkSchedule.Input
             asc = new AddScheduleClass();
 
 
-            Session["UserID"] = 12;
+            //Session["UserID"] = 12;
 
             //if (Request.QueryString["id"] != null)
             //    Session["UserID"] = Request.QueryString["UserID"];

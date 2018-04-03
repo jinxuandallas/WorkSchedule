@@ -908,6 +908,32 @@ namespace Core
             return mMemory.ToArray();
         }
 
+        /// <summary>
+        /// 获取工作详细信息
+        /// </summary>
+        /// <param name="workID"></param>
+        /// <returns></returns>
+        public string GetWorkDetail(Guid workID)
+        {
+            string workDetail;
+            using (SqlDataReader sdr = GetDataReader("select 序号,目标名称,目标内容,备注,类别名称 from 工作视图 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", workID) }))
+                if (sdr.Read())
+                {
+                    workDetail = "第" + sdr[0] + "项："+sdr[1]+"<br/>";
+                    workDetail+="目标名称："+sdr[2] + "<br/>";
+                    workDetail += sdr[3].ToString().Trim() == "" ? "" : "备注：" + sdr[3] + "<br/>";
+                    workDetail+= "类别名称：" + sdr[4] + "<br/>";
+                    return workDetail;
+                }
+                else
+                    return string.Empty;
+        }
+
+        /// <summary>
+        /// 获取工作目标内容
+        /// </summary>
+        /// <param name="workID"></param>
+        /// <returns></returns>
         public string GetWorkContent(Guid workID)
         {
             using (SqlDataReader sdr = GetDataReader("select 目标内容 from 工作 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", workID) }))

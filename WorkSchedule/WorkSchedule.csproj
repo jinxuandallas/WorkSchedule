@@ -83,6 +83,7 @@
     <Content Include="images\DatePrompt.gif" />
     <Content Include="Input\InputSchedule.aspx" />
     <Content Include="Input\InputThisWeekSchedule.aspx" />
+    <Content Include="Manage\DeleteWork.aspx" />
     <Content Include="Manage\ManageWork.aspx" />
     <Content Include="packages.config" />
     <Content Include="MasterPage\MainSite.Master" />
@@ -147,6 +148,13 @@
     </Compile>
     <Compile Include="Input\InputThisWeekSchedule.aspx.designer.cs">
       <DependentUpon>InputThisWeekSchedule.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Manage\DeleteWork.aspx.cs">
+      <DependentUpon>DeleteWork.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Manage\DeleteWork.aspx.designer.cs">
+      <DependentUpon>DeleteWork.aspx</DependentUpon>
     </Compile>
     <Compile Include="Manage\ManageWork.aspx.cs">
       <DependentUpon>ManageWork.aspx</DependentUpon>

@@ -87,7 +87,7 @@
 
                         <%--<asp:UpdatePanel ID="UpdatePanel2" runat="server">
                         <ContentTemplate>--%>
-                        <asp:Panel ID="monthPanel" runat="server" Visible="false" Width="800px">
+                        <asp:Panel ID="monthPanel" runat="server" Visible="false" Width="1000px">
                             <div style="width: 1000px;">
                                 <div style="float: left; margin-top: 20px; margin-bottom: 30px; padding: 5px; border: 1px solid #a7a6a5">
                                     <div style="font-size: small; background-color: #ffffb0; padding: 10px 20px 10px 20px;">

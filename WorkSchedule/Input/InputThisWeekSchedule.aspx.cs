@@ -21,7 +21,7 @@ namespace WorkSchedule.Input
 
             //此页面不成功
             return;
-
+            /*
             Session["UserID"] = 12;
 
             tool = new Core.Tools();
@@ -37,6 +37,7 @@ namespace WorkSchedule.Input
                 SqlDataSource1.SelectParameters["year"].DefaultValue = tool.year.ToString();
                 RepeaterThisWeek.DataBind();
             }
+            */
         }
 
         protected void RepeaterThisWeek_ItemCommand(object source, RepeaterCommandEventArgs e)
