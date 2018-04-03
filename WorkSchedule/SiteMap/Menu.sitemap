@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="" title=""  description="">
+    <siteMapNode url="" title="工作管理"  description="" >
+      <siteMapNode url="~/Manage/DeleteWork.aspx" title="删除工作"  description="" />
+      
+    </siteMapNode>
+    <siteMapNode url="" title="任务管理"  description="" >
+      <siteMapNode url="~/Manage/ManageWork.aspx" title="批量处理任务"  description="" />
+      <siteMapNode url="~/Manage/ManageReportWork.aspx" title="批量处理汇报任务"  description="" />
+    </siteMapNode>
+    <siteMapNode url="" title="工作汇报"  description="" >
+      <siteMapNode url="~/Report/ReportGreenCity.aspx" title="绿色建设科技城"  description="" />
+    </siteMapNode>
+  </siteMapNode>
+</siteMap>

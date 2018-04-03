@@ -14,8 +14,15 @@ namespace WorkSchedule.Manage
         protected Core.Tools t;
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
+                Response.Redirect("~/Account/Login.aspx");
+
             mc = new ManageClass();
             t = new Core.Tools();
+
+            if (t.GetUserType(int.Parse(Session["UserID"].ToString())) != 1)
+                Response.Redirect("~/Account/Login.aspx");
+
             if (!IsPostBack)
             {
                 SqlDataSource1.SelectParameters["年份"].DefaultValue = DateTime.Now.Year.ToString();

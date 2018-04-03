@@ -15,8 +15,14 @@ namespace WorkSchedule.Manage
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
+                Response.Redirect("~/Account/Login.aspx");
+
             mc = new ManageClass();
             t = new Core.Tools();
+
+            if (t.GetUserType(int.Parse(Session["UserID"].ToString())) != 1)
+                Response.Redirect("~/Account/Login.aspx");
 
             if (!IsPostBack)
             {
@@ -39,7 +45,7 @@ namespace WorkSchedule.Manage
         {
             bool result = mc.DeleteWork(Guid.Parse(DropDownListWork.SelectedValue));
             if (result)
-                LabelResult.Text ="第"+(DropDownListWork.SelectedIndex+1)+ "项工作已删除";
+                LabelResult.Text = "第" + (DropDownListWork.SelectedIndex + 1) + "项工作已删除";
             else
                 LabelResult.Text = "删除失败";
 

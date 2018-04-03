@@ -40,7 +40,7 @@
                 </td>
             </tr>
         </table>
-        <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" SiteMapProvider="Webtestsitemap" ShowStartingNode="False" />
+        <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" SiteMapProvider="Menumap" ShowStartingNode="False" />
         <br />
         <div>
             <asp:ContentPlaceHolder ID="ContentPlaceHolderTop" runat="server">

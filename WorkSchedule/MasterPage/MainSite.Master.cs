@@ -20,10 +20,10 @@ namespace WorkSchedule.MasterPage
             Core.Tools mt = new Core.Tools();
             muc = new UserClass();
             userID = int.Parse(Session["UserID"].ToString());
-            
+
             lbUsername.Text = muc.GetUsername(userID);
 
-            if (!mt.HasInput(userID)|| muc.GetUserType(userID) == 3)
+            if (!mt.HasInput(userID) || mt.GetUserType(userID) == 3)
                 lbFunc.Visible = false;
             else
             {
@@ -37,7 +37,8 @@ namespace WorkSchedule.MasterPage
                 else
                 {
                     lbFunc.Text = "查看";
-                    MenuManage.Visible = true;
+                    if (mt.GetUserType(userID) == 1)
+                        MenuManage.Visible = true;
                 }
             }
         }

@@ -11,9 +11,10 @@ namespace Core
 {
     public class UserClass:Database
     {
+        public Tools t;
         public UserClass()
         {
-
+            t = new Tools();
         }
         public string GetUsername(int userID)
         {
@@ -36,17 +37,13 @@ namespace Core
 
         public string RediRedirectUrl(int userID)
         {
-            int userType = GetUserType(userID);
+            int userType = t.GetUserType(userID);
             if (userType == 3)
                 return "~/Input/InputSchedule.aspx";
             else
                 return "~/ShowSchedule/Schedule.aspx";
         }
 
-        public int GetUserType(int userID)
-        {
-            DataTable dt = GetDataSet("select 用户类型 from 用户 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", userID) }).Tables[0];
-            return int.Parse(dt.Rows[0][0].ToString());
-        }
+        
     }
 }

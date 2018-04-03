@@ -84,10 +84,13 @@
     <Content Include="Input\InputSchedule.aspx" />
     <Content Include="Input\InputThisWeekSchedule.aspx" />
     <Content Include="Manage\DeleteWork.aspx" />
+    <Content Include="Manage\ManageReportWork.aspx" />
     <Content Include="Manage\ManageWork.aspx" />
     <Content Include="packages.config" />
     <Content Include="MasterPage\MainSite.Master" />
+    <Content Include="Report\ReportGreenCity.aspx" />
     <Content Include="Test\WebTest.sitemap" />
+    <Content Include="SiteMap\Menu.sitemap" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -108,7 +111,9 @@
     <Content Include="Tools\DebugTool.aspx" />
     <Content Include="Tools\InitDB.aspx" />
     <Content Include="Tools\ModifyDepartment.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\Login.aspx.cs">
@@ -156,6 +161,13 @@
     <Compile Include="Manage\DeleteWork.aspx.designer.cs">
       <DependentUpon>DeleteWork.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Manage\ManageReportWork.aspx.cs">
+      <DependentUpon>ManageReportWork.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Manage\ManageReportWork.aspx.designer.cs">
+      <DependentUpon>ManageReportWork.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Manage\ManageWork.aspx.cs">
       <DependentUpon>ManageWork.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -171,6 +183,13 @@
       <DependentUpon>MainSite.Master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\ReportGreenCity.aspx.cs">
+      <DependentUpon>ReportGreenCity.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Report\ReportGreenCity.aspx.designer.cs">
+      <DependentUpon>ReportGreenCity.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ShowSchedule\Schedule.aspx.cs">
       <DependentUpon>Schedule.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -237,7 +256,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="SiteMap\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

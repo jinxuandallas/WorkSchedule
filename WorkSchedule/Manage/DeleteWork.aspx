@@ -1,17 +1,9 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="DeleteWork.aspx.cs" Inherits="WorkSchedule.Manage.DeleteWork" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="DeleteWork.aspx.cs" Inherits="WorkSchedule.Manage.DeleteWork"  MasterPageFile="~/MasterPage/MainSite.Master"%>
 
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
+<asp:Content ID="ContentSchedule" ContentPlaceHolderID="ContentPlaceHolderTop" runat="server">
         <div>
             <span style="text-align: left; font-size: x-large">删除工作任务</span>
-            <hr style="width: 1500px; text-align: left; margin-left: 0" />
+            <hr style="width: 1000px; text-align: left; margin-left: 0" />
             <br />
             <%--<asp:Button ID="Button1" runat="server" Text="Button" OnClientClick='if(confirm("xx")) {return true;}else{return false}' OnClick="Button1_Click" />--%>
             <table style="width:100%;font-size:small">
@@ -53,6 +45,4 @@
             </SelectParameters>
         </asp:SqlDataSource>
         
-    </form>
-</body>
-</html>
+</asp:Content>

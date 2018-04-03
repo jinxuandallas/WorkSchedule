@@ -41,14 +41,19 @@ namespace Core
             });
             }
             else
-                i = ExecuteSql("insert 周节点(月节点ID,周数,周计划,周完成,周状态) values(@月节点ID,@周数,@周计划,@周完成,@周状态)", new SqlParameter[]{
+            {
+                //如果原来没有周工作计划且此也没有周计划和周完成则不必更新周计划
+                if (status == 0)
+                    return true;
+                else
+                    i = ExecuteSql("insert 周节点(月节点ID,周数,周计划,周完成,周状态) values(@月节点ID,@周数,@周计划,@周完成,@周状态)", new SqlParameter[]{
                 new SqlParameter("@月节点ID",monthTaskID),
                 new SqlParameter("@周数",weekOfYear),
                 new SqlParameter("@周计划",weekSchedule),
                 new SqlParameter("@周完成",weekExecution),
                 new SqlParameter("@周状态",status)
             });
-
+            }
             return i == 1 ? true : false;
         }
         /*

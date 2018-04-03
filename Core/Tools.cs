@@ -473,7 +473,13 @@ namespace Core
             });
             return true;
         }
-
+        public bool UpdateWorkContent(Guid workID, string content,string tableName)
+        {
+            ExecuteSql("update "+tableName+" set 目标内容=@目标内容 where ID=@ID", new SqlParameter[] { new SqlParameter("@目标内容",content),
+                new SqlParameter("@ID",workID)
+            });
+            return true;
+        }
         /// <summary>
         /// 构建临时节点目标表
         /// </summary>
@@ -674,7 +680,17 @@ namespace Core
             return allWorkID;
         }
 
+        public Guid[] GetAllWorkID(string tableName)
+        {
+            Guid[] allWorkID;
+            DataTable dt = GetDataSet("select ID from "+tableName+" where 年份=@年份", new SqlParameter[] { new SqlParameter("@年份", year) }).Tables[0];
 
+            allWorkID = new Guid[dt.Rows.Count];
+            for (int i = 0; i < dt.Rows.Count; i++)
+                allWorkID[i] = Guid.Parse(dt.Rows[i][0].ToString());
+
+            return allWorkID;
+        }
         /// <summary>
         /// 获取某年某用户所有管理的工作ID
         /// </summary>
@@ -683,6 +699,11 @@ namespace Core
         public Guid[] GetUserWorkID(int id)
         {
             return GetUserWorkID(id, year);
+        }
+        public int GetUserType(int userID)
+        {
+            DataTable dt = GetDataSet("select 用户类型 from 用户 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", userID) }).Tables[0];
+            return int.Parse(dt.Rows[0][0].ToString());
         }
 
         /// <summary>
@@ -937,6 +958,15 @@ namespace Core
         public string GetWorkContent(Guid workID)
         {
             using (SqlDataReader sdr = GetDataReader("select 目标内容 from 工作 where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", workID) }))
+                if (sdr.Read())
+                    return sdr[0].ToString();
+                else
+                    return string.Empty;
+        }
+
+        public string GetWorkContent(Guid workID,string tableName)
+        {
+            using (SqlDataReader sdr = GetDataReader("select 目标内容 from "+tableName+" where ID=@ID", new SqlParameter[] { new SqlParameter("@ID", workID) }))
                 if (sdr.Read())
                     return sdr[0].ToString();
                 else
