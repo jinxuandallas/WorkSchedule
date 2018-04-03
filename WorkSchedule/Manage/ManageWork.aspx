@@ -19,7 +19,7 @@
         <br />
         <br />
         <asp:Panel ID="Panel1" runat="server" Visible="False">
-            &nbsp;<asp:Label ID="LabelResult" runat="server"></asp:Label>
+            <asp:Label ID="LabelResult" runat="server"></asp:Label>
             <br />
             <br />
             &nbsp;&nbsp; <span style="color: red">确认无误后提交</span>
