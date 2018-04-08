@@ -11,10 +11,11 @@ namespace WorkSchedule.Input
 {
     public partial class InputThisWeekSchedule : System.Web.UI.Page
     {
-        protected ShowScheduleClass ss;
-        protected Core.Tools tool;
+        protected ScheduleClass sc;
+        //protected Core.Tools tool;
         protected int thisWeek;
-        protected Core.AddScheduleClass asc;
+        protected ManageClass mc;
+        //protected Core.AddScheduleClass asc;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -24,9 +25,10 @@ namespace WorkSchedule.Input
             /*
             Session["UserID"] = 12;
 
-            tool = new Core.Tools();
+            //tool = new Core.Tools();
             ss = new ShowScheduleClass();
             asc = new AddScheduleClass();
+            mc = new ManageClass();
 
             thisWeek = (new GregorianCalendar()).GetWeekOfYear(DateTime.Now, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
 
@@ -58,7 +60,7 @@ namespace WorkSchedule.Input
                     status = (e.Item.FindControl("CheckBoxStatus") as CheckBox).Checked ? 3 : 2;
 
                 //更新本周计划落实情况
-                result=asc.InputWeekSchedule(id, thisWeek, weekSchedule, weekExecution, status);
+                result=mc.InputWeekSchedule(id, thisWeek, weekSchedule, weekExecution, status);
                 if (!result)
                 {
                     l.Text = "更新不成功";
@@ -70,7 +72,7 @@ namespace WorkSchedule.Input
                 if ((e.Item.FindControl("PlaceHolderWeek53") as PlaceHolder).Visible == true)
                 {
                     nextWeekSchedule = (e.Item.FindControl("TextBoxNextWeekSchedule") as TextBox).Text;
-                    result=asc.InputWeekSchedule(id, thisWeek + 1, nextWeekSchedule,string.Empty, 1);
+                    result=mc.InputWeekSchedule(id, thisWeek + 1, nextWeekSchedule,string.Empty, 1);
                     if (!result)
                     {
                         l.Text = "更新不成功";
@@ -92,7 +94,7 @@ namespace WorkSchedule.Input
                     weekSchedule = (e.Item.FindControl("TextBoxLastWeekSchedule") as TextBox).Text;
                     weekExecution = (e.Item.FindControl("TextBoxLastWeekExecution") as TextBox).Text;
                     status = (e.Item.FindControl("CheckBoxLastStatus") as CheckBox).Checked ? 3 : 2;
-                    result = asc.InputWeekSchedule(id, thisWeek + 1, weekSchedule, weekExecution, status);
+                    result = mc.InputWeekSchedule(id, thisWeek + 1, weekSchedule, weekExecution, status);
                     if (!result)
                     {
                         l.Text = "更新不成功";

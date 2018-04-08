@@ -11,16 +11,23 @@ namespace WorkSchedule.Manage
     public partial class ManageWork : System.Web.UI.Page
     {
         protected ManageClass mc;
-        protected Core.Tools t;
+        //protected Core.Tools t;
+        protected WorkClass wc;
+        protected UserClass uc;
+        protected ScheduleClass sc;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
                 Response.Redirect("~/Account/Login.aspx");
 
             mc = new ManageClass();
-            t = new Core.Tools();
+            ////t = new Core.Tools();
+            wc = new WorkClass();
+            uc = new UserClass();
+            sc = new ScheduleClass();
 
-            if (t.GetUserType(int.Parse(Session["UserID"].ToString())) != 1)
+            if (uc.GetUserType(int.Parse(Session["UserID"].ToString())) != 1)
                 Response.Redirect("~/Account/Login.aspx");
 
             if (!IsPostBack)
@@ -41,14 +48,14 @@ namespace WorkSchedule.Manage
 
         protected void DropDownListWork_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TextBoxContent.Text = t.GetWorkContent(Guid.Parse(DropDownListWork.SelectedValue));
+            TextBoxContent.Text = wc.GetWorkContent(Guid.Parse(DropDownListWork.SelectedValue));
         }
 
         protected void ButtonRecognize_Click(object sender, EventArgs e)
         {
             Panel1.Visible = true;
             LabelResult.Text = string.Empty;
-            foreach (string s in t.GetMonthScheduleFormTxt(TextBoxSchedule.Text))
+            foreach (string s in sc.GetMonthScheduleFormTxt(TextBoxSchedule.Text))
                 LabelResult.Text += s + "<br/>";
         }
 
@@ -57,8 +64,8 @@ namespace WorkSchedule.Manage
             bool result;
             Panel1.Visible = false;
             if (TextBoxContent.Text.Trim() != "")
-                t.UpdateWorkContent(Guid.Parse(DropDownListWork.SelectedValue), TextBoxContent.Text);
-            result=t.BatchUpdateMonthScheduleFormTxt(TextBoxSchedule.Text, Guid.Parse(DropDownListWork.SelectedValue));
+                mc.UpdateWorkContent(Guid.Parse(DropDownListWork.SelectedValue), TextBoxContent.Text);
+            result=mc.BatchUpdateMonthScheduleFormTxt(TextBoxSchedule.Text, Guid.Parse(DropDownListWork.SelectedValue));
 
             if (result)
                 Response.Write("更新成功<br/>");

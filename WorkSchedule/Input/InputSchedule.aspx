@@ -72,7 +72,7 @@
                             <ContentTemplate>
                                 第<%#Eval("序号") %>项：<span style="background-color: #ffff99"> <%#Eval("目标名称") %></span><br />
                                 <span style="font-size: small">目标内容：<%#Eval("目标内容") %><br />
-                                    责任领导：<%# ss.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br />
+                                    责任领导：<%# sc.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br />
                                 <span style="font-size: small"><%#Eval("备注").ToString().Trim()==""?"":"备注："+Eval("备注")+"<br />" %></span>
                             </ContentTemplate>
                         </asp:UpdatePanel>
@@ -93,15 +93,15 @@
                                     <div style="font-size: small; background-color: #ffffb0; padding: 10px 20px 10px 20px;">
                                         <br />
                                         <asp:Label ID="monthLabel" runat="server"></asp:Label>
-                                        <asp:Repeater ID="RepeaterWeekSchedule" runat="server" DataSource="<%#tool.GetWeeksOfMonth(editMonth) %>" >
+                                        <asp:Repeater ID="RepeaterWeekSchedule" runat="server" DataSource="<%#sc.GetWeeksOfMonth(editMonth) %>" >
                                             <HeaderTemplate><br /></HeaderTemplate>
                                             <ItemTemplate>
                                                 第<asp:Label ID="lbWeek" runat="server" Text='<%# Eval("周数") %>'></asp:Label>周（<%#DateTime.Parse(Eval("开始日期").ToString()).ToString("M月d日") %>--<%#DateTime.Parse(Eval("结束日期").ToString()).ToString("M月d日") %>）：<br />
-                                                周工作计划：<asp:TextBox ID="TextBoxWeekSchedule" Width="400px" Text='<%# tool.GetWeekSchedule(editWorkID,int.Parse( Eval("周数").ToString())) %>' runat="server"></asp:TextBox>
+                                                周工作计划：<asp:TextBox ID="TextBoxWeekSchedule" Width="400px" Text='<%# sc.GetWeekSchedule(editWorkID,int.Parse( Eval("周数").ToString())) %>' runat="server"></asp:TextBox>
                                                 <br />
-                                                周落实情况：<asp:TextBox ID="TextBoxWeekExecution" Width="400px" Text='<%# tool.GetWeekExecution(editWorkID,int.Parse( Eval("周数").ToString())) %>' runat="server"></asp:TextBox>
+                                                周落实情况：<asp:TextBox ID="TextBoxWeekExecution" Width="400px" Text='<%# sc.GetWeekExecution(editWorkID,int.Parse( Eval("周数").ToString())) %>' runat="server"></asp:TextBox>
                                                 <br />
-                                                已完成：<asp:CheckBox ID="CheckBoxState" Checked='<%# tool.GetWeekState(editWorkID, int.Parse(Eval("周数").ToString())) == 3 ? true:false %>' runat="server" />
+                                                已完成：<asp:CheckBox ID="CheckBoxState" Checked='<%# sc.GetWeekState(editWorkID, int.Parse(Eval("周数").ToString())) == 3 ? true:false %>' runat="server" />
                                                 <br />
                                                 <br />
                                             </ItemTemplate>

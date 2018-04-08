@@ -85,7 +85,7 @@
                             <%--<hr style="width: 1500px; text-align: left; margin-left: 0" />--%>
                         </asp:Panel>
                         第<%#Eval("序号") %>项：<span style="background-color: #ffff99"> <%#Eval("目标名称") %></span><br />
-                        <span style="font-size: small">责任领导：<%# ss.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br />
+                        <span style="font-size: small">责任领导：<%# sc.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br />
                         <span style="font-size: small"><%#Eval("备注").ToString().Trim()==""?"":"备注："+Eval("备注")+"<br />" %></span>
 
                     </ContentTemplate>

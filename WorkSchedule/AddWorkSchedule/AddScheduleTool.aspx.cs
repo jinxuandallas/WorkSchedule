@@ -9,14 +9,21 @@ namespace WorkSchedule.AddWorkSchedule
 {
     public partial class AddScheduleTool : System.Web.UI.Page
     {
-        protected Core.Tools t;
-        protected ShowScheduleClass ss;
-        protected Core.AddScheduleClass asc;
+        //protected Core.Tools t;
+        protected ScheduleClass sc;
+        protected ManageClass mc;
+        protected WorkClass wc;
+
+        //protected Core.AddScheduleClass asc;
         protected void Page_Load(object sender, EventArgs e)
         {
-            t = new Core.Tools();
+            //t = new Core.Tools();
+            mc = new ManageClass();
             //ss = new ShowSchedule();
-            asc = new AddScheduleClass();
+            //asc = new AddScheduleClass();
+            sc = new ScheduleClass();
+            wc = new WorkClass();
+
             if (!IsPostBack)
             {
                 //Repeater1.Visible = false;
@@ -27,13 +34,13 @@ namespace WorkSchedule.AddWorkSchedule
 
         protected void DropDownListWork_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LabelWork.Text = t.GetTaskNameByID(Guid.Parse(DropDownListWork.SelectedValue));
+            LabelWork.Text = wc.GetTaskNameByID(Guid.Parse(DropDownListWork.SelectedValue));
             DropDownListMonth.DataBind();
         }
 
         protected void DropDownListMonth_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LabelMonthTask.Text = t.GetMonthTask(Guid.Parse(DropDownListWork.SelectedValue), int.Parse(DropDownListMonth.SelectedValue));
+            LabelMonthTask.Text = sc.GetMonthTask(Guid.Parse(DropDownListWork.SelectedValue), int.Parse(DropDownListMonth.SelectedValue));
             Repeater1.Visible = true;
             Repeater1.DataBind();
         }
@@ -53,7 +60,7 @@ namespace WorkSchedule.AddWorkSchedule
         {
             string weekSchedule, weekExecution;
             int state, weekOfYear;
-            Guid monnthTaskID = t.GetMonthID(Guid.Parse(DropDownListWork.SelectedValue), int.Parse(DropDownListMonth.SelectedValue));
+            Guid monnthTaskID = sc.GetMonthID(Guid.Parse(DropDownListWork.SelectedValue), int.Parse(DropDownListMonth.SelectedValue));
             bool succeed = true ;
             foreach (RepeaterItem ri in Repeater1.Items)
             {
@@ -65,7 +72,7 @@ namespace WorkSchedule.AddWorkSchedule
                 else
                     state = ((CheckBox)ri.FindControl("CheckBoxState")).Checked ? 3 : 2;
 
-                succeed = !asc.InputWeekSchedule(monnthTaskID, weekOfYear, weekSchedule, weekExecution, state);
+                succeed = !mc.InputWeekSchedule(monnthTaskID, weekOfYear, weekSchedule, weekExecution, state);
             }
 
             string result = succeed ? "成功" : "不成功";

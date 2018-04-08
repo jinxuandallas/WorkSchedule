@@ -18,12 +18,14 @@ namespace WorkSchedule.Test
         /// 本年度所有工作的ID
         /// </summary>
         Guid[] allWorkID;
-        protected ShowScheduleClass ss;
+        protected ScheduleClass sc;
+        protected WorkClass wc;
         protected Dictionary<Guid, List<Dictionary<int,int>>> allMonthWeekInfo;
         protected void Page_Load(object sender, EventArgs e)
         {
             tool = new Core.Tools();
-            ss = new ShowScheduleClass();
+            sc = new ScheduleClass();
+            wc = new WorkClass();
             PreLoadData();
             
             //if (!IsPostBack)
@@ -43,7 +45,7 @@ namespace WorkSchedule.Test
             //获取一年中所有月份的每个月包含的周数量
             weeksOfMonth = tool.GetWeeksOfAllMonth();
 
-            allWorkID = tool.GetAllWorkID();
+            allWorkID = wc.GetAllWorkID();
 
             //foreach(Guid wid in allWorkID)
 
@@ -69,7 +71,7 @@ namespace WorkSchedule.Test
             tr.Style.Value = "border-collapse:collapse;border-spacing:0px;padding: 0px; margin: 0px;";
             for (int i = 1; i <= 12; i++)
             {
-                int[] existMonth = tool.GetExistTaskMonths(workID);
+                int[] existMonth = sc.GetExistTaskMonths(workID);
                 //int[] existMonth = { 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12 };
                 //月表格
                 TableCell tc = new TableCell();
@@ -120,7 +122,7 @@ namespace WorkSchedule.Test
                         wtc.ApplyStyle(tis);
                         */
                         wtc.Style.Value = "padding: 0px; margin: 0px; border-style: solid; border-width: 1px 1px 1px 0px; border-color: #000000;width:25px";
-                        switch (tool.GetWeekState(workID, weekOfYear))
+                        switch (sc.GetWeekState(workID, weekOfYear))
                         {
                             case 0:
                                 break;
@@ -170,7 +172,7 @@ namespace WorkSchedule.Test
                 Panel p = (Panel)e.Item.FindControl("monthPanel");
                 p.Visible = true;
                 string[] arg = e.CommandArgument.ToString().Split(new char[] { '$'});
-                string monthDeail = ss.GetMonthScheduleDetail(Guid.Parse(arg[0]), int.Parse(arg[1]));
+                string monthDeail = sc.GetMonthScheduleDetail(Guid.Parse(arg[0]), int.Parse(arg[1]));
                 ((Label)e.Item.FindControl("monthLabel")).Text = monthDeail;
             }
             //Repeater1.DataBind();

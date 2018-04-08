@@ -11,7 +11,9 @@ namespace WorkSchedule.Manage
     public partial class DeleteWork : System.Web.UI.Page
     {
         protected ManageClass mc;
-        protected Core.Tools t;
+        protected UserClass uc;
+        protected WorkClass wc;
+        //protected Core.Tools t;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -19,9 +21,11 @@ namespace WorkSchedule.Manage
                 Response.Redirect("~/Account/Login.aspx");
 
             mc = new ManageClass();
-            t = new Core.Tools();
+            //t = new Core.Tools();
+            uc = new UserClass();
+            wc = new WorkClass();
 
-            if (t.GetUserType(int.Parse(Session["UserID"].ToString())) != 1)
+            if (uc.GetUserType(int.Parse(Session["UserID"].ToString())) != 1)
                 Response.Redirect("~/Account/Login.aspx");
 
             if (!IsPostBack)
@@ -38,7 +42,7 @@ namespace WorkSchedule.Manage
 
         protected void DropDownListWork_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LabelWorkDetail.Text = t.GetWorkDetail(Guid.Parse(DropDownListWork.SelectedValue));
+            LabelWorkDetail.Text = wc.GetWorkDetail(Guid.Parse(DropDownListWork.SelectedValue));
         }
 
         protected void Delete_Click(object sender, EventArgs e)

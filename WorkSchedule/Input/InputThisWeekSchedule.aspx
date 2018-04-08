@@ -18,7 +18,7 @@
                         <ItemTemplate>
                             第<%#Eval("序号") %>项：<span style="background-color: #ffff99"> <%#Eval("目标名称") %></span><br />
                             <span style="font-size: small">目标内容：<%#Eval("目标内容") %><br />
-                                责任领导：<%# ss.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br />
+                                责任领导：<%# sc.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br />
                             <span style="font-size: small"><%#Eval("备注").ToString().Trim()==""?"":"备注："+Eval("备注")+"<br />" %></span>
                             <div style="width: 1000px;">
                                 <div style="float: left; margin-top: 20px; margin-bottom: 30px; padding: 5px; border: 1px solid #a7a6a5">
@@ -39,11 +39,11 @@
                                         <asp:CheckBox ID="CheckBoxModify" Text="修改上周计划" AutoPostBack="true" OnCheckedChanged="CheckBoxModify_CheckedChanged" Enabled='<%# thisWeek==1?false:true %>' runat="server" />
                                         <br />
                                         <asp:PlaceHolder ID="PlaceHolderModify" runat="server" Visible="false">
-                                            <%# thisWeek-1 %>周工作计划：<asp:TextBox ID="TextBoxLastWeekSchedule" Width="400px" Text='<%#thisWeek==1?"": tool.GetWeekSchedule(Guid.Parse(Eval("ID").ToString()),thisWeek-1) %>' runat="server"></asp:TextBox>
+                                            <%# thisWeek-1 %>周工作计划：<asp:TextBox ID="TextBoxLastWeekSchedule" Width="400px" Text='<%#thisWeek==1?"": sc.GetWeekSchedule(Guid.Parse(Eval("ID").ToString()),thisWeek-1) %>' runat="server"></asp:TextBox>
                                             <br />
-                                            <%#thisWeek-1 %>周落实情况：<asp:TextBox ID="TextBoxLastWeekExecution" Width="400px" Text='<%#thisWeek==1?"": tool.GetWeekExecution(Guid.Parse(Eval("ID").ToString()),thisWeek-1) %>' runat="server"></asp:TextBox>
+                                            <%#thisWeek-1 %>周落实情况：<asp:TextBox ID="TextBoxLastWeekExecution" Width="400px" Text='<%#thisWeek==1?"": sc.GetWeekExecution(Guid.Parse(Eval("ID").ToString()),thisWeek-1) %>' runat="server"></asp:TextBox>
                                             <br />
-                                            <asp:CheckBox ID="CheckBoxLastStatus" Checked='<%# tool.GetWeekState(Guid.Parse(Eval("ID").ToString()), thisWeek-1) == 3 ? true:false %>' Text="已完成" runat="server" />
+                                            <asp:CheckBox ID="CheckBoxLastStatus" Checked='<%# sc.GetWeekState(Guid.Parse(Eval("ID").ToString()), thisWeek-1) == 3 ? true:false %>' Text="已完成" runat="server" />
                                             <br />
                                         </asp:PlaceHolder>
                                         <br />

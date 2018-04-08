@@ -23,7 +23,9 @@ namespace WorkSchedule.Report
 
         protected Dictionary<Guid, int[]> existMonths;
         protected Dictionary<Guid, Dictionary<int, int>> existWeeks;
-        protected ShowScheduleClass ss;
+        protected ScheduleClass sc;
+        protected WorkClass wc;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             //Session["UserID"] = 11;
@@ -32,7 +34,8 @@ namespace WorkSchedule.Report
                 Response.Redirect("~/Account/Login.aspx");
 
             tool = new Core.Tools();
-            ss = new ShowScheduleClass();
+            sc = new ScheduleClass();
+            wc = new WorkClass();
             //category = 0;
 
             if (IsPostBack)
@@ -64,17 +67,17 @@ namespace WorkSchedule.Report
 
 
 
-            allWorkID = tool.GetAllWorkID("绿色建设科技城");
+            allWorkID = wc.GetAllWorkID("绿色建设科技城");
             int[] existTaskMonths;
             existMonths = new Dictionary<Guid, int[]>();
             existWeeks = new Dictionary<Guid, Dictionary<int, int>>();
             foreach (Guid wid in allWorkID)
             {
-                existTaskMonths = tool.GetExistTaskMonths(wid);
+                existTaskMonths = sc.GetExistTaskMonths(wid);
                 //判断此项工作是否有月节点计划
                 if (existTaskMonths != null)
-                    existMonths.Add(wid, tool.GetExistTaskMonths(wid));
-                existWeeks.Add(wid, tool.GetExistTaskWeeksAndState(wid, true));
+                    existMonths.Add(wid, sc.GetExistTaskMonths(wid));
+                existWeeks.Add(wid, sc.GetExistTaskWeeksAndState(wid, true));
             }
             //projectCategoryLocationID = tool.GetProjectCategoryLocationID();
             //categoryName = tool.GetCategoryName();
@@ -130,7 +133,7 @@ namespace WorkSchedule.Report
                 {
                     t.Rows[0].Cells[0].ColumnSpan = weeksOfMonth[i - 1];
 
-                    t.Rows[0].Cells[0].Controls.Add(ss.GetLinkButton(workID, i));
+                    t.Rows[0].Cells[0].Controls.Add(sc.GetLinkButton(workID, i));
 
                     //t.Rows[0].Cells[0].Style.Value = " border-style: solid; border-width: 1px 1px 1px 1px; border-color: #000000;";
 
@@ -148,7 +151,7 @@ namespace WorkSchedule.Report
                         if (existWeeks[workID].ContainsKey(weekOfYear))
                         {
                             switch (existWeeks[workID][weekOfYear])
-                            //switch (ss.GetWeekState(workID, weekOfYear))
+                            //switch (sc.GetWeekState(workID, weekOfYear))
                             {
                                 case 0:
                                 case 1:
@@ -191,7 +194,7 @@ namespace WorkSchedule.Report
                 Panel p = (Panel)e.Item.FindControl("monthPanel");
                 p.Visible = true;
                 string[] arg = e.CommandArgument.ToString().Split(new char[] { '$' });
-                string monthDeail = ss.GetMonthScheduleDetail(Guid.Parse(arg[0]), int.Parse(arg[1]));
+                string monthDeail = sc.GetMonthScheduleDetail(Guid.Parse(arg[0]), int.Parse(arg[1]));
                 ((Label)e.Item.FindControl("monthLabel")).Text = monthDeail;
             }
         }

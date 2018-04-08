@@ -17,13 +17,14 @@ namespace WorkSchedule.MasterPage
             if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
                 Response.Redirect("~/Account/Login.aspx");
 
-            Core.Tools mt = new Core.Tools();
+            //Core.Tools mt = new Core.Tools();
+            //ManageClass mmc = new ManageClass();
             muc = new UserClass();
             userID = int.Parse(Session["UserID"].ToString());
 
             lbUsername.Text = muc.GetUsername(userID);
 
-            if (!mt.HasInput(userID) || mt.GetUserType(userID) == 3)
+            if (!muc.HasInput(userID) || muc.GetUserType(userID) == 3)
                 lbFunc.Visible = false;
             else
             {
@@ -37,7 +38,7 @@ namespace WorkSchedule.MasterPage
                 else
                 {
                     lbFunc.Text = "查看";
-                    if (mt.GetUserType(userID) == 1)
+                    if (muc.GetUserType(userID) == 1)
                         MenuManage.Visible = true;
                 }
             }

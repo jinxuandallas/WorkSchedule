@@ -15,7 +15,8 @@ namespace WorkSchedule.Test
     public partial class Test : System.Web.UI.Page
     {
         public Core.Test t;
-        public ShowScheduleClass ss;
+        protected WorkClass wc;
+        public ScheduleClass sc;
         public Core.Tools tool;
         int[] weeksOfMonth;
         Guid[] allWorkID;
@@ -25,8 +26,9 @@ namespace WorkSchedule.Test
         protected void Page_Load(object sender, EventArgs e)
         {
             t = new Core.Test();
-            ss = new ShowScheduleClass();
+            sc = new ScheduleClass();
             tool = new Core.Tools();
+            wc = new WorkClass();
             //if (!IsPostBack)
             //    PreLoadData();
             //Response.Write(existMonths.Count);
@@ -55,14 +57,14 @@ namespace WorkSchedule.Test
             //获取一年中所有月份的每个月包含的周数量
             weeksOfMonth = tool.GetWeeksOfAllMonth();
 
-            allWorkID = tool.GetAllWorkID();
+            allWorkID = wc.GetAllWorkID();
 
             existMonths = new Dictionary<Guid, int[]>();
             existWeeks = new Dictionary<Guid, Dictionary<int, int>>();
             foreach (Guid wid in allWorkID)
             {
-                existMonths.Add(wid, tool.GetExistTaskMonths(wid));
-                existWeeks.Add(wid, tool.GetExistTaskWeeksAndState(wid,true));
+                existMonths.Add(wid, sc.GetExistTaskMonths(wid));
+                existWeeks.Add(wid, sc.GetExistTaskWeeksAndState(wid,true));
             }
 
             ViewState["weeksOfMonth"] = weeksOfMonth;

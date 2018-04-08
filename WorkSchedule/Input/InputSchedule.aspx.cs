@@ -27,13 +27,18 @@ namespace WorkSchedule.Input
         protected Guid editWorkID;
 
         public Core.Tools tool;
-        public ShowScheduleClass ss;
-        public Core.AddScheduleClass asc;
+        public ScheduleClass sc;
+        protected WorkClass wc;
+        protected ManageClass mc;
+
+        //public Core.AddScheduleClass asc;
         protected void Page_Load(object sender, EventArgs e)
         {
             tool = new Core.Tools();
-            ss = new ShowScheduleClass();
-            asc = new AddScheduleClass();
+            sc = new ScheduleClass();
+            wc = new WorkClass();
+            mc = new ManageClass();
+            //asc = new AddScheduleClass();
 
 
             //Session["UserID"] = 12;
@@ -65,17 +70,17 @@ namespace WorkSchedule.Input
             //获取一年中所有月份的每个月包含的周数量
             weeksOfMonth = tool.GetWeeksOfAllMonth();
 
-            userWorkID = tool.GetAllWorkID();
+            userWorkID = wc.GetAllWorkID();
             int[] existTaskMonths;
             existMonths = new Dictionary<Guid, int[]>();
             existWeeks = new Dictionary<Guid, Dictionary<int, int>>();
             foreach (Guid wid in userWorkID)
             {
-                existTaskMonths = tool.GetExistTaskMonths(wid);
+                existTaskMonths = sc.GetExistTaskMonths(wid);
                 //判断此项工作是否有月节点计划
                 if (existTaskMonths != null)
-                    existMonths.Add(wid, tool.GetExistTaskMonths(wid));
-                existWeeks.Add(wid, tool.GetExistTaskWeeksAndState(wid, true));
+                    existMonths.Add(wid, sc.GetExistTaskMonths(wid));
+                existWeeks.Add(wid, sc.GetExistTaskWeeksAndState(wid, true));
             }
 
             ViewState["weeksOfMonth"] = weeksOfMonth;
@@ -121,7 +126,7 @@ namespace WorkSchedule.Input
                     //lb.CommandName = "monthLinkButton";
                     //lb.CommandArgument = workID + "$" + i.ToString();
 
-                    t.Rows[0].Cells[0].Controls.Add(ss.GetLinkButton(workID, i));
+                    t.Rows[0].Cells[0].Controls.Add(sc.GetLinkButton(workID, i));
 
                     //t.Rows[0].Cells[0].Style.Value = " border-style: solid; border-width: 1px 1px 1px 1px; border-color: #000000;";
 
@@ -139,7 +144,7 @@ namespace WorkSchedule.Input
                         if (existWeeks[workID].ContainsKey(weekOfYear))
                         {
                             switch (existWeeks[workID][weekOfYear])
-                            //switch (ss.GetWeekState(workID, weekOfYear))
+                            //switch (sc.GetWeekState(workID, weekOfYear))
                             {
                                 case 0:
                                 case 1:
@@ -180,8 +185,8 @@ namespace WorkSchedule.Input
                 editWorkID = Guid.Parse(arg[0]);
                 editMonth = int.Parse(arg[1]);
 
-                string monthDeail = editMonth < DateTime.Now.Month ? ss.GetMonthScheduleDetail(editWorkID, editMonth) : ss.GetMonthSchedule(editWorkID, editMonth);
-                //string monthDeail = ss.GetMonthSchedule(editWorkID, editMonth);
+                string monthDeail = editMonth < DateTime.Now.Month ? sc.GetMonthScheduleDetail(editWorkID, editMonth) : sc.GetMonthSchedule(editWorkID, editMonth);
+                //string monthDeail = sc.GetMonthSchedule(editWorkID, editMonth);
                 ((Label)e.Item.FindControl("monthLabel")).Text = monthDeail;
 
                 ViewState["editWorkID"] = editWorkID;
@@ -207,7 +212,7 @@ namespace WorkSchedule.Input
             editWorkID = Guid.Parse(ViewState["editWorkID"].ToString());
             editMonth = int.Parse(ViewState["editMonth"].ToString());
 
-            Guid monnthTaskID = tool.GetMonthID(editWorkID, editMonth);
+            Guid monnthTaskID = sc.GetMonthID(editWorkID, editMonth);
             bool succeed;
             foreach (RepeaterItem ri in ((Repeater)((Control)sender).Parent.Parent).Items)
             {
@@ -221,7 +226,7 @@ namespace WorkSchedule.Input
                 else
                     state = ((CheckBox)ri.FindControl("CheckBoxState")).Checked ? 3 : 2;
 
-                succeed = asc.InputWeekSchedule(monnthTaskID, weekOfYear, weekSchedule, weekExecution, state);
+                succeed = mc.InputWeekSchedule(monnthTaskID, weekOfYear, weekSchedule, weekExecution, state);
 
                 if (succeed)
                 {
