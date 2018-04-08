@@ -11,10 +11,18 @@ using System.Text.RegularExpressions;
 
 namespace Core
 {
-    public class ScheduleClass : Tools
+    public class ScheduleClass : Database
     {
+        public int year;
+        Core.Tools t;
         public ScheduleClass()
         {
+            year = DateTime.Now.Year;
+        }
+
+        public ScheduleClass(int pyear)
+        {
+            year = pyear;
         }
 
         /// <summary>
@@ -90,7 +98,7 @@ namespace Core
                 //monthScheduleDeatil += "<br/>";
                 foreach (DataRow dr in weekDetail.Tables[0].Rows)
                     //(dr["状态"].ToString()=="2"|| dr["状态"].ToString() == "4" ? @"<p style=""color:red""> "+ dr["状态"] + "</p>":dr["状态"])
-                    monthScheduleDeatil += "第" + dr["周数"] + "周（" + DateTime.Parse(dr["开始日期"].ToString()).ToString("M月d日") + "—" + DateTime.Parse(dr["结束日期"].ToString()).ToString("M月d日") + "）：" + (dr["状态"].ToString() == "计划未完成" ? @"<span style=""color:red""> " + dr["状态"] + "</span>" : dr["状态"]) + "<br/>" + "周工作计划：" + dr["周计划"] + "<br/>周落实情况：" + dr["周完成"] + "<br/><br/>";
+                    monthScheduleDeatil += "第" + dr["周数"] + "周（" + DateTime.Parse(dr["开始日期"].ToString()).ToString("M月d日") + "—" + DateTime.Parse(dr["结束日期"].ToString()).ToString("M月d日") + "）：" + (dr["状态"].ToString() == "计划未完成" ? @"<span style=""color:red""> " + dr["状态"] + "</span>" : dr["状态"]) + "<br/>&nbsp;&nbsp;周工作计划：" + dr["周计划"] + "<br/>&nbsp;&nbsp;周落实情况：" + dr["周完成"] + "<br/><br/>";
             }
             //monthScheduleDeatil += "<br/>";
             return monthScheduleDeatil;
@@ -336,9 +344,9 @@ namespace Core
         /// <returns></returns>
         public int[] GetExistTaskMonths(Guid workID)
         {
-
+            t = new Tools();
             DataSet ds = GetDataSet("select distinct datepart(mm,日期) from 月节点 where 工作ID = @工作ID", new SqlParameter[] { new SqlParameter("@工作ID", workID) });
-            return GetIntArrFromDataSet(ds);
+            return t.GetIntArrFromDataSet(ds);
         }
 
         /// <summary>
@@ -373,6 +381,7 @@ namespace Core
                     else
                         //如果本周已完成，将下周未完成状态设置为false
                         lastWeekUnfinished = false;
+
                     weekAndState.Add(int.Parse(dr[0].ToString()), int.Parse(dr[1].ToString()));
                 }
             else

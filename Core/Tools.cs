@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,10 +15,10 @@ namespace Core
     public class Tools : Database
     {
         public int year;
-        static protected ManageClass mc = new ManageClass();
+        protected ManageClass mc = new ManageClass();
         //protected ScheduleClass sc;
-        static protected WorkClass wc = new WorkClass();
-        static protected UserClass uc = new UserClass();
+        protected WorkClass wc = new WorkClass();
+        protected UserClass uc = new UserClass();
 
         public Tools()
         {
@@ -122,6 +122,8 @@ namespace Core
 
             foreach (WorkLeader wl in l)
             {
+                wc = new WorkClass();
+                uc = new UserClass();
                 taskID = wc.GetTaskIDBySN(wl.SN);
                 if (taskID == Guid.Empty)
                     break;
@@ -181,13 +183,14 @@ namespace Core
             Guid workID;
             int startMonth, endMonth;
             DataTable dt = GetDataSet("select 工作ID,目标节点,ID from 临时目标节点").Tables[0];
+            mc = new ManageClass();
+
             foreach (DataRow dr in dt.Rows)
             {
                 task = dr[1].ToString();
                 workID = Guid.Parse(dr[0].ToString());
 
                 //注意顺序
-
 
                 //匹配1-8月
                 if ((r = Regex.Match(task, @"^\d*-\d*月").Value) != "")

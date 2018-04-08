@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 
 namespace Core
 {
-    public class UserClass:Tools
+    public class UserClass:Database
     {
         //public Tools t;
         public UserClass()

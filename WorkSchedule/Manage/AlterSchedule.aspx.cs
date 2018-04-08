@@ -20,15 +20,19 @@ namespace WorkSchedule.Manage
         /// </summary>
         protected Guid[] allWorkID;
         protected string[] categoryName;
+        protected int editMonth;
+        protected Guid editWorkID;
 
         protected Dictionary<Guid, int[]> existMonths;
         protected Dictionary<Guid, Dictionary<int, int>> existWeeks;
         protected ScheduleClass sc;
         protected WorkClass wc;
+        protected ManageClass mc;
+        protected UserClass uc;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Session["UserID"] = 11;
+            //Session["UserID"] = 11;
 
             if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
                 Response.Redirect("~/Account/Login.aspx");
@@ -36,6 +40,12 @@ namespace WorkSchedule.Manage
             tool = new Core.Tools();
             sc = new ScheduleClass();
             wc = new WorkClass();
+            mc = new ManageClass();
+            uc = new UserClass();
+
+            if (uc.GetUserType(int.Parse(Session["UserID"].ToString())) != 1)
+                Response.Redirect("~/Account/Login.aspx");
+
             category = 0;
 
             if (IsPostBack)
@@ -46,6 +56,7 @@ namespace WorkSchedule.Manage
                 existWeeks = (Dictionary<Guid, Dictionary<int, int>>)ViewState["existWeeks"];
                 projectCategoryLocationID = ViewState["projectCategoryLocationID"] as Guid[];
                 categoryName = ViewState["categoryName"] as string[];
+
             }
             else
                 PreLoadData();
@@ -200,10 +211,54 @@ namespace WorkSchedule.Manage
                 Panel p = (Panel)e.Item.FindControl("monthPanel");
                 p.Visible = true;
                 string[] arg = e.CommandArgument.ToString().Split(new char[] { '$' });
-                string monthDeail = sc.GetMonthScheduleDetail(Guid.Parse(arg[0]), int.Parse(arg[1]));
-                ((Label)e.Item.FindControl("monthLabel")).Text = monthDeail;
+
+                editWorkID = Guid.Parse(arg[0]);
+                editMonth = int.Parse(arg[1]);
+
+                ((Label)e.Item.FindControl("monthLabel")).Text = sc.GetMonthSchedule(editWorkID, editMonth);
+
+                //通过ViewState将当前编辑的工作ID和月份传给提交按钮事件
+                ViewState["editWorkID"] = editWorkID;
+                ViewState["editMonth"] = editMonth;
+
+                ((Repeater)e.Item.FindControl("RepeaterWeekSchedule")).DataBind();
             }
         }
 
+        protected void ButtonSubmit_Click(object sender, EventArgs e)
+        {
+            string weekSchedule, weekExecution;
+            int state, weekOfYear;
+
+            editWorkID = Guid.Parse(ViewState["editWorkID"].ToString());
+            editMonth = int.Parse(ViewState["editMonth"].ToString());
+
+            Guid monnthTaskID = sc.GetMonthID(editWorkID, editMonth);
+            bool succeed = false;
+            foreach (RepeaterItem ri in ((Repeater)((Control)sender).Parent.Parent).Items)
+            {
+                //Response.Write(ri.FindControl("TextBoxWeekSchedule") + "<br/>");
+                //Response.Write(ri.FindControl("TextBoxWeekExecution") + "<br/>");
+                weekOfYear = int.Parse(((Label)ri.FindControl("lbWeek")).Text);
+                weekSchedule = ((TextBox)ri.FindControl("TextBoxWeekSchedule")).Text;
+                weekExecution = ((TextBox)ri.FindControl("TextBoxWeekExecution")).Text;
+                if (weekExecution.Trim() == "")
+                    state = weekSchedule.Trim() == "" ? 0 : 1;
+                else
+                    state = ((CheckBox)ri.FindControl("CheckBoxState")).Checked ? 3 : 2;
+
+                succeed = mc.InputWeekSchedule(monnthTaskID, weekOfYear, weekSchedule, weekExecution, state);
+
+                if (!succeed)
+                    return;
+
+            }
+
+            if (succeed)
+            {
+                PreLoadData();
+                RepeaterSchedule.DataBind();
+            }
+        }
     }
 }

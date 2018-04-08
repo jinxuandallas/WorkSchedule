@@ -2,6 +2,7 @@
 <siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
   <siteMapNode url="" title=""  description="">
     <siteMapNode url="" title="工作管理"  description="" >
+      <siteMapNode url="~/Manage/AlterSchedule.aspx" title="修改工作任务"  description="" />
       <siteMapNode url="~/Manage/DeleteWork.aspx" title="删除工作"  description="" />
       
     </siteMapNode>

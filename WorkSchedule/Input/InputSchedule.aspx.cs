@@ -25,6 +25,7 @@ namespace WorkSchedule.Input
         protected int userID;
         protected int editMonth;
         protected Guid editWorkID;
+        //protected string monthDeail;
 
         public Core.Tools tool;
         public ScheduleClass sc;
@@ -53,7 +54,7 @@ namespace WorkSchedule.Input
 
             if (IsPostBack)
             {
-                weeksOfMonth = (int[])ViewState["weeksOfMonth"];
+                weeksOfMonth = (int[]) ViewState["weeksOfMonth"];
                 userWorkID = (Guid[])ViewState["userWorkID"];
                 existMonths = (Dictionary<Guid, int[]>)ViewState["existMonths"];
                 existWeeks = (Dictionary<Guid, Dictionary<int, int>>)ViewState["existWeeks"];
@@ -185,13 +186,16 @@ namespace WorkSchedule.Input
                 editWorkID = Guid.Parse(arg[0]);
                 editMonth = int.Parse(arg[1]);
 
+                //判断月节点信息是否为当月，如果不是则不能编辑显示内容包括周工作计划等信息
                 string monthDeail = editMonth < DateTime.Now.Month ? sc.GetMonthScheduleDetail(editWorkID, editMonth) : sc.GetMonthSchedule(editWorkID, editMonth);
                 //string monthDeail = sc.GetMonthSchedule(editWorkID, editMonth);
                 ((Label)e.Item.FindControl("monthLabel")).Text = monthDeail;
 
+                //通过ViewState将当前编辑的工作ID和月份传给提交按钮事件
                 ViewState["editWorkID"] = editWorkID;
                 ViewState["editMonth"] = editMonth;
 
+                //如果编辑的不为当前页则隐藏编辑文本框和repeater控件
                 if (editMonth < DateTime.Now.Month)
                     ((Repeater)e.Item.FindControl("RepeaterWeekSchedule")).Visible = false;
                 else
@@ -213,7 +217,7 @@ namespace WorkSchedule.Input
             editMonth = int.Parse(ViewState["editMonth"].ToString());
 
             Guid monnthTaskID = sc.GetMonthID(editWorkID, editMonth);
-            bool succeed;
+            bool succeed=false;
             foreach (RepeaterItem ri in ((Repeater)((Control)sender).Parent.Parent).Items)
             {
                 //Response.Write(ri.FindControl("TextBoxWeekSchedule") + "<br/>");
@@ -228,12 +232,15 @@ namespace WorkSchedule.Input
 
                 succeed = mc.InputWeekSchedule(monnthTaskID, weekOfYear, weekSchedule, weekExecution, state);
 
-                if (succeed)
-                {
-                    PreLoadData();
-                    RepeaterSchedule.DataBind();
-                }
+                if (!succeed)
+                    return;
                 //Response.Write(weekOfYear + "++" + weekSchedule + "-" + weekExecution + ":" + state + "<br/>");
+            }
+
+            if (succeed)
+            {
+                PreLoadData();
+                RepeaterSchedule.DataBind();
             }
             //search(((Control)sender).Parent.Parent);
         }
