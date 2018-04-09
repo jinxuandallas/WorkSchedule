@@ -80,6 +80,7 @@ namespace Core
         /// <returns></returns>
         public string GetMonthScheduleDetail(Guid workID,int month)
         {
+            //处理月目标节点
             string monthScheduleDeatil= month+"月目标节点：";
             using (SqlDataReader sdr = GetDataReader("select 目标节点 from 月节点 where 工作ID=@工作ID and datepart(mm,日期)=@月份", new SqlParameter[] {
                 new SqlParameter("@工作ID",workID),
@@ -87,6 +88,7 @@ namespace Core
             }))
                 if (sdr.Read())
                     monthScheduleDeatil += "“"+sdr[0]+ "”<br/><br/>";
+
             DataSet weekDetail = GetDataSet("select 月节点日期,周数,周计划,周完成,状态,开始日期,结束日期 from 周节点视图 where 周状态!=0 and 工作ID=@工作ID and datepart(mm,月节点日期)=@月份",new SqlParameter[] {
                 new SqlParameter("@工作ID",workID),
                 new SqlParameter("@月份",month)
