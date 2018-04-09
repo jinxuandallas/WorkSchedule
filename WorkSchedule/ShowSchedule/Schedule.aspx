@@ -31,7 +31,7 @@
                                                         </tr>
                                                     </table>
                                                 </td>
-                                                <td style="width: 100px; font-size: small">首次未完成的工作</td>
+                                                <td style="width: 100px; font-size: small">首次未完成计划的工作</td>
                                             </tr>
                                         </table>
                                     </td>

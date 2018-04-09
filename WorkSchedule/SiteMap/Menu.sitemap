@@ -7,7 +7,7 @@
       
     </siteMapNode>
     <siteMapNode url="" title="任务管理"  description="" >
-      <siteMapNode url="~/Input/InputSchedule.aspx" title="录入工作任务"  description="" />
+      <siteMapNode url="~/Input/InputSchedule.aspx" title="提报工作任务"  description="" />
       <siteMapNode url="~/Manage/ManageWork.aspx" title="批量处理任务"  description="" />
       <siteMapNode url="~/Manage/ManageReportWork.aspx" title="批量处理汇报任务"  description="" />
     </siteMapNode>

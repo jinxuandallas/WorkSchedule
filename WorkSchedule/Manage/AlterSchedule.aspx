@@ -10,10 +10,7 @@
                     <HeaderTemplate>
                         <table style="width: 100%">
                             <tr>
-                                <td style="text-align: center; font-size: xx-large">青岛中央商务区重点工作管理平台</td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: center; font-size: x-large">（<%#DateTime.Now.Year%>年）</td>
+                                <td style="text-align: left ; font-size: x-large">&nbsp;&nbsp;修改工作任务（<%#DateTime.Now.Year%>年）</td>
                             </tr>
                             <tr>
                                 <td>
@@ -31,7 +28,7 @@
                                                                 </tr>
                                                             </table>
                                                         </td>
-                                                        <td style="width: 100px; font-size: small">首次未完成的工作</td>
+                                                        <td style="width: 100px; font-size: small">首次未完成计划的工作</td>
                                                     </tr>
                                                 </table>
                                             </td>

@@ -333,7 +333,6 @@ namespace Core
             DateTime weekEnd = weekStart.AddDays(7 - Convert.ToInt16(weekStart.DayOfWeek));
             int i = 1;
             for (int m = 1; m <= 12; m++)
-            {
                 do
                 {
                     ExecuteSql("insert 周数(周数,开始日期,结束日期) values(@周数,@开始日期,@结束日期)", new SqlParameter[] {new SqlParameter("@周数",i),
@@ -346,7 +345,6 @@ namespace Core
                     weekEnd = weekStart.AddDays(6);
                 } while (weekStart.Month == m);
 
-            }
         }
 
         //public bool ArrangeDatabase(string argument)

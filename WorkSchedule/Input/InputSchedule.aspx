@@ -10,6 +10,9 @@
                     <HeaderTemplate>
                         <table style="width: 100%">
                             <tr>
+                                <td style="text-align: left ; font-size: x-large">&nbsp;&nbsp;提报工作任务</td>
+                            </tr>
+                            <tr>
                                 <td>
                                     <table style="width: 100%">
                                         <tr>
@@ -25,7 +28,7 @@
                                                                 </tr>
                                                             </table>
                                                         </td>
-                                                        <td style="width: 100px; font-size: small">首次未完成的工作</td>
+                                                        <td style="width: 100px; font-size: small">首次未完成计划的工作</td>
                                                     </tr>
                                                 </table>
                                             </td>
