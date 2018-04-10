@@ -33,13 +33,13 @@ namespace Core
         public string GetWorkLeaders(Guid workID)
         {
             string workLeaders = string.Empty;
-            using (SqlDataReader sdr = GetDataReader("select 责任领导 from 工作责任领导视图 where 工作ID=@工作ID",new SqlParameter[] { new SqlParameter("@工作ID",workID) }))
+            using (SqlDataReader sdr = GetDataReader("select 责任领导 from 工作责任领导视图 where 工作ID=@工作ID", new SqlParameter[] { new SqlParameter("@工作ID", workID) }))
                 while (sdr.Read())
                     workLeaders += " " + sdr[0].ToString();
 
             return workLeaders;
         }
-        
+
         /// <summary>
         /// 为了生成的统一LinkButton样式
         /// </summary>
@@ -62,7 +62,7 @@ namespace Core
         }
         public string GetMonthSchedule(Guid workID, int month)
         {
-            string monthSchedule= month + "月目标节点："; 
+            string monthSchedule = month + "月目标节点：";
             using (SqlDataReader sdr = GetDataReader("select 目标节点 from 月节点 where 工作ID=@工作ID and datepart(mm,日期)=@月份", new SqlParameter[] {
                 new SqlParameter("@工作ID",workID),
                 new SqlParameter("@月份",month)
@@ -78,18 +78,18 @@ namespace Core
         /// <param name="workID"></param>
         /// <param name="month"></param>
         /// <returns></returns>
-        public string GetMonthScheduleDetail(Guid workID,int month)
+        public string GetMonthScheduleDetail(Guid workID, int month)
         {
             //处理月目标节点
-            string monthScheduleDeatil= month+"月目标节点：";
+            string monthScheduleDeatil = month + "月目标节点：";
             using (SqlDataReader sdr = GetDataReader("select 目标节点 from 月节点 where 工作ID=@工作ID and datepart(mm,日期)=@月份", new SqlParameter[] {
                 new SqlParameter("@工作ID",workID),
                 new SqlParameter("@月份",month)
             }))
                 if (sdr.Read())
-                    monthScheduleDeatil += "“"+sdr[0]+ "”<br/><br/>";
+                    monthScheduleDeatil += "“" + sdr[0] + "”<br/><br/>";
 
-            DataSet weekDetail = GetDataSet("select 月节点日期,周数,周计划,周完成,状态,开始日期,结束日期 from 周节点视图 where 周状态!=0 and 工作ID=@工作ID and datepart(mm,月节点日期)=@月份",new SqlParameter[] {
+            DataSet weekDetail = GetDataSet("select 月节点日期,周数,周计划,周完成,状态,开始日期,结束日期 from 周节点视图 where 周状态!=0 and 工作ID=@工作ID and datepart(mm,月节点日期)=@月份", new SqlParameter[] {
                 new SqlParameter("@工作ID",workID),
                 new SqlParameter("@月份",month)
             });
@@ -98,6 +98,7 @@ namespace Core
             if (weekDetail.Tables[0].Rows.Count > 0)
             {
                 //monthScheduleDeatil += "<br/>";
+
                 foreach (DataRow dr in weekDetail.Tables[0].Rows)
                     //(dr["状态"].ToString()=="2"|| dr["状态"].ToString() == "4" ? @"<p style=""color:red""> "+ dr["状态"] + "</p>":dr["状态"])
                     monthScheduleDeatil += "第" + dr["周数"] + "周（" + DateTime.Parse(dr["开始日期"].ToString()).ToString("M月d日") + "—" + DateTime.Parse(dr["结束日期"].ToString()).ToString("M月d日") + "）：" + (dr["状态"].ToString() == "计划未完成" ? @"<span style=""color:red""> " + dr["状态"] + "</span>" : dr["状态"]) + "<br/>&nbsp;&nbsp;周工作计划：" + dr["周计划"] + "<br/>&nbsp;&nbsp;周落实情况：" + dr["周完成"] + "<br/><br/>";
@@ -370,23 +371,20 @@ namespace Core
             if (dealUnfinishedAgain)
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    
+
                     //判断本周是否未完成
                     if (int.Parse(dr[1].ToString()) == 2)
                     {
                         //判断上周是否未完成并且本周是否仍然未完成,而且必须是连续未完成
-                        if (lastUnfinishedWeek!=0 && lastUnfinishedWeek == int.Parse(dr[0].ToString()) - 1)
+                        if (lastUnfinishedWeek != 0 && lastUnfinishedWeek == int.Parse(dr[0].ToString()) - 1)
                         {
                             weekAndState.Add(int.Parse(dr[0].ToString()), 4);
-                            lastUnfinishedWeek = int.Parse(dr[0].ToString());
+                            //lastUnfinishedWeek = int.Parse(dr[0].ToString());
                             continue;
                         }
-                        else
-                        {
-                            //将上周没完成状态设置为true，为下周判断是否第二次未完成做准备
-                            //lastWeekUnfinished = true;
-                            lastUnfinishedWeek = int.Parse(dr[0].ToString());
-                        }
+                        //将上周没完成状态设置为true，为下周判断是否第二次未完成做准备
+                        //lastWeekUnfinished = true;
+                        lastUnfinishedWeek = int.Parse(dr[0].ToString());
                     }
                     //else
                     //    //如果本周已完成，将下周未完成状态设置为false
@@ -400,9 +398,6 @@ namespace Core
 
             return weekAndState;
         }
-
-
-
 
     }
 
@@ -422,5 +417,5 @@ namespace Core
 
 }
 
-    
+
 
