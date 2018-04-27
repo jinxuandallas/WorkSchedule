@@ -19,7 +19,7 @@
                         <td>
                             <table style="width: 100%">
                                 <tr>
-                                    <td style="width: 55%"></td>
+                                    <td style="width: 55%;font-size:small">筛选：<asp:DropDownList ID="Filter" runat="server"></asp:DropDownList></td>
                                     <td>
                                         <table style="width: 120px">
                                             <tr>
@@ -117,7 +117,7 @@
             </ItemTemplate>
         </asp:Repeater>
 
-        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand="SELECT Id, 序号, 目标名称,备注  FROM 工作 WHERE (年份 = @year) order by 序号" ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">
+        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand="SELECT Id, 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) order by 序号" ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">
             <SelectParameters>
                 <asp:Parameter Name="year" Type="Int32" />
             </SelectParameters>

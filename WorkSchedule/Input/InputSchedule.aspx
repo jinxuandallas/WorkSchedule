@@ -10,7 +10,7 @@
                     <HeaderTemplate>
                         <table style="width: 100%">
                             <tr>
-                                <td style="text-align: left ; font-size: x-large">&nbsp;&nbsp;提报工作任务</td>
+                                <td style="text-align: left; font-size: x-large">&nbsp;&nbsp;提报工作任务</td>
                             </tr>
                             <tr>
                                 <td>
@@ -73,8 +73,12 @@
                     <ItemTemplate>
                         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                             <ContentTemplate>
-                                第<%#Eval("序号") %>项：<span style="background-color: #ffff99"> <%#Eval("目标名称") %></span><br />
-                                <span style="font-size: small">目标内容：<%#Eval("目标内容") %><br />责任领导：<%# sc.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br /><span style="font-size: small"><%#Eval("备注").ToString().Trim()==""?"":"备注："+Eval("备注")+"<br />" %></span>
+                                <asp:Panel ID="edited" runat="server" BackColor='<%# editedWorkID.Contains(Guid.Parse( Eval("Id").ToString()))?System.Drawing.Color.FromName("#d7d6d5"):System.Drawing.Color.Empty %>'>
+                                    第<%#Eval("序号") %>项：<span style="background-color: #ffff99"> <%#Eval("目标名称") %></span><br />
+                                    <span style="font-size: small">目标内容：<%#Eval("目标内容") %><br />
+                                        责任领导：<%# sc.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br />
+                                    <span style="font-size: small"><%#Eval("备注").ToString().Trim()==""?"":"备注："+Eval("备注")+"<br />" %></span>
+                                </asp:Panel>
                             </ContentTemplate>
                         </asp:UpdatePanel>
 
@@ -83,6 +87,7 @@
                             <asp:TableRow BorderWidth="0px" runat="server">
                             </asp:TableRow>
                         </asp:Table>
+
                         <%--</ContentTemplate>--%>
                         <%--</asp:UpdatePanel>--%>
 
@@ -94,24 +99,31 @@
                                     <div style="font-size: small; background-color: #ffffb0; padding: 10px 20px 10px 20px;">
                                         <br />
                                         <asp:Label ID="monthLabel" runat="server"></asp:Label>
-                                        <asp:Repeater ID="RepeaterWeekSchedule" runat="server" DataSource="<%#sc.GetWeeksOfMonth(editMonth) %>" >
-                                            <HeaderTemplate><br /></HeaderTemplate>
+                                        <asp:Repeater ID="RepeaterWeekSchedule" runat="server" DataSource="<%#sc.GetWeeksOfMonth(editMonth) %>">
+                                            <HeaderTemplate>
+                                                <br />
+                                            </HeaderTemplate>
                                             <ItemTemplate>
                                                 第<asp:Label ID="lbWeek" runat="server" Text='<%# Eval("周数") %>'></asp:Label>周（<%#DateTime.Parse(Eval("开始日期").ToString()).ToString("M月d日") %>--<%#DateTime.Parse(Eval("结束日期").ToString()).ToString("M月d日") %>）：<br />
-                                                <div style="margin:5px">周工作计划：<asp:TextBox ID="TextBoxWeekSchedule" Width="400px" Text='<%# sc.GetWeekSchedule(editWorkID,int.Parse( Eval("周数").ToString())) %>' runat="server"></asp:TextBox>
-                                                <br /></div> 
-                                                <div style="margin:5px">周落实情况：<asp:TextBox ID="TextBoxWeekExecution" Width="400px" Text='<%# sc.GetWeekExecution(editWorkID,int.Parse( Eval("周数").ToString())) %>' runat="server"></asp:TextBox>
-                                                <br /></div>
+                                                <div style="margin: 5px">
+                                                    周工作计划：<asp:TextBox ID="TextBoxWeekSchedule" Width="400px" Text='<%# sc.GetWeekSchedule(editWorkID,int.Parse( Eval("周数").ToString())) %>' runat="server"></asp:TextBox>
+                                                    <br />
+                                                </div>
+                                                <div style="margin: 5px">
+                                                    周落实情况：<asp:TextBox ID="TextBoxWeekExecution" Width="400px" Text='<%# sc.GetWeekExecution(editWorkID,int.Parse( Eval("周数").ToString())) %>' runat="server"></asp:TextBox>
+                                                    <br />
+                                                </div>
                                                 已完成：<asp:CheckBox ID="CheckBoxState" Checked='<%# sc.GetWeekState(editWorkID, int.Parse(Eval("周数").ToString())) == 3 ? true:false %>' runat="server" />
                                                 <br />
                                                 <br />
                                             </ItemTemplate>
                                             <FooterTemplate>
                                                 <asp:Button ID="ButtonSubmit" runat="server" Text="提交" OnClick="ButtonSubmit_Click" CommandName="SubmitWeekSchedule" />
-                                                <br /><br />
+                                                <br />
+                                                <br />
                                             </FooterTemplate>
                                         </asp:Repeater>
-                                        
+
                                     </div>
                                 </div>
                             </div>

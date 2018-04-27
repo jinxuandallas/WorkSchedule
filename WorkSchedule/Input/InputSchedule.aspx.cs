@@ -25,6 +25,11 @@ namespace WorkSchedule.Input
         protected int userID;
         protected int editMonth;
         protected Guid editWorkID;
+
+        /// <summary>
+        /// 本周已经编辑过的工作任务
+        /// </summary>
+        protected List<Guid> editedWorkID;
         //protected string monthDeail;
 
         public Core.Tools tool;
@@ -54,10 +59,11 @@ namespace WorkSchedule.Input
 
             if (IsPostBack)
             {
-                weeksOfMonth = (int[]) ViewState["weeksOfMonth"];
+                weeksOfMonth = (int[])ViewState["weeksOfMonth"];
                 userWorkID = (Guid[])ViewState["userWorkID"];
                 existMonths = (Dictionary<Guid, int[]>)ViewState["existMonths"];
                 existWeeks = (Dictionary<Guid, Dictionary<int, int>>)ViewState["existWeeks"];
+                editedWorkID=ViewState["editedWorkID"] as List<Guid> ;
             }
             else
                 PreLoadData();
@@ -68,10 +74,13 @@ namespace WorkSchedule.Input
 
         protected void PreLoadData()
         {
+            //获取已编辑过的任务ID
+            editedWorkID = wc.GetThisWeekEditedWorkID(userID);
+
             //获取一年中所有月份的每个月包含的周数量
             weeksOfMonth = tool.GetWeeksOfAllMonth();
 
-            userWorkID = wc.GetAllWorkID();
+            userWorkID = wc.GetUserWorkID(userID);
             int[] existTaskMonths;
             existMonths = new Dictionary<Guid, int[]>();
             existWeeks = new Dictionary<Guid, Dictionary<int, int>>();
@@ -88,6 +97,7 @@ namespace WorkSchedule.Input
             ViewState["userWorkID"] = userWorkID;
             ViewState["existMonths"] = existMonths;
             ViewState["existWeeks"] = existWeeks;
+            ViewState["editedWorkID"] = editedWorkID;
         }
 
         protected void RepeaterSchedule_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -102,7 +112,7 @@ namespace WorkSchedule.Input
             Guid workID = Guid.Parse((((DataRowView)e.Item.DataItem)["ID"].ToString()));
 
             TableRow tr = table.Rows[0];
-            //任务中的一行表格
+            //任务中的一行表格，勾画生成月份与周表格
             tr.Style.Value = "border-collapse:collapse;border-spacing:0px;padding: 0px; margin: 0px;";
             for (int i = 1; i <= (DateTime.Now.Month == 12 ? 12 : DateTime.Now.Month + 1); i++)
             {

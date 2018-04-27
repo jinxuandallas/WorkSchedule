@@ -68,6 +68,7 @@ namespace Core
             return allWorkID;
         }
 
+
         public Guid[] GetAllWorkID(string tableName)
         {
             Guid[] allWorkID;
@@ -79,6 +80,8 @@ namespace Core
 
             return allWorkID;
         }
+
+
         /// <summary>
         /// 获取某年某用户所有管理的工作ID
         /// </summary>
@@ -215,16 +218,23 @@ namespace Core
         public Guid GetTaskIDBySN(int sn)
         {
             using (SqlDataReader sdr = GetDataReader("select ID from 工作 where 序号=@SN", new SqlParameter[] { new SqlParameter("@SN", sn) }))
-            {
                 if (sdr.Read())
                     return Guid.Parse(sdr[0].ToString());
-            }
 
             return Guid.Empty;
         }
 
 
+        public List<Guid> GetThisWeekEditedWorkID(int userId)
+        {
+            List<Guid> thisWeekEditedWorkID = new List<Guid>();
 
+            using (SqlDataReader sdr = GetDataReader("SELECT 周节点视图.工作ID FROM 周节点视图,工作责任领导视图 where 周数=DATEPART(wk,'2018-4-27') and 周状态!=0 and (信息管理用户ID=@用户ID or 用户ID=@用户ID) and 工作责任领导视图.工作ID=周节点视图.工作ID", new SqlParameter[] { new SqlParameter("@用户ID", userId) }))
+                while(sdr.Read())
+                    thisWeekEditedWorkID.Add(Guid.Parse(sdr[0].ToString()));
+
+            return thisWeekEditedWorkID;
+        }
 
 
     }
