@@ -3,23 +3,23 @@
 <asp:Content ID="ContentSchedule" ContentPlaceHolderID="ContentPlaceHolderTop" runat="server">
     <%--<asp:HiddenField  Value="<%# tool.year %>" runat="server" id="inputYear" />--%>
     <div>
+
         <asp:ScriptManager ID="ScriptManager1" runat="server">
         </asp:ScriptManager>
-
-        <asp:Repeater ID="RepeaterSchedule" runat="server" OnItemDataBound="RepeaterSchedule_ItemDataBound" DataSourceID="SqlDataSource1" DataMember="DefaultView" OnItemCommand="RepeaterSchedule_ItemCommand">
-            <HeaderTemplate>
-                <table style="width: 100%">
+        <table style="width: 100%">
                     <tr>
                         <td style="text-align: center; font-size: xx-large">青岛中央商务区重点工作管理平台</td>
                     </tr>
                     <tr>
-                        <td style="text-align: center; font-size: x-large">（<%#DateTime.Now.Year%>年）</td>
+                        <td style="text-align: center; font-size: x-large">（<%# DateTime.Now.Year %>年）</td>
                     </tr>
                     <tr>
                         <td>
                             <table style="width: 100%">
                                 <tr>
-                                    <td style="width: 55%;font-size:small">筛选：<asp:DropDownList ID="Filter" runat="server"></asp:DropDownList></td>
+                                    <td style="width: 55%; font-size: small">筛选：<asp:DropDownList ID="Filter" runat="server">
+                                        <asp:ListItem Value="SELECT Id, 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) order by 序号">全部</asp:ListItem>
+                                    </asp:DropDownList></td>
                                     <td>
                                         <table style="width: 120px">
                                             <tr>
@@ -72,7 +72,7 @@
                 </table>
                 <br />
                 <hr style="width: 1500px; text-align: left; margin-left: 0" />
-            </HeaderTemplate>
+        <asp:Repeater ID="RepeaterSchedule" runat="server" OnItemDataBound="RepeaterSchedule_ItemDataBound" DataSourceID="SqlDataSource1" DataMember="DefaultView" OnItemCommand="RepeaterSchedule_ItemCommand">
             <ItemTemplate>
                 <%--<div style="background-image: url('../images/DatePrompt.gif'); background-repeat: repeat-y; background-position: 220px">--%>
                 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
@@ -103,8 +103,9 @@
                         <%--<asp:UpdatePanel ID="UpdatePanel2" runat="server">--%>
                         <%--<ContentTemplate>--%>
                         <asp:Panel ID="monthPanel" runat="server" Visible="false" Width="800px">
-                            <div style="font-size: small; background-color: #ffffb0; float: left; margin-top: 20px; margin-bottom: 20px; padding-left: 15px; padding-right: 15px;border:1px solid #a7a6a5;">
-                                <br /><asp:Label ID="monthLabel" runat="server"></asp:Label>
+                            <div style="font-size: small; background-color: #ffffb0; float: left; margin-top: 20px; margin-bottom: 20px; padding-left: 15px; padding-right: 15px; border: 1px solid #a7a6a5;">
+                                <br />
+                                <asp:Label ID="monthLabel" runat="server"></asp:Label>
                             </div>
                         </asp:Panel>
                         <br />
@@ -118,6 +119,7 @@
         </asp:Repeater>
 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand="SELECT Id, 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) order by 序号" ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">
+        <%--<asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand=<%# (RepeaterSchedule.Controls[0].FindControl("Filter") as DropDownList).SelectedValue %> ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">--%>
             <SelectParameters>
                 <asp:Parameter Name="year" Type="Int32" />
             </SelectParameters>

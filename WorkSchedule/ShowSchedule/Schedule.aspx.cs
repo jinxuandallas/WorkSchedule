@@ -29,7 +29,7 @@ namespace WorkSchedule
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //Session["UserID"] = 11;
+            Session["UserID"] = 11;
 
             if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
                 Response.Redirect("~/Account/Login.aspx");
@@ -54,8 +54,9 @@ namespace WorkSchedule
 
             SqlDataSource1.SelectParameters["year"].DefaultValue = tool.year.ToString();
             //SqlDataSource1.DataBind();
-
+            //SqlDataSource1.SelectCommand = (RepeaterSchedule.Controls[0].FindControl("Filter") as DropDownList).SelectedValue;
             RepeaterSchedule.DataBind();
+            //Response.Write((RepeaterSchedule.Controls[0].FindControl("Filter") as DropDownList).SelectedValue);
             //    ViewState["repeater"] = Repeater1.ItemTemplate;
             //}
             //else
