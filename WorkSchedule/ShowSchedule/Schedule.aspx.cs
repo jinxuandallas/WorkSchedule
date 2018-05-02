@@ -14,7 +14,8 @@ namespace WorkSchedule
     {
         protected Core.Tools tool;
         protected int[] weeksOfMonth;
-        protected Guid[] projectCategoryLocationID;
+        //protected Guid[] projectCategoryLocationID;
+        protected int[] projectCategoryLocationSN;
         protected int category;
         /// <summary>
         /// 本年度所有工作的ID
@@ -46,16 +47,22 @@ namespace WorkSchedule
                 allWorkID = (Guid[])ViewState["allWorkID"];
                 existMonths = (Dictionary<Guid, int[]>)ViewState["existMonths"];
                 existWeeks = (Dictionary<Guid, Dictionary<int, int>>)ViewState["existWeeks"];
-                projectCategoryLocationID = ViewState["projectCategoryLocationID"] as Guid[];
+                //projectCategoryLocationID = ViewState["projectCategoryLocationID"] as Guid[];
+                projectCategoryLocationSN = ViewState["projectCategoryLocationSN"] as int[];
                 categoryName = ViewState["categoryName"] as string[];
+                //SqlDataSource1.SelectCommand = Filter.SelectedValue;
             }
             else
                 PreLoadData();
 
             SqlDataSource1.SelectParameters["year"].DefaultValue = tool.year.ToString();
+            //SqlDataSource1.SelectCommand = Filter.SelectedValue;
             //SqlDataSource1.DataBind();
             //SqlDataSource1.SelectCommand = (RepeaterSchedule.Controls[0].FindControl("Filter") as DropDownList).SelectedValue;
-            RepeaterSchedule.DataBind();
+
+            //RepeaterSchedule.DataBind();
+            DataBind();
+
             //Response.Write((RepeaterSchedule.Controls[0].FindControl("Filter") as DropDownList).SelectedValue);
             //    ViewState["repeater"] = Repeater1.ItemTemplate;
             //}
@@ -82,14 +89,16 @@ namespace WorkSchedule
                     existMonths.Add(wid, sc.GetExistTaskMonths(wid));
                 existWeeks.Add(wid, sc.GetExistTaskWeeksAndState(wid, true));
             }
-            projectCategoryLocationID = wc.GetProjectCategoryLocationID();
+            projectCategoryLocationSN = wc.GetProjectCategoryLocationSN();
+            //projectCategoryLocationID = wc.GetProjectCategoryLocationID();
             categoryName = wc.GetCategoryName();
 
             ViewState["weeksOfMonth"] = weeksOfMonth;
             ViewState["allWorkID"] = allWorkID;
             ViewState["existMonths"] = existMonths;
             ViewState["existWeeks"] = existWeeks;
-            ViewState["projectCategoryLocationID"] = projectCategoryLocationID;
+            ViewState["projectCategoryLocationSN"] = projectCategoryLocationSN;
+            //ViewState["projectCategoryLocationID"] = projectCategoryLocationID;
             ViewState["categoryName"] = categoryName;
         }
 
@@ -106,8 +115,9 @@ namespace WorkSchedule
                 return;
 
             Guid workID = Guid.Parse((((DataRowView)e.Item.DataItem)["ID"].ToString()));
+            int SN=int.Parse((((DataRowView)e.Item.DataItem)["序号"].ToString()));
 
-            if (category < 5 && projectCategoryLocationID[category] == workID)
+            if (category < 5 && projectCategoryLocationSN[category] == SN)
             {
                 Panel pc = e.Item.FindControl("ProjectCategory") as Panel;
                 pc.Visible = true;

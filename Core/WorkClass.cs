@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 
 namespace Core
 {
-    public class WorkClass:Database
+    public class WorkClass : Database
     {
         public int year;
         //protected Tools t;
@@ -91,7 +91,7 @@ namespace Core
         {
             return GetUserWorkID(id, year);
         }
-        
+
 
         /// <summary>
         /// 获取某年某用户所有管理的工作ID
@@ -131,7 +131,9 @@ namespace Core
 
             int i = 0;
             foreach (DataRow dr in category.Rows)
-                using (SqlDataReader sdr = GetDataReader("select top 1 ID from 工作 where 工作类别=@工作类别 order by 序号", new SqlParameter[] { new SqlParameter("@工作类别", dr[0]) }))
+                using (SqlDataReader sdr = GetDataReader("select top 1 ID from 工作 where 工作类别=@工作类别 and 年份=@年份 order by 序号", new SqlParameter[] { new SqlParameter("@工作类别", dr[0]),
+                    new SqlParameter("@年份", year)
+                }))
                 {
                     sdr.Read();
                     projectCategoryLocationID[i] = Guid.Parse(sdr[0].ToString());
@@ -139,6 +141,33 @@ namespace Core
                 }
 
             return projectCategoryLocationID;
+        }
+
+        public int[] GetProjectCategoryLocationSN()
+        {
+            return GetProjectCategoryLocationSN(year);
+        }
+
+        public int[] GetProjectCategoryLocationSN(int year)
+        {
+            int[] projectCategoryLocationSN;
+
+            DataTable category = GetDataSet("select ID from [工作类别]").Tables[0];
+            projectCategoryLocationSN = new int[category.Rows.Count];
+
+            int i = 0;
+            foreach (DataRow dr in category.Rows)
+                using (SqlDataReader sdr = GetDataReader("select top 1 序号 from 工作 where 工作类别=@工作类别 order by 序号", new SqlParameter[] { new SqlParameter("@工作类别", dr[0]),
+                    new SqlParameter("@年份", year)
+                }))
+                {
+                    sdr.Read();
+                    projectCategoryLocationSN[i] = int.Parse(sdr[0].ToString());
+                    i++;
+                }
+
+            return projectCategoryLocationSN;
+
         }
 
         /// <summary>
@@ -230,7 +259,7 @@ namespace Core
             List<Guid> thisWeekEditedWorkID = new List<Guid>();
 
             using (SqlDataReader sdr = GetDataReader("SELECT 周节点视图.工作ID FROM 周节点视图,工作责任领导视图 where 周数=DATEPART(wk,'2018-4-27') and 周状态!=0 and (信息管理用户ID=@用户ID or 用户ID=@用户ID) and 工作责任领导视图.工作ID=周节点视图.工作ID", new SqlParameter[] { new SqlParameter("@用户ID", userId) }))
-                while(sdr.Read())
+                while (sdr.Read())
                     thisWeekEditedWorkID.Add(Guid.Parse(sdr[0].ToString()));
 
             return thisWeekEditedWorkID;

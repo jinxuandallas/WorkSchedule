@@ -17,17 +17,20 @@
                         <td>
                             <table style="width: 100%">
                                 <tr>
-                                    <td style="width: 55%; font-size: small">筛选：<asp:DropDownList ID="Filter" runat="server">
+                                    <td style="width: 55%; font-size: small">筛选：<asp:DropDownList ID="Filter" runat="server" AutoPostBack="True">
                                         <asp:ListItem Value="SELECT Id, 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) order by 序号">全部</asp:ListItem>
+                                        <asp:ListItem Value="SELECT distinct(工作.Id), 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) and exists (select 工作.Id from 周节点视图 where 工作.Id=工作ID and 周数=datepart(week,getdate()) and 周状态=3) order by 序号">本周已完成</asp:ListItem>
+                                        <asp:ListItem Value="SELECT distinct(工作.Id), 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) and exists (select 工作.Id from 周节点视图 where 工作.Id=工作ID and 周数=datepart(week,getdate()) and 周状态=2) order by 序号">本周未完成</asp:ListItem>
+                                        <asp:ListItem Value="SELECT distinct(工作.Id), 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) and exists (select 工作.Id from 周节点视图 where 工作.Id=工作ID and month(月节点日期)=3 and 周状态=2) order by 序号">本月未完成</asp:ListItem>
                                     </asp:DropDownList></td>
                                     <td>
                                         <table style="width: 120px">
                                             <tr>
                                                 <td></td>
                                                 <td>
-                                                    <table style="width: 20px; height: 15px; background-color: #FF6600;">
+                                                    <table style="border: 2px solid #FF6600; padding: 1px; width: 25px; height: 25px">
                                                         <tr>
-                                                            <td></td>
+                                                            <td style="background-color: #FF6600;"></td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -40,9 +43,9 @@
                                             <tr>
                                                 <td></td>
                                                 <td>
-                                                    <table style="width: 20px; height: 15px; background-color: #D04242;">
+                                                    <table style="border: 2px solid #D04242; padding: 1px; width: 25px; height: 25px">
                                                         <tr>
-                                                            <td></td>
+                                                            <td style="background-color: #D04242;"></td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -55,9 +58,9 @@
                                             <tr>
                                                 <td></td>
                                                 <td>
-                                                    <table style="width: 20px; height: 15px; background-color: #3399FF;">
+                                                    <table style="border: 2px solid #3399FF; padding: 1px; width: 25px; height: 25px">
                                                         <tr>
-                                                            <td></td>
+                                                            <td style="background-color: #3399FF;"></td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -85,8 +88,7 @@
                             <%--<hr style="width: 1500px; text-align: left; margin-left: 0" />--%>
                         </asp:Panel>
                         第<%#Eval("序号") %>项：<span style="background-color: #ffff99"> <%#Eval("目标名称") %></span><br />
-                        <span style="font-size: small">责任领导：<%# sc.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br />
-                        <span style="font-size: small"><%#Eval("备注").ToString().Trim()==""?"":"备注："+Eval("备注")+"<br />" %></span>
+                        <span style="font-size: small">责任领导：<%# sc.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br /><span style="font-size: small"><%#Eval("备注").ToString().Trim()==""?"":"备注："+Eval("备注")+"<br />" %></span>
 
                     </ContentTemplate>
                 </asp:UpdatePanel>
@@ -118,8 +120,8 @@
             </ItemTemplate>
         </asp:Repeater>
 
-        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand="SELECT Id, 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) order by 序号" ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">
-        <%--<asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand=<%# (RepeaterSchedule.Controls[0].FindControl("Filter") as DropDownList).SelectedValue %> ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">--%>
+        <%--<asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand="SELECT Id, 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) order by 序号" ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">--%>
+        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString1 %>" SelectCommand=<%# Filter.SelectedValue %> ProviderName="<%$ ConnectionStrings:ConnectionString1.ProviderName %>">
             <SelectParameters>
                 <asp:Parameter Name="year" Type="Int32" />
             </SelectParameters>
