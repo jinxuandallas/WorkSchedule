@@ -22,9 +22,9 @@
                                                     <tr>
                                                         <td></td>
                                                         <td>
-                                                            <table style="width: 20px; height: 15px; background-color: #FF6600;">
+                                                            <table style="border: 2px solid #FF6600; padding: 1px; width: 25px; height: 25px">
                                                                 <tr>
-                                                                    <td></td>
+                                                                    <td style="background-color: #FF6600;"></td>
                                                                 </tr>
                                                             </table>
                                                         </td>
@@ -37,9 +37,9 @@
                                                     <tr>
                                                         <td></td>
                                                         <td>
-                                                            <table style="width: 20px; height: 15px; background-color: #D04242;">
+                                                            <table style="border: 2px solid #D04242; padding: 1px; width: 25px; height: 25px">
                                                                 <tr>
-                                                                    <td></td>
+                                                                    <td style="background-color: #D04242;"></td>
                                                                 </tr>
                                                             </table>
                                                         </td>
@@ -52,9 +52,9 @@
                                                     <tr>
                                                         <td></td>
                                                         <td>
-                                                            <table style="width: 20px; height: 15px; background-color: #3399FF;">
+                                                            <table style="border: 2px solid #3399FF; padding: 1px; width: 25px; height: 25px">
                                                                 <tr>
-                                                                    <td></td>
+                                                                    <td style="background-color: #3399FF;"></td>
                                                                 </tr>
                                                             </table>
                                                         </td>
@@ -75,10 +75,7 @@
                             <ContentTemplate>
                                 <asp:Panel ID="edited" runat="server" BackColor='<%# editedWorkID.Contains(Guid.Parse( Eval("Id").ToString()))?System.Drawing.Color.FromName("#d7d6d5"):System.Drawing.Color.Empty %>'>
                                     第<%#Eval("序号") %>项：<span style="background-color: #ffff99"> <%#Eval("目标名称") %></span><br />
-                                    <span style="font-size: small">目标内容：<%#Eval("目标内容") %><br />
-                                        责任领导：<%# sc.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br />
-                                    <span style="font-size: small"><%#Eval("备注").ToString().Trim()==""?"":"备注："+Eval("备注")+"<br />" %></span>
-                                </asp:Panel>
+                                    <span style="font-size: small">目标内容：<%#Eval("目标内容") %><br />责任领导：<%# sc.GetWorkLeaders(Guid.Parse( Eval("ID").ToString())) %></span><br /><span style="font-size: small"><%#Eval("备注").ToString().Trim()==""?"":"备注："+Eval("备注")+"<br />" %></span></asp:Panel>
                             </ContentTemplate>
                         </asp:UpdatePanel>
 

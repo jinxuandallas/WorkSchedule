@@ -197,7 +197,7 @@ namespace WorkSchedule.Input
                 editMonth = int.Parse(arg[1]);
 
                 //判断月节点信息是否为当月，如果不是则不能编辑显示内容包括周工作计划等信息
-                string monthDeail = editMonth < DateTime.Now.Month ? sc.GetMonthScheduleDetail(editWorkID, editMonth) : sc.GetMonthSchedule(editWorkID, editMonth);
+                string monthDeail = editMonth < DateTime.Now.Month-1 ? sc.GetMonthScheduleDetail(editWorkID, editMonth) : sc.GetMonthSchedule(editWorkID, editMonth);
                 //string monthDeail = sc.GetMonthSchedule(editWorkID, editMonth);
                 ((Label)e.Item.FindControl("monthLabel")).Text = monthDeail;
 
@@ -206,7 +206,7 @@ namespace WorkSchedule.Input
                 ViewState["editMonth"] = editMonth;
 
                 //如果编辑的不为当前页则隐藏编辑文本框和repeater控件
-                if (editMonth < DateTime.Now.Month)
+                if (editMonth < DateTime.Now.Month-1)
                     ((Repeater)e.Item.FindControl("RepeaterWeekSchedule")).Visible = false;
                 else
                     ((Repeater)e.Item.FindControl("RepeaterWeekSchedule")).DataBind();

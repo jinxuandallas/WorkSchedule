@@ -10,7 +10,7 @@
                     <HeaderTemplate>
                         <table style="width: 100%">
                             <tr>
-                                <td style="text-align: left ; font-size: x-large">&nbsp;&nbsp;修改工作任务（<%#DateTime.Now.Year%>年）</td>
+                                <td style="text-align: left; font-size: x-large">&nbsp;&nbsp;修改工作任务（<%#DateTime.Now.Year%>年）</td>
                             </tr>
                             <tr>
                                 <td>
@@ -22,9 +22,9 @@
                                                     <tr>
                                                         <td></td>
                                                         <td>
-                                                            <table style="width: 20px; height: 15px; background-color: #FF6600;">
+                                                            <table style="border: 2px solid #FF6600; padding: 1px; width: 25px; height: 25px">
                                                                 <tr>
-                                                                    <td></td>
+                                                                    <td style="background-color: #FF6600;"></td>
                                                                 </tr>
                                                             </table>
                                                         </td>
@@ -37,9 +37,9 @@
                                                     <tr>
                                                         <td></td>
                                                         <td>
-                                                            <table style="width: 20px; height: 15px; background-color: #D04242;">
+                                                            <table style="border: 2px solid #D04242; padding: 1px; width: 25px; height: 25px">
                                                                 <tr>
-                                                                    <td></td>
+                                                                    <td style="background-color: #D04242;"></td>
                                                                 </tr>
                                                             </table>
                                                         </td>
@@ -52,9 +52,9 @@
                                                     <tr>
                                                         <td></td>
                                                         <td>
-                                                            <table style="width: 20px; height: 15px; background-color: #3399FF;">
+                                                            <table style="border: 2px solid #3399FF; padding: 1px; width: 25px; height: 25px">
                                                                 <tr>
-                                                                    <td></td>
+                                                                    <td style="background-color: #3399FF;"></td>
                                                                 </tr>
                                                             </table>
                                                         </td>

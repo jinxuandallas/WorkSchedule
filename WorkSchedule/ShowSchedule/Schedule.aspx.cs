@@ -30,7 +30,7 @@ namespace WorkSchedule
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Session["UserID"] = 11;
+            //Session["UserID"] = 11;
 
             if (Session["UserID"] == null || string.IsNullOrWhiteSpace(Session["UserID"].ToString()))
                 Response.Redirect("~/Account/Login.aspx");
@@ -56,7 +56,8 @@ namespace WorkSchedule
                 PreLoadData();
 
             SqlDataSource1.SelectParameters["year"].DefaultValue = tool.year.ToString();
-            //SqlDataSource1.SelectCommand = Filter.SelectedValue;
+            
+            SqlDataSource1.SelectCommand = Filter.SelectedValue;
             //SqlDataSource1.DataBind();
             //SqlDataSource1.SelectCommand = (RepeaterSchedule.Controls[0].FindControl("Filter") as DropDownList).SelectedValue;
 
@@ -217,12 +218,12 @@ namespace WorkSchedule
             //    ((LinkButton)e.Item.FindControl("LinkButton1")).Text = p.Visible ? "折叠" : "详细";
             //}
 
-            if (e.CommandName == "button")
-            {
-                ((Label)e.Item.FindControl("Label1")).Text = DateTime.Now.ToString();
-            }
+            //if (e.CommandName == "button")
+            //{
+            //    ((Label)e.Item.FindControl("Label1")).Text = DateTime.Now.ToString();
+            //}
 
-            else if (e.CommandName == "monthLinkButton")
+            if (e.CommandName == "monthLinkButton")
             {
                 Panel p = (Panel)e.Item.FindControl("monthPanel");
                 p.Visible = true;
