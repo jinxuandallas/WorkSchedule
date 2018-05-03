@@ -19,9 +19,9 @@
                                 <tr>
                                     <td style="width: 55%; font-size: small">筛选：<asp:DropDownList ID="Filter" runat="server" AutoPostBack="True">
                                         <asp:ListItem Value="SELECT Id, 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) order by 序号">全部</asp:ListItem>
-                                        <asp:ListItem Value="SELECT distinct(工作.Id), 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) and exists (select 工作.Id from 周节点视图 where 工作.Id=工作ID and 周数=datepart(week,getdate()) and 周状态=3) order by 序号">本周已完成</asp:ListItem>
-                                        <asp:ListItem Value="SELECT distinct(工作.Id), 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) and exists (select 工作.Id from 周节点视图 where 工作.Id=工作ID and 周数=datepart(week,getdate()) and 周状态=2) order by 序号">本周未完成</asp:ListItem>
-                                        <asp:ListItem Value="SELECT distinct(工作.Id), 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) and exists (select 工作.Id from 周节点视图 where 工作.Id=工作ID and month(月节点日期)=3 and 周状态=2) order by 序号">本月未完成</asp:ListItem>
+                                        <asp:ListItem Value="SELECT 工作.Id, 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) and exists (select 工作.Id from 周节点视图 where 工作.Id=工作ID and 周数=datepart(week,getdate()) and 周状态=3) order by 序号">本周已完成</asp:ListItem>
+                                        <asp:ListItem Value="SELECT 工作.Id, 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) and exists (select 工作.Id from 周节点视图 where 工作.Id=工作ID and 周数=datepart(week,getdate()) and 周状态=2) order by 序号">本周未完成</asp:ListItem>
+                                        <asp:ListItem Value="SELECT 工作.Id, 序号, 目标名称,备注 FROM 工作 WHERE (年份 = @year) and exists (select 工作.Id from 周节点视图 where 工作.Id=工作ID and month(月节点日期)=month(getdate()) and 周状态=2) order by 序号">本月未完成</asp:ListItem>
                                     </asp:DropDownList></td>
                                     <td>
                                         <table style="width: 120px">

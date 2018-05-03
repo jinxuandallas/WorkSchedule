@@ -115,10 +115,13 @@ namespace WorkSchedule
                 return;
 
             Guid workID = Guid.Parse((((DataRowView)e.Item.DataItem)["ID"].ToString()));
-            int SN=int.Parse((((DataRowView)e.Item.DataItem)["序号"].ToString()));
+            int SN = int.Parse((((DataRowView)e.Item.DataItem)["序号"].ToString()));
 
-            if (category < 5 && projectCategoryLocationSN[category] == SN)
+            if (category < 5 && SN >= projectCategoryLocationSN[category])
             {
+                while (category<4 && SN >= projectCategoryLocationSN[category + 1])
+                    category++;
+
                 Panel pc = e.Item.FindControl("ProjectCategory") as Panel;
                 pc.Visible = true;
                 (pc.FindControl("lbCategoryName") as Label).Text = categoryName[category];
