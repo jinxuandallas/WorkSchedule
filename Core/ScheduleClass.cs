@@ -353,7 +353,7 @@ namespace Core
         }
 
         /// <summary>
-        /// 获取某项工作的全部有工作任务信息的周
+        /// 获取某项工作的全部有工作任务信息的周及周状态
         /// </summary>
         /// <param name="workID"></param>
         /// <param name="month"></param>
@@ -379,7 +379,7 @@ namespace Core
                         if (lastUnfinishedWeek != 0 && lastUnfinishedWeek == int.Parse(dr[0].ToString()) - 1)
                         {
                             weekAndState.Add(int.Parse(dr[0].ToString()), 4);
-                            //lastUnfinishedWeek = int.Parse(dr[0].ToString());
+                            lastUnfinishedWeek = int.Parse(dr[0].ToString());
                             continue;
                         }
                         //将上周没完成状态设置为true，为下周判断是否第二次未完成做准备

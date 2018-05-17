@@ -71,6 +71,9 @@ namespace WorkSchedule
             //    Repeater1.ItemTemplate = (ITemplate )ViewState["repeater"];
         }
 
+        /// <summary>
+        /// 将所需任务等数据提前读入变量并保存到viewstate中，避免在控件中反复用数据库查询，降低repeater控件效率
+        /// </summary>
         protected void PreLoadData()
         {
             //获取一年中所有月份的每个月包含的周数量
@@ -88,6 +91,7 @@ namespace WorkSchedule
                 //判断此项工作是否有月节点计划
                 if (existTaskMonths != null)
                     existMonths.Add(wid, sc.GetExistTaskMonths(wid));
+                //将某项工作所有周的状态保存至existWeeks中
                 existWeeks.Add(wid, sc.GetExistTaskWeeksAndState(wid, true));
             }
             projectCategoryLocationSN = wc.GetProjectCategoryLocationSN();
